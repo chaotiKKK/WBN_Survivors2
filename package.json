@@ -9,9 +9,15 @@
     "build": "node tools/build.js",
     "build:watch": "node tools/build.js --watch",
     "serve": "npx http-server -p 8642 -c-1 .",
-    "test": "node tools/selftest-headless.js"
+    "test": "node tools/selftest-headless.js",
+    "perf": "node tools/perf-bench.js",
+    "blender:smoke": "node tools/blender-smoke.js"
   },
   "devDependencies": {
     "playwright": "^1.48.0"
+  },
+  "scripts_comments": {
+    "perf": "Performance-Regressionstest: P99 Render-Zeit, Alarm bei >5ms (PERF_THRESHOLD_MS=5)",
+    "blender:smoke": "Blender-Smoke: blender_chars.py headless + GLB-Validierung (soft falls Blender fehlt)"
   }
 }

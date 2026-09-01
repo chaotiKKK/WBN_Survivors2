@@ -38,6 +38,15 @@ jobs:
       - name: Selftest (headless Chromium)
         run: npm test
 
+      - name: Performance-Regressionstest (P99 Render-Zeit, Alarm > 5 ms)
+        run: npm run perf
+        env:
+          PERF_THRESHOLD_MS: "5"
+          PERF_FRAMES: "240"
+
+      - name: Blender-Smoke (GLB-Validierung)
+        run: npm run blender:smoke
+
       - name: Artefakte bei Fehlschlag hochladen
         if: failure()
         uses: actions/upload-artifact@v4
