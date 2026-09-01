@@ -12151,7 +12151,7 @@ const Game = {
       /* Der Vorspann ist zugleich die Nutzergeste, die Ton erlaubt. */
       try { AudioSys.init(); AudioSys.musicOn = true; } catch (e) { }
       /* Direkt im Anschluss: Sebbo laeuft rein und zersaegt den Bildschirm. */
-      setTimeout(() => { try { UI.sebboIntro(); } catch (e) { } }, 260);
+      setTimeout(() => { try { Game.sebboIntro(); } catch (e) { } }, 260);
     };
     addEventListener('keydown', schliessen, true);
     addEventListener('pointerdown', schliessen, true);
