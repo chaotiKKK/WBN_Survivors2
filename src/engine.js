@@ -182,7 +182,7 @@ const Game = {
     const AUFPRALL = 0.55;                 /* Anteil des Hiebs, ab dem es schneidet */
     const bodenY = H * 0.78, hoehe = Math.max(150, Math.min(H * 0.52, 300));
     const zielX = W * 0.62;
-    let t0 = null, saege = null, abgebrochen = false, schnitt = null, fetzen = null;
+    let t0 = null, saege = null, abgebrochen = false, schnitt = null, fetzen = null, funkenSpur = null;
     let saegeVersucht = false, vollgas = false, gekracht = false;
 
     const raus = (sofort) => {
@@ -267,8 +267,40 @@ const Game = {
       }
     };
 
+    /* Funkenspritzer entlang der ganzen Schnittkante - einmal beim Aufprall
+       gesetzt, spruehen dann nach aussen und verglimmen, bevor die Fetzen weg
+       sind. Parametrisch in fs (Fortschritt der Schnittphase), damit sie bei
+       rAF-Aussetzern nicht springen. */
+    const baueFunken = () => {
+      funkenSpur = [];
+      const N = 64, cols = ['#fff3b0', '#ffd24a', '#ff8a3d', '#ffffff'];
+      for (let i = 0; i < N; i++) {
+        const fx = i / (N - 1);
+        const ang = Math.random() * Math.PI * 2, spd = 60 + Math.random() * 190;
+        funkenSpur.push({
+          ox: fx * W + (Math.random() - .5) * 6, oy: linieY(fx) + (Math.random() - .5) * 6,
+          vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd - 50, g: 130 + Math.random() * 160,
+          col: cols[i % 4], sz: 1.4 + Math.random() * 1.8, life: .45 + Math.random() * .3
+        });
+      }
+    };
+
+    const zeichneFunken = (fs) => {
+      x.save();
+      x.globalCompositeOperation = 'lighter';
+      for (const s of funkenSpur) {
+        const a = 1 - fs / s.life;
+        if (a <= 0) continue;
+        const px = s.ox + s.vx * fs, py = s.oy + s.vy * fs + s.g * fs * fs;
+        x.globalAlpha = a; x.fillStyle = s.col;
+        x.fillRect(px - s.sz / 2, py - s.sz / 2, s.sz, s.sz);
+        x.globalAlpha = a * .5;   /* kurzer Schweif hinter dem Funken */
+        x.fillRect(px - s.vx * .02 - s.sz / 2, py - s.vy * .02 - s.sz / 2, s.sz * .7, s.sz * .7);
+      }
+      x.restore();
+    };
+
     const zeichneFetzen = (f) => {
-      x.clearRect(0, 0, W, H);
       for (const p of fetzen) {
         const a = 1 - f * 1.12;                       /* Fetzen faden aus -> Menue scheint durch */
         if (a <= 0) continue;
@@ -309,8 +341,17 @@ const Game = {
       /* --- die Fetzen fliegen --- */
       const ts = th - T_HIEB;
       if (ts >= T_SCHNITT) return true;
-      if (!schnitt) { schnappschuss(); baueFetzen(); }
-      zeichneFetzen(ts / T_SCHNITT);
+      if (!schnitt) { schnappschuss(); baueFetzen(); baueFunken(); }
+      const fs = ts / T_SCHNITT;
+      /* Leichte Kameraerschuetterung beim Aufprall, klingt in ~35% der Phase ab. */
+      const sAmp = 8 * Math.pow(1 - Math.min(1, fs / .35), 2);
+      const shx = Math.sin(fs * 46) * sAmp, shy = Math.cos(fs * 53) * sAmp * .8;
+      x.clearRect(0, 0, W, H);
+      x.save();
+      x.translate(shx, shy);
+      zeichneFetzen(fs);
+      zeichneFunken(fs);
+      x.restore();
       return false;
     };
 
