@@ -21,7 +21,7 @@ function entry(cid) {
   const lines = [`  ${cid}: {`];
   for (const [anim, [cols, rows, n]] of Object.entries(ANIMS)) {
     const src = `'data:image/png;base64,${b64(`${cid}_${anim}.png`)}'`;
-    lines.push(`    ${anim}: { img: Object.assign(new Image(), {src:${src}}), cols: ${cols}, rows: ${rows}, fw: 96, fh: 96, n: ${n} },`);
+    lines.push(`    ${anim}: { img: Object.assign(new Image(), {src:${src}}), cols: ${cols}, rows: ${rows}, fw: 128, fh: 128, n: ${n} },`);
   }
   lines.push('  },');
   return lines.join('\n');

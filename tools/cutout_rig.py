@@ -17,7 +17,7 @@ from collections import deque
 from PIL import Image, ImageFilter
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
-CELL = 96
+CELL = 128
 ANIMS = {'idle': (4, 1, 4), 'walk': (3, 2, 6), 'punch': (4, 1, 4)}
 
 # Proportionen (Anteile der Figur-Hoehe nach dem Zuschnitt)
@@ -115,7 +115,7 @@ def bbox_crop(img, alpha_thr=40):
 
 
 # ---------- 2. Normalisierung ----------
-def normalize(img, figure_h=86):
+def normalize(img, figure_h=115):
     """Fuesse unten, Figur auf figure_h Pixel, horizontal zentriert.
     Liefert RGBA-Canvas CELL x CELL mit Ankerpunkt unten-mitte."""
     im = bbox_crop(img)
