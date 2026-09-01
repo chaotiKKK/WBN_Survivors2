@@ -33,7 +33,7 @@ jobs:
         run: |
           python tools/sprite_audit.py
           node tools/embed_char_sprites.js
-          git diff --exit-code -- src/main.js
+          git diff --exit-code -- src/
 
       - name: Selftest (headless Chromium)
         run: npm test

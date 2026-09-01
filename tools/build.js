@@ -16,8 +16,15 @@ function build() {
 
   const out = tpl.replace(/^<!--INLINE:([^>]+)-->\s*$/gm, (m, rel) => {
     const file = path.join(root, 'src', rel.trim());
-    const body = fs.readFileSync(file, 'utf8').replace(/\n$/, '');
     const ext = path.extname(file).toLowerCase();
+    /* bundle.json = geordnete Modulliste; Verkettung muss exakt dem ehemaligen
+       src/main.js entsprechen (byte-kompatibler Single-File-Build). */
+    if (rel.trim() === 'bundle.json') {
+      const mods = JSON.parse(fs.readFileSync(file, 'utf8'));
+      const body = mods.map(f => fs.readFileSync(path.join(root, 'src', f), 'utf8')).join('');
+      return '<script>\n' + body.replace(/\n$/, '') + '\n</script>';
+    }
+    const body = fs.readFileSync(file, 'utf8').replace(/\n$/, '');
     if (ext === '.css') return '<style>\n' + body + '\n</style>';
     if (ext === '.js') return '<script>\n' + body + '\n</script>';
     throw new Error('INLINE: unbekannter Typ ' + ext + ' (' + rel + ')');

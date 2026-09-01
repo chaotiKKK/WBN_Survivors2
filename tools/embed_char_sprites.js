@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /* Betten die Foto-Collage-Sprite-Sheets (models/sheets/<char>_{idle,walk,punch}.png)
-   als Base64 in die CHAR_SPR-Eintraege von src/main.js ein.
+   als Base64 in die CHAR_SPR-Eintraege ein. Ziel ist die Modul-Datei aus
+   src/bundle.json, die CHAR_SPR enthaelt (momentan src/data.js).
    Gilt automatisch fuer jeden Charakter, fuer den Sheets vorliegen.
    Deterministisch & idempotent: gleiche Sheets -> keine Aenderung. */
 'use strict';
@@ -9,7 +10,12 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const SHEETS = path.join(ROOT, 'models', 'sheets');
-const MAIN = path.join(ROOT, 'src', 'main.js');
+const SRC = path.join(ROOT, 'src');
+
+const bundle = JSON.parse(fs.readFileSync(path.join(SRC, 'bundle.json'), 'utf8'));
+const MAIN_FILE = bundle.find(f => /\bconst CHAR_SPR\b/.test(fs.readFileSync(path.join(SRC, f), 'utf8')));
+if (!MAIN_FILE) throw new Error('Keine Bundle-Datei mit CHAR_SPR gefunden');
+const MAIN = path.join(SRC, MAIN_FILE);
 
 const ANIMS = { idle: [4, 1, 4], walk: [3, 2, 6], punch: [4, 1, 4] }; // [cols, rows, n]
 
