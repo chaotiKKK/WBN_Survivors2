@@ -1,0 +1,34 @@
+#!/usr/bin/env sh
+# Pre-commit: Sprite-Drift-Check
+# Verhindert, dass kaputte oder driftende Charakter-Sheets committet werden -
+# spiegelt den CI-Schritt "Sprite-Drift" lokal, damit Drift gar nicht erst
+# in die Historie gelangt. Weiches Versagen, wenn Python/Pillow fehlen: der
+# Hook blockiert dann keine Commits (eine fehlende Dev-Abhaengigkeit soll nicht
+# die gesamte Arbeit lahmlegen - der CI faengt es ohnehin noch ab).
+#
+# Aktivieren (einmalig pro Klon):   git config core.hooksPath tools/hooks
+# Einzeln umgehen:                  git commit --no-verify
+
+set -e
+root="$(git rev-parse --show-toplevel)"
+audit="$root/tools/sprite_audit.py"
+[ -f "$audit" ] || exit 0
+
+# Ersten Interpreter waehlen, der auch Pillow hat - unter Windows heisst der
+# funktionierende oft "python", waehrend "python3" nur ein Store-Stub ohne
+# Pillow ist. Sonst wuerde der Audit faelschlich uebersprungen.
+PY=""
+for c in python3 python py; do
+  if command -v "$c" >/dev/null 2>&1 && "$c" -c "import PIL" >/dev/null 2>&1; then PY="$c"; break; fi
+done
+if [ -z "$PY" ]; then
+  echo "pre-commit: kein Python mit Pillow gefunden (pip install pillow) - Sprite-Audit uebersprungen" >&2
+  exit 0
+fi
+
+echo "pre-commit: Sprite-Audit laeuft..."
+if ! "$PY" "$audit"; then
+  echo "pre-commit: Sprite-Audit fehlgeschlagen - Commit abgebrochen (mit --no-verify umgehbar)." >&2
+  exit 1
+fi
+exit 0
