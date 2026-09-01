@@ -40,6 +40,29 @@ npm test            # 本地 headless 运行（Playwright Chromium，缺则用�
 3. `npm test` — headless Chromium 里跑完整 Selftest
 4. 失败时上传 `test-results/`（截图 + 控制台日志）
 
+## Charakter-Modelle (Blender-Pipeline)
+
+Leonidas und Sylvia sind echte 3D-Modelle, die headless in Blender gerendert
+und als Sprite-Sheets ins Spiel eingebettet werden:
+
+- `tools/blender_chars.py` — baut beide Figuren aus Primitiven (Low-Poly,
+  Vertexfarben → Diffuse-Color-Bake auf eine Textur), rendert
+  Frontal-Ortho-Sheets (idle 4 / walk 6 / punch 4 Frames à 96 px) und legt
+  `models/` an: `sheets/` (Spiel-Sprites), `bakes/` (Texturen), `glb/`
+  (texturierte Modelle), `*.blend` (Szenen zum Weiterbearbeiten).
+- `tools/embed_char_sprites.js` — bettet die Sheets als Base64 in die
+  `CHAR_SPR`-Einträge von `src/main.js` ein (deterministisch, idempotent).
+
+```bash
+"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe" -b --factory-startup -P tools/blender_chars.py -- .
+node tools/embed_char_sprites.js
+npm run build
+```
+
+Regeln im Sprite-Zeichenpfad (`src/main.js`): Figuren stehen aufrecht
+(Blickrichtung wird gespiegelt, nie `rotate(aim)`), konstante Größe
+(kein Treffer-Scale — Treffer blinken nur weiß), Bodenanker über Schatten.
+
 ## 版本策略（重要）
 
 - `index.html` — **唯一 canonical 构建**（由 src/ + build 生成，字体内嵌 → 100% 离线）。
