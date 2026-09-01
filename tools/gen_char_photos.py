@@ -72,6 +72,18 @@ CHARS = {
               'wearing a purple futuristic jacket and white sneakers, cheerful smile, '
               'standing upright in A-pose, arms slightly away from body, legs straight, '
               'facing camera, entire body visible from head to feet, plain solid light gray studio background',
+    'titan': 'photorealistic full body photo of an extremely muscular giant strongman colossus, '
+              'bald, wearing a tight green wrestler tank top and heavy dark trousers, arms like pillars, '
+              'standing upright in A-pose, arms slightly away from body, legs straight, '
+              'facing camera, entire body visible from head to feet, plain solid light gray studio background',
+    'marathon': 'photorealistic full body photo of a lean endurance marathon runner man in his thirties, '
+              'short dark hair, wearing a light blue running singlet and racing shorts with running shoes, '
+              'standing upright in A-pose, arms slightly away from body, legs straight, '
+              'facing camera, entire body visible from head to feet, plain solid light gray studio background',
+    'nachtfalter': 'photorealistic full body photo of a mysterious slim night figure person, '
+              'wearing a dark grey moth-patterned cloak with large hood, pale moth wing details on shoulders, '
+              'standing upright in A-pose, arms slightly away from body, legs straight, '
+              'facing camera, entire body visible from head to feet, plain solid light gray studio background',
 }
 
 def gen(char, prompt, seed, w=768, h=1024):
