@@ -9,3 +9,4 @@ server.pid
 # Playwright-Runner (Screenshots/Logs bei Fehlschlag)
 test-results/
 node_modules/
+*.blend1
