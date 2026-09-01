@@ -26,39 +26,52 @@ P = dict(neck=0.13, shoulder=0.22, hip=0.50, knee=0.72)
 
 # ---------- 1. Cutout ----------
 def cutout(img):
-    """Flood-Fill vom Rand: Gradienten-Hintergrund wird ueber lokale
-    Farbdifferenz-Toleranz entfernt; Rueckstand weich geantialiaset."""
+    """Flood-Fill vom Rand gegen die feste Eckfarbe (global), damit der Fill
+    nicht schrittweise durch Hintergrund-Vignetten in dunkle Kleidung laufen
+    kann. Graue Bodenreste werden danach per Saettigungs-Test entfernt."""
     rgb = img.convert('RGB')
     w, h = rgb.size
     px = rgb.load()
-    bg = [[False] * w for _ in range(h)]
-    q = deque()
 
     def near(c1, c2, tol):
         return abs(c1[0] - c2[0]) + abs(c1[1] - c2[1]) + abs(c1[2] - c2[2]) < tol
 
-    def push(x, y, ref):
-        if 0 <= x < w and 0 <= y < h and not bg[y][x] and near(px[x, y], ref, 85):
+    corners = [px[0, 0], px[w - 1, 0], px[0, h - 1], px[w - 1, h - 1]]
+    seed = tuple(sum(c[i] for c in corners) // 4 for i in range(3))
+
+    bg = [[False] * w for _ in range(h)]
+    q = deque()
+
+    def push(x, y):
+        if 0 <= x < w and 0 <= y < h and not bg[y][x] and near(px[x, y], seed, 130):
             bg[y][x] = True
-            q.append((x, y, ref))
+            q.append((x, y))
 
     for x in range(w):
-        push(x, 0, px[x, 0]); push(x, h - 1, px[x, h - 1])
+        push(x, 0); push(x, h - 1)
     for y in range(h):
-        push(0, y, px[0, y]); push(w - 1, y, px[w - 1, y])
+        push(0, y); push(w - 1, y)
     while q:
-        x, y, ref = q.popleft()
-        push(x + 1, y, ref); push(x - 1, y, ref)
-        push(x, y + 1, ref); push(x, y - 1, ref)
+        x, y = q.popleft()
+        push(x + 1, y); push(x - 1, y)
+        push(x, y + 1); push(x, y - 1)
 
-    # Zweiter Durchgang: hellgraue Bodenreste in der unteren Bildhaelfte
-    # entfernen (geringe Saettigung + Helligkeit; dunkle Hosen/Schuhe bleiben)
-    # — trifft auch die eingeschlossene Bodenflaeche zwischen den Beinen
+    # Zweiter Durchgang: graue Boden-/Vignettenreste in der unteren Bildhaelfte
+    # entfernen (geringe Saettigung + Helligkeit; dunkle oder farbige Kleidung
+    # bleibt) — trifft auch die eingeschlossene Bodenflaeche zwischen den Beinen
     for y in range(round(h * .50), h):
         for x in range(w):
             if not bg[y][x]:
                 r, g, b = px[x, y]
-                if min(r, g, b) > 100 and max(r, g, b) - min(r, g, b) < 28:
+                if min(r, g, b) > 85 and max(r, g, b) - min(r, g, b) < 28:
+                    bg[y][x] = True
+    # Fussbereich: groesszuegiger (auch blau angehauchter Bodenschein),
+    # da dort keine grau-neutralen Koerperteile mehr erwartet werden
+    for y in range(round(h * .78), h):
+        for x in range(w):
+            if not bg[y][x]:
+                r, g, b = px[x, y]
+                if min(r, g, b) > 70 and max(r, g, b) - min(r, g, b) < 40:
                     bg[y][x] = True
 
     mask = Image.new('L', (w, h), 255)
@@ -74,8 +87,31 @@ def cutout(img):
 
 
 def bbox_crop(img, alpha_thr=40):
-    a = img.getchannel('A').point(lambda v: 255 if v > alpha_thr else 0)
-    return img.crop(a.getbbox())
+    # Nur Zeilen/Spalten mit echtem Figur-Inhalt zaehlen (alpha > 120,
+    # mindestens ~6 px, zwei Zeilen in Folge) — damit duenne Bodenlinien-
+    # Reste die Figur nicht vom Boden abheben.
+    a = img.getchannel('A')
+    w, h = img.size
+    ap = a.load()
+    rows = [sum(1 for x in range(w) if ap[x, y] > 120) for y in range(h)]
+    # Adaptiv: Zeilen zaehlen, die mind. 25% der breitesten Zeile erreichen
+    # und >= 10 px sind — duenne Staublinien/Spitzen fallen raus.
+    mx = max(rows) if rows else 0
+    need = max(10, round(mx * 0.25))
+    solid = [c >= need for c in rows]
+    top = next((y for y in range(h) if solid[y]), 0)
+    bot = next((y for y in range(h - 1, -1, -1) if solid[y]), h - 1)
+    if bot <= top:
+        return img.crop((0, 0, w, h))
+    l, r = w, -1
+    for x in range(w):
+        if sum(1 for y in range(top, bot + 1) if ap[x, y] > 120) >= 3:
+            if l == w:
+                l = x
+            r = x
+    if r < 0:
+        return img.crop((0, top, w, bot + 2))
+    return img.crop((l, top, r + 1, min(h, bot + 2)))
 
 
 # ---------- 2. Normalisierung ----------

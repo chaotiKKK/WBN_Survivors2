@@ -5,7 +5,7 @@
  *  - 跨域/非 GET（如 MQTT over WebSocket 不走 fetch）→ 直接放行
  *  - activate: 清理旧版本缓存
  */
-const CACHE = 'wbns-v3';
+const CACHE = 'wbns-v5';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './maskable-512.png'];
 
 self.addEventListener('install', (event) => {

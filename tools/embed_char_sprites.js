@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-/* Betten die Blender-Sprite-Sheets (models/sheets/) als Base64 in die
-   CHAR_SPR-Eintraege von leonidas + sylvia in src/main.js ein.
-   Deterministisch & idempotent: gleiche Sheets -> gleiche Datei. */
+/* Betten die Foto-Collage-Sprite-Sheets (models/sheets/<char>_{idle,walk,punch}.png)
+   als Base64 in die CHAR_SPR-Eintraege von src/main.js ein.
+   Gilt automatisch fuer jeden Charakter, fuer den Sheets vorliegen.
+   Deterministisch & idempotent: gleiche Sheets -> keine Aenderung. */
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -26,28 +27,24 @@ function entry(cid) {
   return lines.join('\n');
 }
 
-/* Blockgrenzen: "\n  key: {\n" (Blockkopf gefolgt von Zeilenumbruch) trifft
-   nur die CHAR_SPR-Eintraege — die CharacterProfiles-Eintraege sind Einzeiler
-   ("leonidas: { figure: ..."). */
-const BOUNDS = [
-  { cid: 'leonidas', next: 'sylvia' },
-  { cid: 'sylvia', next: 'titan' },
-];
+/* Vorhandene Charaktere = Sheet-Tripel im models/sheets-Verzeichnis */
+const chars = fs.readdirSync(SHEETS)
+  .filter(f => /^.+_idle\.png$/.test(f))
+  .map(f => f.replace(/_idle\.png$/, ''));
 
 let src = fs.readFileSync(MAIN, 'utf8');
-let changed = 0;
-for (const b of BOUNDS) {
-  const start = `\n  ${b.cid}: {\n`;
-  const end = `\n  ${b.next}: {\n`;
-  const s = src.indexOf(start);
-  if (s < 0) throw new Error(`Blockanfang fuer ${b.cid} nicht gefunden`);
-  const e = src.indexOf(end, s + 1);
-  if (e < 0) throw new Error(`Blockende fuer ${b.cid} (naechster: ${b.next}) nicht gefunden`);
-  const replacement = `\n${entry(b.cid)}\n`;
-  if (src.slice(s, e) !== replacement) {
-    src = src.slice(0, s) + replacement + src.slice(e);
+let changed = 0, missing = [];
+for (const cid of chars) {
+  /* Eintrag: "  cid: {" ... bis zur ersten Zeile genau "  }," */
+  const re = new RegExp(`\\n  ${cid}: \\{\\n(?:.*\\n)*?  \\},`);
+  const m = src.match(re);
+  if (!m) { missing.push(cid); continue; }
+  const replacement = `\n${entry(cid)}`;
+  if (m[0] !== replacement) {
+    src = src.replace(re, replacement);
     changed++;
   }
 }
 fs.writeFileSync(MAIN, src);
-console.log(`embed_char_sprites: ${changed} Block(s) aktualisiert (leonidas, sylvia)`);
+console.log(`embed_char_sprites: ${changed} Block(s) aktualisiert (${chars.join(', ')})`);
+if (missing.length) console.log(`ACHTUNG, kein CHAR_SPR-Eintrag fuer: ${missing.join(', ')}`);
