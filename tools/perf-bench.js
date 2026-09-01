@@ -3,8 +3,11 @@
    - serviert Repo-Root ueber localhost-HTTP
    - oeffnet index.html in headless Chromium (Playwright)
    - startet einen echten Run (Leonidas), laesst N Frames laufen
-   - misst die Render-Zeit pro Frame (performance.now um Game.render)
-   - Alarm bei P99 > 5 ms (Schwellwert ueber ENV PERF_THRESHOLD_MS anpassbar)
+   - misst GETRENNT die Zeit pro Frame um Game.update (Simulation/Logik) und
+     Game.render (Zeichnen) und loggt je P50/P99 - so faellt eine CPU-Regression
+     im Loop frueh auf, egal ob sie in Update oder Render steckt
+   - Alarm bei P99 > 5 ms in Update ODER Render (Schwellwert ueber ENV
+     PERF_THRESHOLD_MS anpassbar)
    - Exit 1 beim Alarm; Screenshot + JSON unter test-results/ */
 'use strict';
 const http = require('http');
@@ -76,21 +79,31 @@ function main() {
       "typeof Game !== 'undefined' && Game.state === 'play' && Game.players && Game.players.length > 0",
       null, { timeout: 10000 });
 
-    /* Instrumentierung: Game.render timen, N Frames sammeln */
+    /* Instrumentierung: Game.update UND Game.render getrennt timen. Beide werden
+       im Loop je einmal pro Spielframe aufgerufen; render dient als verlaesslicher
+       Pro-Frame-Zaehler fuer die N-Frame-Grenze. */
     const results = await page.evaluate(async (N) => {
       return new Promise((resolve) => {
-        const times = [];
-        const orig = Game.render.bind(Game);
-        let collected = 0;
+        const upd = [], ren = [];
+        const origU = Game.update.bind(Game);
+        const origR = Game.render.bind(Game);
+        let collected = 0, done = false;
+        const finish = () => {
+          if (done) return; done = true;
+          Game.update = origU; Game.render = origR;
+          resolve({ update: upd, render: ren });
+        };
+        Game.update = function (dt) {
+          const t0 = performance.now();
+          const r = origU(dt);
+          upd.push(performance.now() - t0);
+          return r;
+        };
         Game.render = function () {
           const t0 = performance.now();
-          const r = orig();
-          times.push(performance.now() - t0);
-          collected++;
-          if (collected >= N) {
-            Game.render = orig;
-            resolve(times);
-          }
+          const r = origR();
+          ren.push(performance.now() - t0);
+          if (++collected >= N) finish();
           return r;
         };
         /* Spieler bewegen lassen, damit der Loop aktiv bleibt (AFK-Tod vermeiden) */
@@ -102,28 +115,40 @@ function main() {
             window.dispatchEvent(ev);
           } catch (e) { }
         }, 50);
-        setTimeout(() => { clearInterval(move); resolve(times); }, (N / 60 + 4) * 1000);
+        setTimeout(() => { clearInterval(move); finish(); }, (N / 60 + 4) * 1000);
       });
     }, FRAMES);
 
     await browser.close();
     server.close();
 
-    if (!results || results.length === 0) {
+    if (!results || !results.render || results.render.length === 0) {
       console.error('PERF: keine Frame-Zeiten gesammelt — Spiel lief nicht');
       process.exit(1);
     }
-    const sorted = results.slice().sort((a, b) => a - b);
-    const avg = sorted.reduce((a, b) => a + b, 0) / sorted.length;
-    const p50 = sorted[Math.floor(sorted.length * 0.5)];
-    const p99 = sorted[Math.floor(sorted.length * 0.99)];
-    const max = sorted[sorted.length - 1];
-    const over = results.filter(t => t > THRESHOLD_MS).length;
+    /* Kennzahlen je Messreihe. Leere Reihe -> Nullen (kein Alarm), damit ein
+       nicht aufgerufenes update() nicht faelschlich als Regression zaehlt. */
+    const stats = (arr) => {
+      if (!arr || arr.length === 0) return { samples: 0, avg_ms: 0, p50_ms: 0, p99_ms: 0, max_ms: 0, over_threshold: 0 };
+      const s = arr.slice().sort((a, b) => a - b);
+      const q = (p) => s[Math.min(s.length - 1, Math.floor(s.length * p))];
+      return {
+        samples: s.length,
+        avg_ms: +(s.reduce((a, b) => a + b, 0) / s.length).toFixed(3),
+        p50_ms: +q(0.5).toFixed(3),
+        p99_ms: +q(0.99).toFixed(3),
+        max_ms: +s[s.length - 1].toFixed(3),
+        over_threshold: arr.filter(t => t > THRESHOLD_MS).length,
+      };
+    };
+    const update = stats(results.update);
+    const render = stats(results.render);
 
     const out = {
-      frames: results.length, avg_ms: +avg.toFixed(3),
-      p50_ms: +p50.toFixed(3), p99_ms: +p99.toFixed(3), max_ms: +max.toFixed(3),
-      threshold_ms: THRESHOLD_MS, frames_over_threshold: over,
+      frames: results.render.length,
+      threshold_ms: THRESHOLD_MS,
+      update,   // Simulation/Logik pro Frame
+      render,   // Zeichnen pro Frame
       errors: errors.slice(0, 10),
     };
     console.log('PERF:', JSON.stringify(out, null, 2));
@@ -133,11 +158,16 @@ function main() {
     try { fs.mkdirSync(tr, { recursive: true }); } catch (e) { }
     fs.writeFileSync(path.join(tr, 'perf-bench.json'), JSON.stringify(out, null, 2));
 
-    if (p99 > THRESHOLD_MS) {
-      console.error(`PERF: P99 ${p99.toFixed(2)} ms > Schwellwert ${THRESHOLD_MS} ms — PERFORMANCE-REGRESSION`);
+    /* Alarm, wenn Update ODER Render die Schwelle reisst - so faellt eine
+       Regression im Loop unabhaengig von der Phase auf. */
+    const regress = [];
+    if (update.p99_ms > THRESHOLD_MS) regress.push(`update P99 ${update.p99_ms.toFixed(2)} ms`);
+    if (render.p99_ms > THRESHOLD_MS) regress.push(`render P99 ${render.p99_ms.toFixed(2)} ms`);
+    if (regress.length > 0) {
+      console.error(`PERF: ${regress.join(' · ')} > Schwellwert ${THRESHOLD_MS} ms — PERFORMANCE-REGRESSION`);
       process.exit(1);
     }
-    console.log(`PERF: P99 ${p99.toFixed(2)} ms <= ${THRESHOLD_MS} ms — OK`);
+    console.log(`PERF: update P50/P99 ${update.p50_ms}/${update.p99_ms} ms · render P50/P99 ${render.p50_ms}/${render.p99_ms} ms · <= ${THRESHOLD_MS} ms — OK`);
     process.exit(0);
   }).catch(e => {
     console.error('PERF-Fehler:', e.message);
