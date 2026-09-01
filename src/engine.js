@@ -155,12 +155,14 @@ const Game = {
   },
   /* ---- Sebbos Auftritt: reinlaufen, ausholen, den Bildschirm zersaegen ----
      Laeuft einmal nach dem Studio-Vorspann. Die Leinwand liegt ueber allem und
-     zeigt eine eigene Fassung des Titelhintergrunds; beim Hieb wird genau dieses
-     Bild entlang einer gezackten Linie in zwei Haelften geschnitten, die
-     auseinanderfahren - darunter liegt das echte Menue. Jederzeit ueberspringbar. */
+     zeigt eine eigene Fassung des Titelhintergrunds. Sebbo rennt von links rein,
+     reisst die Kettensaege sofort hoch und zersaegt das Bild entlang einer
+     gezackten Linie; im Aufprall zerfaellt der Schnappschuss in viele Fetzen, die
+     mit Flugbahn, Drehung und Schwerkraft auseinanderfliegen - darunter liegt das
+     echte Menue, auf das am Ende weichgeblendet wird. Jederzeit ueberspringbar. */
   sebboIntro(fertig) {
     const cv = document.getElementById('sawfx');
-    const ende = () => { if (cv) { cv.classList.remove('on'); } if (fertig) fertig(); };
+    const ende = () => { if (cv) { cv.classList.remove('on'); cv.style.transition = ''; cv.style.opacity = ''; } if (fertig) fertig(); };
     if (!cv || OPT().reduceFlicker) { ende(); return; }   /* reduzierte Bewegung: ueberspringen */
     /* Erst sichtbar schalten, dann messen: bei display:none liefert
        clientWidth 0, und der Notnagel innerWidth stimmt nur zufaellig. */
@@ -174,19 +176,26 @@ const Game = {
     if (!x) { ende(); return; }
     x.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const T_LAUF = 1.15, T_HIEB = 0.80, T_SCHNITT = 0.62;
-    const AUFPRALL = 0.62;                 /* Anteil des Hiebs, ab dem es schneidet */
+    /* Kuerzere Laufzeit -> die Saege geht "sofort" hoch; die Schnittphase laeuft
+       laenger, damit die Fetzen sichtbar wegfliegen. */
+    const T_LAUF = 0.90, T_HIEB = 0.62, T_SCHNITT = 0.92;
+    const AUFPRALL = 0.55;                 /* Anteil des Hiebs, ab dem es schneidet */
     const bodenY = H * 0.78, hoehe = Math.max(150, Math.min(H * 0.52, 300));
     const zielX = W * 0.62;
-    let t0 = null, saege = null, abgebrochen = false, schnitt = null;
-    let saegeVersucht = false, vollgas = false;
+    let t0 = null, saege = null, abgebrochen = false, schnitt = null, fetzen = null;
+    let saegeVersucht = false, vollgas = false, gekracht = false;
 
-    const weg = () => {
+    const raus = (sofort) => {
       removeEventListener('keydown', ueber, true);
       removeEventListener('pointerdown', ueber, true);
       removeEventListener('resize', ueber);
       if (saege) { try { saege.stop(); } catch (e) { } }
-      ende();
+      if (sofort || !cv) { ende(); return; }
+      /* Blende auf den Titelscreen: die Leinwand liegt noch ueber dem Menue und
+         wird weichgeblendet, statt hart zu verschwinden. */
+      cv.style.transition = 'opacity .34s ease-in';
+      cv.style.opacity = '0';
+      setTimeout(ende, 360);
     };
     const ueber = () => { abgebrochen = true; };
     addEventListener('keydown', ueber, true);
@@ -223,6 +232,56 @@ const Game = {
       }
     };
 
+    /* Schnappschuss (Titelbild + Sebbo im Endbild) - einmal beim Aufprall. */
+    const schnappschuss = () => {
+      schnitt = document.createElement('canvas');
+      schnitt.width = cv.width; schnitt.height = cv.height;
+      const sg = schnitt.getContext('2d');
+      sg.setTransform(dpr, 0, 0, dpr, 0, 0);
+      Game.renderTitleBg(sg);
+      zeichneFigur(sg, _sebboChop, 9, zielX, bodenY, hoehe);
+    };
+
+    /* Spalten ober- und unterhalb der Schnittlinie werden zu Fetzen mit eigener
+       Flugbahn (vx/vy), Schwerkraft (g) und Drehung (rot). Die Bahn ist rein
+       parametrisch in f (0..1) - so bleibt sie bei Frame-Aussetzern (verdecktes
+       Tab friert rAF ein) formstabil statt zu springen. */
+    const baueFetzen = () => {
+      fetzen = [];
+      const NCOL = 16, colW = W / NCOL;
+      for (let i = 0; i < NCOL; i++) {
+        const sx = i * colW, cx = sx + colW / 2;
+        const cutY = Math.max(1, Math.min(H - 1, linieY((i + .5) / NCOL)));
+        const rel = (cx - W / 2) / (W / 2);          /* -1 links, +1 rechts */
+        const drift = rel * W * .42 + (Math.random() - .5) * W * .08;
+        fetzen.push({                                 /* oberer Fetzen: fliegt hoch-raus */
+          sx, sy: 0, sw: colW, sh: cutY, cx, cyc: cutY / 2,
+          vx: drift, vy: -H * .26 - Math.random() * H * .08, g: H * .62,
+          rot: (Math.random() - .5) * 2.2
+        });
+        fetzen.push({                                 /* unterer Fetzen: fliegt tief-raus */
+          sx, sy: cutY, sw: colW, sh: H - cutY, cx, cyc: cutY + (H - cutY) / 2,
+          vx: drift, vy: H * .22 + Math.random() * H * .08, g: H * .55,
+          rot: (Math.random() - .5) * 2.2
+        });
+      }
+    };
+
+    const zeichneFetzen = (f) => {
+      x.clearRect(0, 0, W, H);
+      for (const p of fetzen) {
+        const a = 1 - f * 1.12;                       /* Fetzen faden aus -> Menue scheint durch */
+        if (a <= 0) continue;
+        const dx = p.vx * f, dy = p.vy * f + p.g * f * f;
+        x.save();
+        x.globalAlpha = a;
+        x.translate(p.cx + dx, p.cyc + dy);
+        x.rotate(p.rot * f);
+        x.drawImage(schnitt, p.sx * dpr, p.sy * dpr, p.sw * dpr, p.sh * dpr, -p.sw / 2, -p.sh / 2, p.sw, p.sh);
+        x.restore();
+      }
+    };
+
     /* Die Schnittphase zeichnet aus dem Schnappschuss und braucht den
        Hintergrund nicht - deshalb steht er in den Phasen, nicht davor. */
     const bild = (t) => {
@@ -243,61 +302,44 @@ const Game = {
           const fx = (f - AUFPRALL) / (1 - AUFPRALL);
           x.save(); x.strokeStyle = '#fff3b0'; x.lineWidth = 3; x.globalAlpha = .9;
           x.beginPath(); pfad(x, fx); x.stroke(); x.restore();
-          funken(fx, 14);
+          funken(fx, 16);
         }
         return false;
       }
-      /* --- die Haelften fahren auseinander --- */
+      /* --- die Fetzen fliegen --- */
       const ts = th - T_HIEB;
       if (ts >= T_SCHNITT) return true;
-      const f = ts / T_SCHNITT, e = f * f;
-      if (!schnitt) {
-        schnitt = document.createElement('canvas');
-        schnitt.width = cv.width; schnitt.height = cv.height;
-        const sg = schnitt.getContext('2d');
-        sg.setTransform(dpr, 0, 0, dpr, 0, 0);
-        Game.renderTitleBg(sg);
-        zeichneFigur(sg, _sebboChop, 9, zielX, bodenY, hoehe);
-      }
-      x.clearRect(0, 0, W, H);
-      for (const oben of [true, false]) {
-        x.save();
-        x.beginPath();
-        if (oben) { x.moveTo(0, -H); x.lineTo(W, -H); }
-        else { x.moveTo(W, H * 2); x.lineTo(0, H * 2); }
-        for (const z of (oben ? zacken : zacken.slice().reverse())) x.lineTo(z.fx * W, linieY(z.fx) + z.dy);
-        x.closePath(); x.clip();
-        x.globalAlpha = 1 - e * .85;
-        x.translate(oben ? -e * W * .55 : e * W * .55, oben ? -e * H * .5 : e * H * .5);
-        x.rotate((oben ? -1 : 1) * e * .07);
-        x.drawImage(schnitt, 0, 0, W, H);
-        x.restore();
-      }
-      x.strokeStyle = 'rgba(255,243,176,' + (1 - f) + ')'; x.lineWidth = 2;
-      x.beginPath(); pfad(x, 1); x.stroke();
+      if (!schnitt) { schnappschuss(); baueFetzen(); }
+      zeichneFetzen(ts / T_SCHNITT);
       return false;
     };
 
     const schlag = (ts) => {
       if (t0 === null) t0 = ts;
       const t = (ts - t0) / 1000;
-      if (abgebrochen) { weg(); return; }
+      if (abgebrochen) { raus(true); return; }
       /* Nur ein Versuch: chainsaw() gibt bei abgeschaltetem Ton null zurueck,
          ohne Flagge liefe der Versuch in jedem Bild neu. */
-      if (!saegeVersucht && t > T_LAUF - .25) {
+      if (!saegeVersucht && t > T_LAUF - .45) {
         saegeVersucht = true;
-        saege = AudioSys.chainsaw(T_HIEB + T_SCHNITT + .5, .26);
+        saege = AudioSys.chainsaw(T_HIEB + T_SCHNITT + .5, .30);
         if (saege) saege.rev(0);
       }
-      /* Vollgas genau einmal planen - rev() setzt sieben Rampen (drei
-         Saegezahn-Oszillatoren plus Tiefpass, Bandpass, LFO, LFO-Tiefe). */
-      if (saege && !vollgas && t > T_LAUF + T_HIEB * .35) { vollgas = true; saege.rev(1); }
+      /* Sofort hochreissen: Vollgas genau dann, wenn Sebbo sich aufstellt.
+         rev() setzt sieben Rampen (drei Saegezahn-Oszillatoren plus Tiefpass,
+         Bandpass, LFO, LFO-Tiefe). */
+      if (saege && !vollgas && t > T_LAUF - .12) { vollgas = true; saege.rev(1); }
+      /* Krachender Aufprall genau beim Schnitt: Explosion + Luftzug + Splitter. */
+      if (!gekracht && t > T_LAUF + T_HIEB) {
+        gekracht = true;
+        try { AudioSys.rBoom(1.05, .5); AudioSys.rWhoosh(1.2, .12); AudioSys.rDebris(10, .3); } catch (e) { }
+      }
       /* Ein Zeichenfehler wuerde sonst den rAF-Faden toeten: Blende bliebe
          ueber dem Menue liegen, die Saege liefe weiter. */
       let fertigJetzt;
       try { fertigJetzt = bild(t); }
-      catch (e) { weg(); return; }
-      if (fertigJetzt) { weg(); return; }
+      catch (e) { raus(true); return; }
+      if (fertigJetzt) { raus(false); return; }
       requestAnimationFrame(schlag);
     };
     /* Data-URIs dekodieren asynchron. Ohne Warten laeuft die Sequenz zwar
@@ -308,7 +350,7 @@ const Game = {
     if (bereit()) { requestAnimationFrame(schlag); return; }
     let gewartet = 0;
     const warten = () => {
-      if (abgebrochen) { weg(); return; }
+      if (abgebrochen) { raus(true); return; }
       gewartet += 1;
       if (bereit() || gewartet > 30) { requestAnimationFrame(schlag); return; }
       requestAnimationFrame(warten);
