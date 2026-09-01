@@ -10,6 +10,25 @@ const root = path.join(__dirname, '..');
 const srcDir = path.join(root, 'src');
 const tplPath = path.join(root, 'src', 'index.template.html');
 const outPath = path.join(root, 'index.html');
+const assetsDir = path.join(srcDir, 'assets');
+
+/* Externalisierte Base64-Assets: im Quellcode stehen kurze Sentinels
+   @@ASSET:<name.ext>@@, die hier beim Build wieder als data:-URI eingebettet
+   werden - so bleibt index.html eine Einzeldatei, waehrend src/data.js schlank
+   und diffbar ist. MIME kommt aus der Dateiendung. */
+const ASSET_MIME = { '.png': 'image/png', '.webp': 'image/webp', '.jpeg': 'image/jpeg', '.jpg': 'image/jpeg', '.gif': 'image/gif', '.svg': 'image/svg+xml' };
+function inlineAssets(text) {
+  const missing = [];
+  const res = text.replace(/@@ASSET:([A-Za-z0-9_.-]+)@@/g, (m, name) => {
+    const file = path.join(assetsDir, name);
+    if (!fs.existsSync(file)) { missing.push(name); return m; }
+    const mime = ASSET_MIME[path.extname(name).toLowerCase()];
+    if (!mime) throw new Error('ASSET: unbekannter Typ (' + name + ')');
+    return 'data:' + mime + ';base64,' + fs.readFileSync(file).toString('base64');
+  });
+  if (missing.length) throw new Error('Fehlende Assets in src/assets/: ' + missing.join(', '));
+  return res;
+}
 
 function build() {
   const tpl = fs.readFileSync(tplPath, 'utf8');
@@ -32,8 +51,11 @@ function build() {
 
   if (/<!--INLINE:/.test(out)) throw new Error('Es sind unaufgeloeste INLINE-Marker uebrig.');
 
-  fs.writeFileSync(outPath, out, 'utf8');
-  const kb = (Buffer.byteLength(out, 'utf8') / 1024 / 1024).toFixed(2);
+  const finalOut = inlineAssets(out);
+  if (/@@ASSET:/.test(finalOut)) throw new Error('Es sind unaufgeloeste ASSET-Sentinels uebrig.');
+
+  fs.writeFileSync(outPath, finalOut, 'utf8');
+  const kb = (Buffer.byteLength(finalOut, 'utf8') / 1024 / 1024).toFixed(2);
   console.log('build ok → index.html (' + kb + ' MB)');
 }
 
@@ -50,7 +72,7 @@ if (process.argv.includes('--watch')) {
     }, 100);
   };
   fs.watch(srcDir, { recursive: true }, (evt, file) => {
-    if (!file || (!file.endsWith('.js') && !file.endsWith('.css') && !file.endsWith('.html'))) return;
+    if (!file || !/\.(js|css|html|png|webp|jpe?g|gif|svg)$/i.test(file)) return;
     run(evt, file);
   });
   console.log('watching src/ … (Strg+C zum Beenden)');
