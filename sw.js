@@ -5,13 +5,24 @@
  *  - 跨域/非 GET（如 MQTT over WebSocket 不走 fetch）→ 直接放行
  *  - activate: 清理旧版本缓存
  */
-const CACHE = 'wbns-v9';
+/* CACHE-Name wird beim Build aus dem Content-Hash von index.html gestempelt
+   (tools/build.js). Aendert sich das Spiel, aendert sich der Name -> die
+   activate-Phase raeumt den alten Cache weg. Manuelles Hochzaehlen entfaellt. */
+const CACHE = 'wbns-0c0a38494da5';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './maskable-512.png'];
 
 self.addEventListener('install', (event) => {
+  /* KEIN automatisches skipWaiting: der neue Worker wartet, bis der Spieler im
+     Update-Toast "Neu laden" klickt (siehe message-Handler). So springt der
+     Cache nicht mitten in der Sitzung um. */
   event.waitUntil(
-    caches.open(CACHE).then((cache) => cache.addAll(SHELL)).then(() => self.skipWaiting())
+    caches.open(CACHE).then((cache) => cache.addAll(SHELL))
   );
+});
+
+/* Auf Zuruf der Seite aktivieren (Update-Toast). */
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {

@@ -5,6 +5,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const root = path.join(__dirname, '..');
 const srcDir = path.join(root, 'src');
@@ -57,6 +58,22 @@ function build() {
   fs.writeFileSync(outPath, finalOut, 'utf8');
   const kb = (Buffer.byteLength(finalOut, 'utf8') / 1024 / 1024).toFixed(2);
   console.log('build ok → index.html (' + kb + ' MB)');
+
+  stampServiceWorker(finalOut);
+}
+
+/* Content-Hash von index.html in den CACHE-Namen von sw.js stempeln. Aendert
+   sich das Spiel, aendert sich der Cache-Name -> der Browser sieht ein neues
+   sw.js und bietet das Update an. Ersetzt das manuelle Hochzaehlen von wbns-vN. */
+function stampServiceWorker(indexHtml) {
+  const swPath = path.join(root, 'sw.js');
+  if (!fs.existsSync(swPath)) return;
+  const hash = crypto.createHash('sha256').update(indexHtml).digest('hex').slice(0, 12);
+  const sw = fs.readFileSync(swPath, 'utf8');
+  const stamped = sw.replace(/const CACHE = '[^']*';/, `const CACHE = 'wbns-${hash}';`);
+  if (!/const CACHE = '[^']*';/.test(sw)) { console.warn('sw.js: kein CACHE-Marker gefunden, nicht gestempelt'); return; }
+  if (stamped !== sw) { fs.writeFileSync(swPath, stamped); console.log('sw.js CACHE → wbns-' + hash); }
+  else console.log('sw.js CACHE unveraendert (wbns-' + hash + ')');
 }
 
 build();

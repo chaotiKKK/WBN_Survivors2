@@ -640,3 +640,14 @@ h2.hd{font-family:var(--amt);color:var(--formular);letter-spacing:.18em}
   padding-top:8px;max-width:none;width:min(760px,94vw)}
 #scTitle .credits b,#scTitle .credits .az{color:var(--post-gelb);font-weight:700}
 
+
+/* ---- Service-Worker Update-Toast (von src/sw-register.js erzeugt) ---- */
+.sw-toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,160%);z-index:200;
+  display:flex;align-items:center;gap:12px;padding:10px 12px 10px 16px;border-radius:11px;
+  background:rgba(18,22,30,.96);border:1px solid #3a4657;box-shadow:0 8px 28px rgba(0,0,0,.55);
+  color:#e8eef6;font:600 13px/1.2 system-ui,-apple-system,sans-serif;
+  opacity:0;transition:transform .32s ease,opacity .32s ease;pointer-events:auto;max-width:92vw}
+.sw-toast.show{transform:translate(-50%,0);opacity:1}
+.sw-toast button{background:#ff8a3d;color:#1a1206;border:0;border-radius:8px;padding:7px 13px;
+  font:700 13px/1 system-ui,sans-serif;cursor:pointer;transition:background .15s ease}
+.sw-toast button:hover{background:#ffa25c}
