@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Abhängigkeiten installieren
+        run: npm ci
+
+      - name: Chromium installieren
+        run: npx playwright install --with-deps chromium
+
+      - name: Build-Artefakt ist aktuell (index.html ↔ src/)
+        run: |
+          npm run build
+          git diff --exit-code -- index.html
+
+      - name: Selftest (headless Chromium)
+        run: npm test
+
+      - name: Artefakte bei Fehlschlag hochladen
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          if-no-files-found: ignore

@@ -25,6 +25,21 @@ npm run build        # 重新生成 index.html（逐字节等于旧版基线，�
 
 **`index.html` 是生成物——不要直接改它**；改 `src/`，然后 `npm run build`。
 
+## 测试 / CI
+
+游戏内置 Selftest（URL `?selftest`，约 98 个断言：RNG/存取/Combat/Data/Audio/长跑/联机协议…）。
+
+```bash
+npm test            # 本地 headless 运行（Playwright Chromium，缺则用系统 Edge/Chrome）
+```
+
+`.github/workflows/ci.yml` 在每次 push / PR 上跑：
+
+1. `npm ci` + Playwright Chromium 安装
+2. `npm run build` 后检查 `index.html` 无 diff（生成物必须与 src/ 同步）
+3. `npm test` — headless Chromium 里跑完整 Selftest
+4. 失败时上传 `test-results/`（截图 + 控制台日志）
+
 ## 版本策略（重要）
 
 - `index.html` — **唯一 canonical 构建**（由 src/ + build 生成，字体内嵌 → 100% 离线）。

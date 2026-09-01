@@ -5,6 +5,10 @@
   "description": "Wiesbaden Survivors — Arena 1984 (single-file PWA Roguelite)",
   "scripts": {
     "build": "node tools/build.js",
-    "serve": "npx http-server -p 8642 -c-1 ."
+    "serve": "npx http-server -p 8642 -c-1 .",
+    "test": "node tools/selftest-headless.js"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
   }
 }

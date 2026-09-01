@@ -5,3 +5,7 @@
 .DS_Store
 Thumbs.db
 server.pid
+
+# Playwright-Runner (Screenshots/Logs bei Fehlschlag)
+test-results/
+node_modules/
