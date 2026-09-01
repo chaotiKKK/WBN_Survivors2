@@ -21,10 +21,19 @@ jobs:
       - name: Chromium installieren
         run: npx playwright install --with-deps chromium
 
+      - name: Python + Pillow (Sprite-Audit)
+        run: pip install pillow
+
       - name: Build-Artefakt ist aktuell (index.html ↔ src/)
         run: |
           npm run build
           git diff --exit-code -- index.html
+
+      - name: Sprite-Drift-Check (Audit + Embed-Idempotenz)
+        run: |
+          python tools/sprite_audit.py
+          node tools/embed_char_sprites.js
+          git diff --exit-code -- src/main.js
 
       - name: Selftest (headless Chromium)
         run: npm test
