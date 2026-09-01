@@ -15825,6 +15825,29 @@ const Game = {
           ctx.fillStyle = p.col;
           ctx.beginPath(); ctx.arc(0, 0, p.r * (2.0 + (F.glow || 0) * .8) * puls, 0, TAU); ctx.fill();
         }
+        /* ---- Geschwindigkeits-Schweif: additiver Kometenstrich hinter jedem
+           Projektil, weiss-heiss am Kopf, zur Farbe hin auslaufend. Skaliert mit
+           dem Tempo - langsame Wuerfe (Kiste, Klecks) bekommen ihn kaum, schnelle
+           Runden einen kraeftigen Zug. Liegt unter der scharfen Form. ---- */
+        if (qual >= 1) {
+          const sp = Math.hypot(p.vx, p.vy);
+          const sf = clamp((sp - 220) / 680, 0, 1);
+          if (sf > .04) {
+            ctx.save();
+            ctx.rotate(ang);
+            ctx.globalCompositeOperation = 'lighter';
+            const La = 6 + p.r * 1.2 + sf * (24 + (F.len || 8) * .55);
+            const seg = 4;
+            for (let i = 0; i < seg; i++) {
+              const f0 = i / seg, f1 = (i + 1) / seg;
+              ctx.globalAlpha = (.14 + .22 * (F.glow || .5)) * (1 - f0) * sf * puls;
+              ctx.fillStyle = i === 0 ? '#fff6e0' : p.col;
+              const h = p.r * (1.05 - f0 * .72);
+              ctx.fillRect(-La * f1, -h, La * (f1 - f0) + .7, h * 2);
+            }
+            ctx.restore();
+          }
+        }
         ctx.globalAlpha = .97;
         ctx.fillStyle = p.col;
         switch (F.style) {
@@ -16024,6 +16047,20 @@ const Game = {
       if (this.quality() >= 1) {
         ctx.globalAlpha = .3; ctx.fillStyle = b.col;
         ctx.beginPath(); ctx.arc(0, 0, b.r * 2.4, 0, TAU); ctx.fill();
+        /* Tempo-Schweif auch fuer Gegnerkugeln, dezenter als bei Spielerschuessen */
+        const sp = Math.hypot(b.vx, b.vy), sf = clamp((sp - 160) / 520, 0, 1);
+        if (sf > .05) {
+          ctx.save(); ctx.rotate(ba); ctx.globalCompositeOperation = 'lighter';
+          const La = b.r * 1.4 + sf * 16;
+          for (let i = 0; i < 3; i++) {
+            const f0 = i / 3, f1 = (i + 1) / 3;
+            ctx.globalAlpha = .22 * (1 - f0) * sf;
+            ctx.fillStyle = i === 0 ? '#ffffff' : b.col;
+            const h = b.r * (.9 - f0 * .55);
+            ctx.fillRect(-La * f1, -h, La * (f1 - f0) + .6, h * 2);
+          }
+          ctx.restore();
+        }
       }
       ctx.globalAlpha = .95; ctx.fillStyle = b.col;
       ctx.rotate(ba);
