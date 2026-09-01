@@ -8,12 +8,26 @@ Retro-futurismus Survivor-like 浏览器游戏（Wiesbaden 主题，德语 UI）
 浏览器直接打开 `index.html`，或：
 
 ```bash
-npx serve .          # 或任何静态服务器
+npm run serve        # http://127.0.0.1:8642（PWA/Service-Worker 需要 HTTP）
 ```
+
+## 源码结构与构建
+
+- `src/index.template.html` — HTML 骨架；内嵌点用 `<!--INLINE:style.css-->` 等标记行。
+- `src/style.css` — 全部样式（含 base64 字体）。
+- `src/main.js` — 游戏引擎（约 16k 行）。
+- `src/sw-register.js` — Service-Worker 注册。
+- `tools/build.js` — 把 src 内嵌进模板，产出单文件 `index.html`。
+
+```bash
+npm run build        # 重新生成 index.html（逐字节等于旧版基线，已验证）
+```
+
+**`index.html` 是生成物——不要直接改它**；改 `src/`，然后 `npm run build`。
 
 ## 版本策略（重要）
 
-- `index.html` — **唯一 canonical 构建**（源自 WBNS-BUILD v1，字体内嵌 → 100% 离线）。
+- `index.html` — **唯一 canonical 构建**（由 src/ + build 生成，字体内嵌 → 100% 离线）。
 - `archive/` — 历史版本快照，**只读归档，不在此上开发**：
   - `wiesbaden_survivors_wbns_v3_cdn.html`（v3，Google-Fonts CDN，需联网加载字体）
   - `WS-backup - Kopie.html`、`wiesbaden_survivors_ORIGINAL_backup.html`（更早期版本）

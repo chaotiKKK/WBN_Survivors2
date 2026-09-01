@@ -1,0 +1,10 @@
+{
+  "name": "wiesbaden-survivors",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wiesbaden Survivors — Arena 1984 (single-file PWA Roguelite)",
+  "scripts": {
+    "build": "node tools/build.js",
+    "serve": "npx http-server -p 8642 -c-1 ."
+  }
+}
