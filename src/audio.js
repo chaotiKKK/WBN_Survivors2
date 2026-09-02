@@ -203,8 +203,8 @@ const AudioSys = {
     const src = c.createBufferSource(); src.buffer = buf;
     const fl = c.createBiquadFilter(); fl.type = ftype || 'lowpass';
     const hz = 1 + (Math.random() * 2 - 1) * .05;
-    fl.frequency.setValueAtTime((f0 || 1000) * hz, t);
-    if (f1) fl.frequency.exponentialRampToValueAtTime(Math.max(30, f1), t + dur);
+    fl.frequency.setValueAtTime(Math.min(sr / 2, (f0 || 1000) * hz), t);
+    if (f1) fl.frequency.exponentialRampToValueAtTime(Math.min(sr / 2, Math.max(30, f1)), t + dur);
     fl.Q.value = q || .8;
     const g = c.createGain();
     const at = (o && o.attack) || .003;
@@ -325,17 +325,18 @@ const AudioSys = {
     src.playbackRate.value = o.rate || 1;
     if (o.rateEnd) src.playbackRate.exponentialRampToValueAtTime(Math.max(.05, o.rateEnd), t + dur);
     let node = src;
+    const nyq = (c.sampleRate || 44100) / 2;   /* keine Filterfrequenz ueber Nyquist */
     const f = c.createBiquadFilter();
     f.type = o.filter || 'bandpass';
-    f.frequency.setValueAtTime(Math.max(20, o.f0 || 1200), t);
-    if (o.fMid) f.frequency.exponentialRampToValueAtTime(Math.max(20, o.fMid), t + dur * (o.fMidAt || .22));
-    if (o.f1) f.frequency.exponentialRampToValueAtTime(Math.max(20, o.f1), t + dur);
+    f.frequency.setValueAtTime(Math.min(nyq, Math.max(20, o.f0 || 1200)), t);
+    if (o.fMid) f.frequency.exponentialRampToValueAtTime(Math.min(nyq, Math.max(20, o.fMid)), t + dur * (o.fMidAt || .22));
+    if (o.f1) f.frequency.exponentialRampToValueAtTime(Math.min(nyq, Math.max(20, o.f1)), t + dur);
     f.Q.value = o.q != null ? o.q : 1;
     node.connect(f); node = f;
     if (o.filter2) {
       const f2 = c.createBiquadFilter(); f2.type = o.filter2;
-      f2.frequency.setValueAtTime(Math.max(20, o.f2 || 300), t);
-      if (o.f2End) f2.frequency.exponentialRampToValueAtTime(Math.max(20, o.f2End), t + dur);
+      f2.frequency.setValueAtTime(Math.min(nyq, Math.max(20, o.f2 || 300)), t);
+      if (o.f2End) f2.frequency.exponentialRampToValueAtTime(Math.min(nyq, Math.max(20, o.f2End)), t + dur);
       f2.Q.value = o.q2 != null ? o.q2 : .7;
       node.connect(f2); node = f2;
     }
@@ -359,6 +360,7 @@ const AudioSys = {
     o = o || {};
     if (!this.started) return;
     const c = this.ctx, t = c.currentTime + (o.start || 0);
+    const nyq = (c.sampleRate || 44100) / 2;   /* keine Filterfrequenz ueber Nyquist */
     const partials = o.partials || [1, 2.42, 4.1];
     const decay = o.decay || [1, .55, .3];
     const _dst = o.dest || this.sfxGain;
@@ -379,7 +381,7 @@ const AudioSys = {
     src.connect(eg);
     partials.forEach((p, i) => {
       const bp = c.createBiquadFilter(); bp.type = 'bandpass';
-      bp.frequency.value = Math.max(30, f * p * (1 + crnd(-.01, .01)));
+      bp.frequency.value = Math.min(nyq, Math.max(30, f * p * (1 + crnd(-.01, .01))));
       bp.Q.value = o.q || 18;
       const g = c.createGain();
       const d = dur * (decay[i] != null ? decay[i] : .3);
@@ -430,11 +432,12 @@ const AudioSys = {
       const ng = c.createGain(); ng.gain.value = o.breath;
       ns.connect(ng); ng.connect(bus); ns.start(t); ns.stop(t + dur + .06);
     }
+    const nyq = (c.sampleRate || 44100) / 2;   /* keine Filterfrequenz ueber Nyquist */
     const F = o.formants || [620, 1180, 2500], A = o.famp || [1, .48, .2];
     F.forEach((ff, i) => {
       const bp = c.createBiquadFilter(); bp.type = 'bandpass';
-      bp.frequency.setValueAtTime(ff, t);
-      if (o.fSweep) bp.frequency.exponentialRampToValueAtTime(Math.max(60, ff * o.fSweep), t + dur);
+      bp.frequency.setValueAtTime(Math.min(nyq, ff), t);
+      if (o.fSweep) bp.frequency.exponentialRampToValueAtTime(Math.min(nyq, Math.max(60, ff * o.fSweep)), t + dur);
       bp.Q.value = o.fq || 7;
       const g = c.createGain(); g.gain.value = A[i] != null ? A[i] : .25;
       bus.connect(bp); bp.connect(g); g.connect(out);
