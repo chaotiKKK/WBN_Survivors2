@@ -3205,16 +3205,25 @@ const AudioSys = {
     });
   },
   _pwmWave(duty) {
-    /* Erzeugt eine PeriodicWave fuer Pulse-Width-Modulation.
-       duty = Pulsverhaeltnis (0..1), 0.5 = Square-Welle. */
+    /* PeriodicWave fuer Pulse-Width-Modulation. duty = Pulsverhaeltnis (0..1),
+       0.5 = Square-Welle.
+       - Pro duty (und Kontext) gecacht: die Welle haengt nur an duty, nicht an
+         der einzelnen Note - so wird sie nicht bei jedem Ton neu berechnet.
+       - disableNormalization:false: der Browser normiert die Welle auf ~Peak 1,
+         wie die nativen Oszillatortypen. Mit true lag der Peak durch Gibbs-
+         Ueberschwingen bei ~1.6 (60% ueber 1) -> uebersteuerte den Drive-
+         Waveshaper der Stimme und war lauter/haerter als der native square-Pfad. */
+    if (!this._pwmCache || this._pwmCacheCtx !== this.ctx) { this._pwmCache = {}; this._pwmCacheCtx = this.ctx; }
+    const key = duty.toFixed(4);
+    if (this._pwmCache[key]) return this._pwmCache[key];
     const n = 64;
     const re = new Float32Array(n + 1), im = new Float32Array(n + 1);
-    re[0] = 0; im[0] = 0;
     for (let k = 1; k <= n; k++) {
-      re[k] = 0;
       im[k] = (2 / (k * Math.PI)) * Math.sin(k * Math.PI * duty);
     }
-    return this.ctx.createPeriodicWave(re, im, { disableNormalization: true });
+    const w = this.ctx.createPeriodicWave(re, im, { disableNormalization: false });
+    this._pwmCache[key] = w;
+    return w;
   },
   _chipTriangle(f, dur, v, o) {
     o = o || {};
