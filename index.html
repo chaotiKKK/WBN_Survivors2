@@ -653,6 +653,17 @@ h2.hd{font-family:var(--amt);color:var(--formular);letter-spacing:.18em}
   padding-top:8px;max-width:none;width:min(760px,94vw)}
 #scTitle .credits b,#scTitle .credits .az{color:var(--post-gelb);font-weight:700}
 
+
+/* ---- Service-Worker Update-Toast (von src/sw-register.js erzeugt) ---- */
+.sw-toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,160%);z-index:200;
+  display:flex;align-items:center;gap:12px;padding:10px 12px 10px 16px;border-radius:11px;
+  background:rgba(18,22,30,.96);border:1px solid #3a4657;box-shadow:0 8px 28px rgba(0,0,0,.55);
+  color:#e8eef6;font:600 13px/1.2 system-ui,-apple-system,sans-serif;
+  opacity:0;transition:transform .32s ease,opacity .32s ease;pointer-events:auto;max-width:92vw}
+.sw-toast.show{transform:translate(-50%,0);opacity:1}
+.sw-toast button{background:#ff8a3d;color:#1a1206;border:0;border-radius:8px;padding:7px 13px;
+  font:700 13px/1 system-ui,sans-serif;cursor:pointer;transition:background .15s ease}
+.sw-toast button:hover{background:#ffa25c}
 </style>
 </head>
 <body>
@@ -1229,7 +1240,7 @@ const AudioSys = {
     this.comp = this.ctx.createDynamicsCompressor();
     this.comp.threshold.value = -14; this.comp.knee.value = 24; this.comp.ratio.value = 10;
     this.comp.attack.value = .003; this.comp.release.value = .25;
-    this.presence = this.ctx.createBiquadFilter(); this.presence.type = 'peaking'; this.presence.frequency.value = 2600; this.presence.gain.value = 1.2; this.presence.Q.value = .7;
+    this.presence = this.ctx.createBiquadFilter(); this.presence.type = 'peaking'; this.presence.frequency.value = 2600; this.presence.gain.value = 0.6; this.presence.Q.value = .5;
     this.limiter = this.ctx.createWaveShaper(); this.limiter.oversample = '2x'; this.limiter.curve = this._clipCurve(1.2);
     this.master.connect(this.comp); this.comp.connect(this.presence); this.presence.connect(this.limiter); this.limiter.connect(this.ctx.destination);
     this.sfxGain = this.ctx.createGain(); this.sfxGain.gain.value = OPT().sfx; this.sfxGain.connect(this.master);
@@ -1239,10 +1250,10 @@ const AudioSys = {
     this.musicGain = this.ctx.createGain(); this.musicGain.gain.value = OPT().music * .5;
     this.duck = this.ctx.createGain(); this.duck.gain.value = 1;
     this.musicFilter = this.ctx.createBiquadFilter(); this.musicFilter.type = 'lowpass'; this.musicFilter.frequency.value = 20000; this.musicFilter.Q.value = .8;
-    this.musicDrive = this.ctx.createWaveShaper(); this.musicDrive.oversample = '2x'; this.musicDrive.curve = this._clipCurve(1.0);
+    /* musicDrive entfernt: per-voice drive reicht, doppelte Sättigung vermieden */
     this.pump = this.ctx.createGain(); this.pump.gain.value = 1;
     this.dangerFilter = this.ctx.createBiquadFilter(); this.dangerFilter.type = 'lowpass'; this.dangerFilter.frequency.value = 20000; this.dangerFilter.Q.value = .5;
-    this.musicGain.connect(this.musicFilter); this.musicFilter.connect(this.dangerFilter); this.dangerFilter.connect(this.musicDrive); this.musicDrive.connect(this.pump); this.pump.connect(this.musicComp); this.musicComp.connect(this.duck); this.duck.connect(this.master);
+    this.musicGain.connect(this.musicFilter); this.musicFilter.connect(this.dangerFilter); this.dangerFilter.connect(this.pump); this.pump.connect(this.musicComp); this.musicComp.connect(this.duck); this.duck.connect(this.master);
     const q = OPT().quality != null ? OPT().quality : 2;
     this.reverbSend = this.ctx.createGain(); this.reverbSend.gain.value = 1;
     this.reverb = this.ctx.createConvolver();
@@ -1357,14 +1368,15 @@ const AudioSys = {
     if (o.echo) { const s = c.createGain(); s.gain.value = o.echo; out.connect(s); s.connect(this.echoIn); }
     const filt = c.createBiquadFilter();
     filt.type = 'lowpass';
-    filt.frequency.setValueAtTime(Math.max(30, o.cutoff || 5000), t);
-    if (o.cutoffEnd) filt.frequency.exponentialRampToValueAtTime(Math.max(40, o.cutoffEnd), t + dur);
+    const nyq = (c.sampleRate || 44100) / 2;
+    filt.frequency.setValueAtTime(Math.min(nyq, Math.max(30, o.cutoff || 5000)), t);
+    if (o.cutoffEnd) filt.frequency.exponentialRampToValueAtTime(Math.min(nyq, Math.max(40, o.cutoffEnd)), t + dur);
     filt.Q.value = o.q != null ? o.q : .5;
     const n = Math.max(1, Math.round(o.stack || 1));
     const jit = (o.jit != null ? o.jit : (dest === this.sfxGain ? 6 : 0)) * (Math.random() * 2 - 1);
     for (let i = 0; i < n; i++) {
       const osc = c.createOscillator();
-      osc.type = o.type || 'square';
+      if (o.periodicWave) osc.setPeriodicWave(o.periodicWave); else osc.type = o.type || 'square';
       const det = (i - (n - 1) / 2) * ((o.detune || 0) + (o.spread || 0)) + jit;
       osc.frequency.setValueAtTime(Math.max(20, o.freq * Math.pow(2, det / 1200)), t);
       if (o.slide) osc.frequency.exponentialRampToValueAtTime(Math.max(20, o.freq + o.slide), t + dur);
@@ -3176,12 +3188,30 @@ const AudioSys = {
   _chipPulse(f, dur, v, o) {
     o = o || {};
     const V = this._chipV();
+    /* Pulse-Width-Modulation: duty bestimmt das Pulsverhaeltnis (NES: 50%)
+       Per PeriodicWave als custom-Typ, damit die Web-Audio-Oscillator
+       die korrekte Wellenform erzeugt. duty=0.5 = klassisches Square. */
+    const duty = V.duty != null ? V.duty : .5;
+    const pwType = duty === .5 ? 'square' : null;
     this.voice({
-      freq: f, dur: dur, type: 'triangle', vol: v,
+      freq: f, dur: dur, type: pwType || 'square', vol: v,
       attack: .003, release: dur * .6, cutoff: 3200, cutoffEnd: 1800,
       q: .8, drive: V.drive || 1, start: o.at, pan: o.pan || 0,
-      dest: this.musicGain, verb: V.delay || .12
+      dest: this.musicGain, verb: V.delay || .12,
+      periodicWave: pwType ? null : this._pwmWave(duty)
     });
+  },
+  _pwmWave(duty) {
+    /* Erzeugt eine PeriodicWave fuer Pulse-Width-Modulation.
+       duty = Pulsverhaeltnis (0..1), 0.5 = Square-Welle. */
+    const n = 64;
+    const re = new Float32Array(n + 1), im = new Float32Array(n + 1);
+    re[0] = 0; im[0] = 0;
+    for (let k = 1; k <= n; k++) {
+      re[k] = 0;
+      im[k] = (2 / (k * Math.PI)) * Math.sin(k * Math.PI * duty);
+    }
+    return this.ctx.createPeriodicWave(re, im, { disableNormalization: true });
   },
   _chipTriangle(f, dur, v, o) {
     o = o || {};
@@ -13164,6 +13194,8 @@ const Game = {
   endless: false, manualSeed: 0, combo: 0, comboT: 0, timeScale: 1, hitstop: 0, speedBase: 1,
   deathInfo: null, lastHitBy: null, swapT: 0, _shakeAngled: false, epilog: null, speedMul: 1, sepToggle: false,
 
+};
+Object.assign(Game, {
   init() {
     Combat.setWorld(this);
     this.cv = $('game'); this.ctx = this.cv.getContext('2d', { alpha: false });
@@ -13235,7 +13267,7 @@ const Game = {
     const AUFPRALL = 0.55;                 /* Anteil des Hiebs, ab dem es schneidet */
     const bodenY = H * 0.78, hoehe = Math.max(150, Math.min(H * 0.52, 300));
     const zielX = W * 0.62;
-    let t0 = null, saege = null, abgebrochen = false, schnitt = null, fetzen = null;
+    let t0 = null, saege = null, abgebrochen = false, schnitt = null, fetzen = null, funkenSpur = null;
     let saegeVersucht = false, vollgas = false, gekracht = false;
 
     const raus = (sofort) => {
@@ -13320,8 +13352,40 @@ const Game = {
       }
     };
 
+    /* Funkenspritzer entlang der ganzen Schnittkante - einmal beim Aufprall
+       gesetzt, spruehen dann nach aussen und verglimmen, bevor die Fetzen weg
+       sind. Parametrisch in fs (Fortschritt der Schnittphase), damit sie bei
+       rAF-Aussetzern nicht springen. */
+    const baueFunken = () => {
+      funkenSpur = [];
+      const N = 64, cols = ['#fff3b0', '#ffd24a', '#ff8a3d', '#ffffff'];
+      for (let i = 0; i < N; i++) {
+        const fx = i / (N - 1);
+        const ang = Math.random() * Math.PI * 2, spd = 60 + Math.random() * 190;
+        funkenSpur.push({
+          ox: fx * W + (Math.random() - .5) * 6, oy: linieY(fx) + (Math.random() - .5) * 6,
+          vx: Math.cos(ang) * spd, vy: Math.sin(ang) * spd - 50, g: 130 + Math.random() * 160,
+          col: cols[i % 4], sz: 1.4 + Math.random() * 1.8, life: .45 + Math.random() * .3
+        });
+      }
+    };
+
+    const zeichneFunken = (fs) => {
+      x.save();
+      x.globalCompositeOperation = 'lighter';
+      for (const s of funkenSpur) {
+        const a = 1 - fs / s.life;
+        if (a <= 0) continue;
+        const px = s.ox + s.vx * fs, py = s.oy + s.vy * fs + s.g * fs * fs;
+        x.globalAlpha = a; x.fillStyle = s.col;
+        x.fillRect(px - s.sz / 2, py - s.sz / 2, s.sz, s.sz);
+        x.globalAlpha = a * .5;   /* kurzer Schweif hinter dem Funken */
+        x.fillRect(px - s.vx * .02 - s.sz / 2, py - s.vy * .02 - s.sz / 2, s.sz * .7, s.sz * .7);
+      }
+      x.restore();
+    };
+
     const zeichneFetzen = (f) => {
-      x.clearRect(0, 0, W, H);
       for (const p of fetzen) {
         const a = 1 - f * 1.12;                       /* Fetzen faden aus -> Menue scheint durch */
         if (a <= 0) continue;
@@ -13362,8 +13426,17 @@ const Game = {
       /* --- die Fetzen fliegen --- */
       const ts = th - T_HIEB;
       if (ts >= T_SCHNITT) return true;
-      if (!schnitt) { schnappschuss(); baueFetzen(); }
-      zeichneFetzen(ts / T_SCHNITT);
+      if (!schnitt) { schnappschuss(); baueFetzen(); baueFunken(); }
+      const fs = ts / T_SCHNITT;
+      /* Leichte Kameraerschuetterung beim Aufprall, klingt in ~35% der Phase ab. */
+      const sAmp = 8 * Math.pow(1 - Math.min(1, fs / .35), 2);
+      const shx = Math.sin(fs * 46) * sAmp, shy = Math.cos(fs * 53) * sAmp * .8;
+      x.clearRect(0, 0, W, H);
+      x.save();
+      x.translate(shx, shy);
+      zeichneFetzen(fs);
+      zeichneFunken(fs);
+      x.restore();
       return false;
     };
 
@@ -13624,6 +13697,8 @@ const Game = {
       }
     });
   },
+});
+Object.assign(Game, {
   setRunSeed(seed) {
     this.seed = (seed >>> 0) || 1;
     this.manualSeed = this.seed;
@@ -14086,6 +14161,8 @@ const Game = {
     }
     Save.save();
   },
+});
+Object.assign(Game, {
   spawnEnemyAt(def, x, y, boss) {
     const e = this.enemyPool.pop() || new Enemy();
     e.spawn(def || ENEMIES[0], x, y, this.wave, boss);
@@ -14332,6 +14409,8 @@ const Game = {
      lässt: Regen mit Rutschphysik, Stromausfall, Feierabendverkehr,
      Nebel, Hitze, Nacht und Sturm.
      ============================================================ */
+});
+Object.assign(Game, {
   ARENA_MODS: [
     { id: 'regen', name: 'REGEN', desc: 'Nasser Asphalt: Trägheit beim Bremsen, Sicht leicht getrübt.', col: '#59e6ff', minW: 3 },
     { id: 'stromausfall', name: 'STROMAUSFALL', desc: 'Nur der eigene Lichtkegel bleibt — der Rest liegt im Dunkeln.', col: '#7f92b8', minW: 5 },
@@ -14745,6 +14824,8 @@ const Game = {
     if (c.id === 'nohit' && this.players.some(p => p.tookDamageThisWave)) { UI.toast('Auftrag verfehlt: ' + c.t); return; }
     this.contractDone();
   },
+});
+Object.assign(Game, {
   bossIntro: 0, bossIntroMax: 3.4, bossIntroTarget: null, bossIntroName: '',
   /* ------------------------------------------------------------------
      UEBERZEIT: der Boss zieht an, bis der Kampf entschieden ist.
@@ -14935,6 +15016,8 @@ const Game = {
     ctx.restore();
     ctx.globalAlpha = 1; ctx.textAlign = 'left';
   },
+});
+Object.assign(Game, {
   hazObjs: [],
   spawnMortar(sx, sy, tx, ty, L, name) {
     if (this.hazObjs.length > 90) return;
@@ -15100,6 +15183,8 @@ const Game = {
     return { x: (sx - this.W / 2) / this.cam.zoom + this.cam.x, y: (sy - this.H / 2) / this.cam.zoom + this.cam.y };
   },
   shake(amt, t) { this.addTrauma(amt, t); this._shakeAngled = false; },
+});
+Object.assign(Game, {
   loop(t) {
     const dt = Math.min(.05, (t - this.lastT) / 1000 || 0);
     this.lastT = t;
@@ -15478,6 +15563,8 @@ const Game = {
     this.hudAcc += dt;
     if (this.hudAcc >= .1) { this.hudAcc = 0; UI.renderHud(); }
   },
+});
+Object.assign(Game, {
   updateProjectile(p, dt) {
     const L = this.level;
     p.life -= dt; if (p.life <= 0) { if (p.boom) this.detonate(p); p.dead = true; return; }
@@ -15706,6 +15793,8 @@ const Game = {
       }
     }
   },
+});
+Object.assign(Game, {
   render() {
     const ctx = this.ctx;
     ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
@@ -16288,8 +16377,7 @@ const Game = {
     /* Die Figur steht jetzt als DOM-Element neben dem Schriftzug — auf der
        Leinwand waere sie hinter der fast deckenden Menueflaeche unsichtbar. */
   }
-};
-
+});
 /* ============================ 22. PARAMETER-WERKSTATT ============================
    Ein Editor fuer alle Waffen- und Gegnerwerte zur Laufzeit: Reichweite,
    Streuung, Farbe, Bauart, Verhalten, Schaden, Tempo, Sonderwirkungen.
@@ -17448,9 +17536,56 @@ window.addEventListener('DOMContentLoaded', () => { Game.init(); if (location.se
 if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(() => { if (!Game.ctx) { Game.init(); if (location.search.indexOf('selftest') >= 0) setTimeout(() => SelfTest.run(), 300); } }, 0);
 </script>
 <script>
+/* Service-Worker-Registrierung mit Update-Erkennung.
+   Der Build stempelt einen Content-Hash in sw.js (CACHE-Name). Aendert sich das
+   Spiel, sieht der Browser ein neues sw.js, installiert es als wartenden Worker
+   und wir zeigen einen "Update verfuegbar"-Toast. Erst der Klick aktiviert den
+   neuen Worker (skipWaiting) und laedt die Seite neu - so bleibt niemand auf
+   einem alten Cache haengen, ohne mitten im Spiel unterbrochen zu werden. */
 if ('serviceWorker' in navigator) {
   addEventListener('load', function () {
-    navigator.serviceWorker.register('sw.js').catch(function () {});
+    var updating = false;
+
+    function toast(reg) {
+      if (document.getElementById('sw-toast')) return;
+      var el = document.createElement('div');
+      el.id = 'sw-toast';
+      el.className = 'sw-toast';
+      el.setAttribute('role', 'status');
+      el.innerHTML = '<span>Update verfügbar</span><button type="button">Neu laden</button>';
+      el.querySelector('button').addEventListener('click', function () {
+        updating = true;
+        var w = reg.waiting || reg.installing;
+        if (w) w.postMessage({ type: 'SKIP_WAITING' });
+        el.querySelector('button').textContent = '…';
+      });
+      document.body.appendChild(el);
+      requestAnimationFrame(function () { el.classList.add('show'); });
+    }
+
+    navigator.serviceWorker.register('sw.js').then(function (reg) {
+      /* Update lag schon vor dem Laden bereit. */
+      if (reg.waiting && navigator.serviceWorker.controller) toast(reg);
+      /* Neuer Worker installiert sich -> erst bei 'installed' + bestehendem
+         Controller ist es ein echtes Update (nicht die Erstinstallation). */
+      reg.addEventListener('updatefound', function () {
+        var neu = reg.installing;
+        if (!neu) return;
+        neu.addEventListener('statechange', function () {
+          if (neu.state === 'installed' && navigator.serviceWorker.controller) toast(reg);
+        });
+      });
+      /* Regelmaessig nach Updates fragen: beim Sichtbarwerden und stuendlich. */
+      var pruefe = function () { reg.update().catch(function () {}); };
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) pruefe(); });
+      setInterval(pruefe, 60 * 60 * 1000);
+    }).catch(function () {});
+
+    /* Nur neu laden, wenn der Wechsel vom Spieler ausgeloest wurde - die
+       Erstinstallation (clients.claim) darf die Seite nicht neu laden. */
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (updating) location.reload();
+    });
   });
 }
 </script>

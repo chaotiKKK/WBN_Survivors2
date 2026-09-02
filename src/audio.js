@@ -27,7 +27,7 @@ const AudioSys = {
     this.comp = this.ctx.createDynamicsCompressor();
     this.comp.threshold.value = -14; this.comp.knee.value = 24; this.comp.ratio.value = 10;
     this.comp.attack.value = .003; this.comp.release.value = .25;
-    this.presence = this.ctx.createBiquadFilter(); this.presence.type = 'peaking'; this.presence.frequency.value = 2600; this.presence.gain.value = 1.2; this.presence.Q.value = .7;
+    this.presence = this.ctx.createBiquadFilter(); this.presence.type = 'peaking'; this.presence.frequency.value = 2600; this.presence.gain.value = 0.6; this.presence.Q.value = .5;
     this.limiter = this.ctx.createWaveShaper(); this.limiter.oversample = '2x'; this.limiter.curve = this._clipCurve(1.2);
     this.master.connect(this.comp); this.comp.connect(this.presence); this.presence.connect(this.limiter); this.limiter.connect(this.ctx.destination);
     this.sfxGain = this.ctx.createGain(); this.sfxGain.gain.value = OPT().sfx; this.sfxGain.connect(this.master);
@@ -37,10 +37,10 @@ const AudioSys = {
     this.musicGain = this.ctx.createGain(); this.musicGain.gain.value = OPT().music * .5;
     this.duck = this.ctx.createGain(); this.duck.gain.value = 1;
     this.musicFilter = this.ctx.createBiquadFilter(); this.musicFilter.type = 'lowpass'; this.musicFilter.frequency.value = 20000; this.musicFilter.Q.value = .8;
-    this.musicDrive = this.ctx.createWaveShaper(); this.musicDrive.oversample = '2x'; this.musicDrive.curve = this._clipCurve(1.0);
+    /* musicDrive entfernt: per-voice drive reicht, doppelte Sättigung vermieden */
     this.pump = this.ctx.createGain(); this.pump.gain.value = 1;
     this.dangerFilter = this.ctx.createBiquadFilter(); this.dangerFilter.type = 'lowpass'; this.dangerFilter.frequency.value = 20000; this.dangerFilter.Q.value = .5;
-    this.musicGain.connect(this.musicFilter); this.musicFilter.connect(this.dangerFilter); this.dangerFilter.connect(this.musicDrive); this.musicDrive.connect(this.pump); this.pump.connect(this.musicComp); this.musicComp.connect(this.duck); this.duck.connect(this.master);
+    this.musicGain.connect(this.musicFilter); this.musicFilter.connect(this.dangerFilter); this.dangerFilter.connect(this.pump); this.pump.connect(this.musicComp); this.musicComp.connect(this.duck); this.duck.connect(this.master);
     const q = OPT().quality != null ? OPT().quality : 2;
     this.reverbSend = this.ctx.createGain(); this.reverbSend.gain.value = 1;
     this.reverb = this.ctx.createConvolver();
@@ -155,14 +155,15 @@ const AudioSys = {
     if (o.echo) { const s = c.createGain(); s.gain.value = o.echo; out.connect(s); s.connect(this.echoIn); }
     const filt = c.createBiquadFilter();
     filt.type = 'lowpass';
-    filt.frequency.setValueAtTime(Math.max(30, o.cutoff || 5000), t);
-    if (o.cutoffEnd) filt.frequency.exponentialRampToValueAtTime(Math.max(40, o.cutoffEnd), t + dur);
+    const nyq = (c.sampleRate || 44100) / 2;
+    filt.frequency.setValueAtTime(Math.min(nyq, Math.max(30, o.cutoff || 5000)), t);
+    if (o.cutoffEnd) filt.frequency.exponentialRampToValueAtTime(Math.min(nyq, Math.max(40, o.cutoffEnd)), t + dur);
     filt.Q.value = o.q != null ? o.q : .5;
     const n = Math.max(1, Math.round(o.stack || 1));
     const jit = (o.jit != null ? o.jit : (dest === this.sfxGain ? 6 : 0)) * (Math.random() * 2 - 1);
     for (let i = 0; i < n; i++) {
       const osc = c.createOscillator();
-      osc.type = o.type || 'square';
+      if (o.periodicWave) osc.setPeriodicWave(o.periodicWave); else osc.type = o.type || 'square';
       const det = (i - (n - 1) / 2) * ((o.detune || 0) + (o.spread || 0)) + jit;
       osc.frequency.setValueAtTime(Math.max(20, o.freq * Math.pow(2, det / 1200)), t);
       if (o.slide) osc.frequency.exponentialRampToValueAtTime(Math.max(20, o.freq + o.slide), t + dur);
@@ -1974,12 +1975,30 @@ const AudioSys = {
   _chipPulse(f, dur, v, o) {
     o = o || {};
     const V = this._chipV();
+    /* Pulse-Width-Modulation: duty bestimmt das Pulsverhaeltnis (NES: 50%)
+       Per PeriodicWave als custom-Typ, damit die Web-Audio-Oscillator
+       die korrekte Wellenform erzeugt. duty=0.5 = klassisches Square. */
+    const duty = V.duty != null ? V.duty : .5;
+    const pwType = duty === .5 ? 'square' : null;
     this.voice({
-      freq: f, dur: dur, type: 'triangle', vol: v,
+      freq: f, dur: dur, type: pwType || 'square', vol: v,
       attack: .003, release: dur * .6, cutoff: 3200, cutoffEnd: 1800,
       q: .8, drive: V.drive || 1, start: o.at, pan: o.pan || 0,
-      dest: this.musicGain, verb: V.delay || .12
+      dest: this.musicGain, verb: V.delay || .12,
+      periodicWave: pwType ? null : this._pwmWave(duty)
     });
+  },
+  _pwmWave(duty) {
+    /* Erzeugt eine PeriodicWave fuer Pulse-Width-Modulation.
+       duty = Pulsverhaeltnis (0..1), 0.5 = Square-Welle. */
+    const n = 64;
+    const re = new Float32Array(n + 1), im = new Float32Array(n + 1);
+    re[0] = 0; im[0] = 0;
+    for (let k = 1; k <= n; k++) {
+      re[k] = 0;
+      im[k] = (2 / (k * Math.PI)) * Math.sin(k * Math.PI * duty);
+    }
+    return this.ctx.createPeriodicWave(re, im, { disableNormalization: true });
   },
   _chipTriangle(f, dur, v, o) {
     o = o || {};

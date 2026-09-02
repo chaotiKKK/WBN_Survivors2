@@ -8,5 +8,15 @@
   "weapons.js",
   "run.js",
   "ui.js",
-  "engine.js"
+  "engine-base.js",
+  "engine-init.js",
+  "engine-run.js",
+  "engine-spawn.js",
+  "engine-arena.js",
+  "engine-boss.js",
+  "engine-hazards.js",
+  "engine-loop.js",
+  "engine-physics.js",
+  "engine-render.js",
+  "engine-legacy.js"
 ]
