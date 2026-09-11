@@ -1,4 +1,13 @@
-# Wiesbaden Survivors — Arena 1984
+# WBN_Survivors2
+Alpha Version 1 — Unreal-Engine-Port von Wiesbaden Survivors.
+
+Grundlage: Klon von `C:\freebuff\wiesbaden-survivors` (Single-File-PWA,
+inkl. Git-Historie). Sprites (`models/sheets/`, `src/assets/`), Datentabellen
+(`src/data.js`) und Spielsysteme dienen als Vorlage für den UE-Port.
+
+---
+
+# Wiesbaden Survivors — Arena 1984 (Web-Basis)
 
 Retro-futurismus Survivor-like 浏览器游戏（Wiesbaden 主题，德语 UI）。
 **单文件、零依赖、完全离线可玩**：`index.html` 即全部（字体 base64 内嵌）。
