@@ -191,6 +191,10 @@ namespace WBNImport
 	template<typename T>
 	static T* GetOrCreate(const FString& LongPkg, const FString& AssetName)
 	{
+		// Zuerst VOLLSTÄNDIG laden (Referenzen bleiben gültig). FindObject allein
+		// reicht nicht: Die Registry hält ggf. nur teilgeladene Pakete vor, und
+		// SavePackage crasht dann ("nur teilweise geladen").
+		if (T* Loaded = LoadObject<T>(nullptr, *LongPkg)) return Loaded;
 		UPackage* Pkg = CreatePackage(*LongPkg);
 		T* A = FindObject<T>(Pkg, *AssetName);
 		if (!A) A = NewObject<T>(Pkg, *AssetName, RF_Public | RF_Standalone);
