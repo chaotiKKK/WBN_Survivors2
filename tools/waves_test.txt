@@ -1,0 +1,30 @@
+# Wellen-Test (Seed 1234, Formel aus engine-run.js, ohne Wetten/Mods)
+# Welle Gefahr Gruppen Spawns Eliten MaxMinW Top3-Mix
+W01 D0 groups=11 spawns=33 elites=0 maxminW=1 runner:13,swarm:12,walker:8
+W01 D2 groups=14 spawns=42 elites=0 maxminW=1 swarm:16,runner:16,walker:10
+W01 D5 groups=19 spawns=57 elites=0 maxminW=1 runner:24,swarm:22,walker:11
+W02 D0 groups=15 spawns=45 elites=0 maxminW=1 swarm:18,runner:17,walker:10
+W02 D2 groups=19 spawns=57 elites=0 maxminW=1 runner:24,swarm:22,walker:11
+W02 D5 groups=26 spawns=78 elites=0 maxminW=1 runner:34,swarm:26,walker:18
+W03 D0 groups=14 spawns=56 elites=0 maxminW=3 swarm:16,runner:13,walker:12
+W03 D2 groups=19 spawns=76 elites=0 maxminW=3 runner:20,swarm:19,walker:17
+W03 D5 groups=26 spawns=104 elites=0 maxminW=3 walker:27,runner:27,swarm:25
+W05 D0 groups=22 spawns=88 elites=0 maxminW=5 walker:15,runner:14,swarm:11
+W05 D2 groups=28 spawns=112 elites=0 maxminW=5 walker:18,swarm:17,runner:16
+W05 D5 groups=39 spawns=156 elites=0 maxminW=5 swarm:27,walker:24,runner:22
+W10 D0 groups=29 spawns=174 elites=0 maxminW=10 runner:22,walker:17,flyer:12
+W10 D2 groups=37 spawns=222 elites=27 maxminW=10 runner:24,swarm:21,walker:19
+W10 D5 groups=51 spawns=306 elites=30 maxminW=10 runner:31,swarm:28,walker:22
+W15 D0 groups=34 spawns=272 elites=0 maxminW=12 runner:31,shooter:25,spinner:18
+W15 D2 groups=44 spawns=352 elites=41 maxminW=12 swarm:36,runner:35,walker:29
+W15 D5 groups=61 spawns=488 elites=48 maxminW=12 runner:52,swarm:43,walker:36
+W20 D0 groups=48 spawns=384 elites=0 maxminW=12 runner:48,shooter:31,swarm:28
+W20 D2 groups=63 spawns=504 elites=57 maxminW=12 runner:52,swarm:42,walker:40
+W20 D2+koop groups=94 spawns=752 elites=85 maxminW=12 runner:71,walker:63,swarm:60
+W20 D5 groups=87 spawns=696 elites=83 maxminW=12 runner:67,walker:58,swarm:55
+W25 D0 groups=64 spawns=512 elites=0 maxminW=12 runner:53,shooter:40,swarm:39
+W25 D2 groups=83 spawns=664 elites=100 maxminW=12 runner:64,walker:59,swarm:50
+W25 D5 groups=115 spawns=920 elites=128 maxminW=12 runner:82,walker:81,swarm:71
+W30 D0 groups=81 spawns=648 elites=0 maxminW=12 runner:65,walker:47,shooter:46
+W30 D2 groups=105 spawns=840 elites=129 maxminW=12 walker:76,runner:72,swarm:65
+W30 D5 groups=145 spawns=1160 elites=178 maxminW=12 runner:106,walker:99,swarm:90

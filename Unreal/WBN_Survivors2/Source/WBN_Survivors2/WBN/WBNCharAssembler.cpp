@@ -18,27 +18,35 @@ bool UWBNCharAssembler::Assemble(const UWBNCharacterData* Data)
 	BodySlot = Owner->GetMesh();
 	ClearAttachments();
 
-	const TSoftObjectPtr<USkeletalMesh>* BodyRef = BodyMeshes.Find(Data->Skin.Build);
-	if (!BodyRef || BodyRef->IsNull())
+	// Quelle 1: Mesh-Refs am DataAsset. Quelle 2 (Fallback): Maps hier.
+	auto Resolve = [&](const TSoftObjectPtr<USkeletalMesh>& FromData, const FString& Key) -> USkeletalMesh*
 	{
-		UE_LOG(LogTemp, Warning, TEXT("WBNAssembly: kein Body für Build '%s' registriert"), *Data->Skin.Build);
-		return false;
-	}
-	USkeletalMesh* Body = BodyRef->LoadSynchronous();
-	if (!Body) { UE_LOG(LogTemp, Warning, TEXT("WBNAssembly: Body-Load fehlgeschlagen: %s"), *Data->Skin.Build); return false; }
+		if (!FromData.IsNull())
+			if (USkeletalMesh* M = FromData.LoadSynchronous()) return M;
+		const TSoftObjectPtr<USkeletalMesh>* Ref = BodyMeshes.Find(Key);
+		if (!Ref || Ref->IsNull()) { UE_LOG(LogTemp, Warning, TEXT("WBNAssembly: kein Mesh für '%s'"), *Key); return nullptr; }
+		return Ref->LoadSynchronous();
+	};
+	USkeletalMesh* Body = Resolve(Data->BodyMesh, Data->Skin.Build);
+	if (!Body) return false;
 	BodySlot->SetSkeletalMesh(Body);
 	BodySlot->SetRelativeRotation(FRotator(0.f, MeshYawOffset, 0.f));
 	ApplyTints(BodySlot, Data);
 
-	auto Attach = [&](const FString& Id, FName Bone)
+	auto Attach = [&](const TSoftObjectPtr<USkeletalMesh>& FromData, const FString& Id, FName Bone)
 	{
+		if (!FromData.IsNull())
+		{
+			if (USkeletalMesh* M = FromData.LoadSynchronous()) SpawnFollower(M, Bone);
+			return;
+		}
 		if (Id.IsEmpty() || Id == TEXT("none")) return;
 		const TSoftObjectPtr<USkeletalMesh>* Ref = Attachments.Find(Id);
 		if (!Ref || Ref->IsNull()) { UE_LOG(LogTemp, Warning, TEXT("WBNAssembly: Attachment '%s' nicht registriert"), *Id); return; }
 		if (USkeletalMesh* M = Ref->LoadSynchronous()) SpawnFollower(M, Bone);
 	};
-	Attach(Data->Skin.Hat, HatBone);
-	Attach(Data->Skin.Prop, PropBone);
+	Attach(Data->HatMesh, Data->Skin.Hat, HatBone);
+	Attach(Data->PropMesh, Data->Skin.Prop, PropBone);
 	return true;
 }
 

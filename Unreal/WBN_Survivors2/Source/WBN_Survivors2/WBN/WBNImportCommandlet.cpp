@@ -10,6 +10,8 @@
 #include "Serialization/JsonSerializer.h"
 #include "AssetRegistry/AssetRegistryModule.h"
 #include "Animation/Skeleton.h"
+#include "HAL/FileManager.h"
+#include "WBNWaveDirector.h"
 #include "UObject/SavePackage.h"
 #include "Misc/PackageName.h"
 
@@ -201,6 +203,95 @@ namespace WBNImport
 		if (!A) A = NewObject<T>(Pkg, *AssetName, RF_Public | RF_Standalone);
 		return A;
 	}
+	// Soft-Ref setzen, falls das Asset als Datei existiert (Registry-unabhängig).
+	// Pfad von Hand gebaut: LongPackageNameToFilename wirft Fatal bei noch
+	// nicht gescannten Content-Pfaden.
+	static bool SetMeshRefIfExists(TSoftObjectPtr<USkeletalMesh>& Field, const FString& LongPkg)
+	{
+		if (!LongPkg.StartsWith(TEXT("/Game/"))) return false;
+		const FString File = FPaths::ProjectDir() + TEXT("Content") + LongPkg.RightChop(5) + TEXT(".uasset");
+		if (!FPaths::FileExists(File)) return false;
+		Field = TSoftObjectPtr<USkeletalMesh>(FSoftObjectPath(LongPkg));
+		return true;
+	}
+	// Erstes <prefix>*-Mesh im Char-Ordner suchen (Platten-Scan, kein Registry-Timing).
+	static FString FindPrefixedMesh(const FString& CharFolder, const FString& Prefix)
+	{
+		const FString Dir = FPaths::ProjectDir() + TEXT("Content/WBN/Chars/") + FPaths::GetPathLeaf(CharFolder) + TEXT("/");
+		TArray<FString> Files;
+		IFileManager::Get().FindFiles(Files, *(Dir + Prefix + TEXT("*.uasset")), true, false);
+		if (Files.Num() == 0) return FString();
+		return CharFolder + TEXT("/") + FPaths::GetBaseFilename(Files[0]);
+	}
+	static TArray<TSharedPtr<FJsonValue>> ReadJsonArray(const FString& Path, bool& bOk)
+	{
+		bOk = false;
+		FString Json;
+		if (!FFileHelper::LoadFileToString(Json, *Path)) return {};
+		TSharedPtr<FJsonValue> Root;
+		TSharedRef<TJsonReader<>> R = TJsonReaderFactory<>::Create(Json);
+		if (!FJsonSerializer::Deserialize(R, Root) || !Root.IsValid() || Root->Type != EJson::Array) return {};
+		bOk = true;
+		return Root->AsArray();
+	}
+	// Modus -testwaves: Wellen 1..30 gegen UWBNWaveDirector rechnen, Tabelle schreiben.
+	static bool TestWaves(const FString& DataDir)
+	{
+		bool bOkE = false, bOkD = false;
+		const auto Enemies = ReadJsonArray(DataDir + TEXT("enemies.json"), bOkE);
+		const auto Dangers = ReadJsonArray(DataDir + TEXT("dangers.json"), bOkD);
+		if (!bOkE || !bOkD) { UE_LOG(LogTemp, Error, TEXT("WBNImport: enemies/dangers.json fehlt")); return false; }
+		TArray<FWBNEnemyPick> Pool;
+		TMap<FString, int32> MinW;
+		for (const auto& V : Enemies)
+		{
+			const auto O = V->AsObject(); if (!O.IsValid()) continue;
+			FWBNEnemyPick P;
+			P.EnemyId = JStr(O, TEXT("id"));
+			P.MinWave = (int32)JNum(O, TEXT("minW"), 1.0);
+			P.Weight = (float)JNum(O, TEXT("w"), 10.0);
+			Pool.Add(P);
+			MinW.Add(P.EnemyId, P.MinWave);
+		}
+		auto CntFor = [&](int32 N) -> float
+		{
+			for (const auto& V : Dangers)
+			{
+				const auto O = V->AsObject();
+				if (O.IsValid() && (int32)JNum(O, TEXT("n"), -1.0) == N) return (float)JNum(O, TEXT("cnt"), 1.0);
+			}
+			return 1.f;
+		};
+		FString Out = TEXT("# Wellen-Test (Seed 1234, Formel aus engine-run.js, ohne Wetten/Mods)\n");
+		Out += TEXT("# Welle Gefahr Gruppen Spawns Eliten MaxMinW Top3-Mix\n");
+		const int32 Waves[] = { 1, 2, 3, 5, 10, 15, 20, 25, 30 };
+		const int32 Dng[] = { 0, 2, 5 };
+		for (int32 W : Waves) for (int32 D : Dng) for (int32 Coop = 0; Coop < 2; Coop++)
+		{
+			if (Coop == 1 && !(W == 20 && D == 2)) continue; // eine Koop-Probe reicht
+			const auto Groups = UWBNWaveDirector::BuildWave(W, CntFor(D), D, Coop == 1, Pool, 1234);
+			int32 Spawns = 0, Elites = 0, MaxMin = 0;
+			TMap<FString, int32> Mix;
+			for (const auto& G : Groups) for (const auto& E : G.Entries)
+			{
+				Spawns++;
+				if (E.bElite) Elites++;
+				if (const int32* M = MinW.Find(E.EnemyId)) MaxMin = FMath::Max(MaxMin, *M);
+				Mix.FindOrAdd(E.EnemyId)++;
+			}
+			Mix.ValueSort([](int32 A, int32 B) { return A > B; });
+			TArray<FString> Top;
+			int32 k = 0;
+			for (const auto& KV : Mix) { if (k++ >= 3) break; Top.Add(FString::Printf(TEXT("%s:%d"), *KV.Key, KV.Value)); }
+			Out += FString::Printf(TEXT("W%02d D%d%s groups=%d spawns=%d elites=%d maxminW=%d %s\n"),
+				W, D, Coop ? TEXT("+koop") : TEXT(""), Groups.Num(), Spawns, Elites, MaxMin, *FString::Join(Top, TEXT(",")));
+		}
+		FString File = FPaths::Combine(FPaths::ProjectDir(), TEXT("../../tools/waves_test.txt"));
+		FPaths::CollapseRelativeDirectories(File);
+		FFileHelper::SaveStringToFile(Out, *File);
+		UE_LOG(LogTemp, Display, TEXT("WBNImport: Wellen-Test -> %s"), *File);
+		return true;
+	}
 }
 
 int32 UWBNImportCommandlet::Main(const FString& Params)
@@ -230,6 +321,9 @@ int32 UWBNImportCommandlet::Main(const FString& Params)
 	{
 		DataDir = FPaths::Combine(FPaths::ProjectDir(), TEXT("Unreal/Data/"));
 	}
+	// Modus -testwaves: Wellen-Tabelle rechnen statt importieren.
+	if (Params.Contains(TEXT("testwaves")))
+		return TestWaves(DataDir) ? 0 : 1;
 	int32 Total = 0, Failed = 0;
 
 	auto LoadArr = [&](const FString& File) -> TArray<TSharedPtr<FJsonValue>>
@@ -284,6 +378,13 @@ int32 UWBNImportCommandlet::Main(const FString& Params)
 		}
 		const TSharedPtr<FJsonObject>* Un = nullptr;
 		if (O->TryGetObjectField(TEXT("unlock"), Un) && Un) ApplyUnlock(A->Unlock, *Un);
+		// 3D-Meshes: Konvention /Game/WBN/Chars/<CapId>/<id>_body, Hut exakt sonst Scan.
+		const FString CapId = Id.Left(1).ToUpper() + Id.Mid(1);
+		const FString CharFolder = TEXT("/Game/WBN/Chars/") + CapId;
+		SetMeshRefIfExists(A->BodyMesh, CharFolder + TEXT("/") + Id + TEXT("_body"));
+		if (!SetMeshRefIfExists(A->HatMesh, CharFolder + TEXT("/") + Id + TEXT("_hat_") + A->Skin.Hat)
+			&& !A->Skin.Hat.IsEmpty() && A->Skin.Hat != TEXT("none"))
+			SetMeshRefIfExists(A->HatMesh, FindPrefixedMesh(CharFolder, Id + TEXT("_hat_")));
 		if (!SaveAsset(A->GetOutermost(), A)) { UE_LOG(LogTemp, Error, TEXT("WBNImport: Save fehlgeschlagen: %s"), *Id); Failed++; }
 		else Total++;
 	}

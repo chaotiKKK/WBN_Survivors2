@@ -70,6 +70,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WBN|Char") FWBNCharSkin Skin;
 	/** Optionales Sprite-Sheet-Set (models/sheets/<id>_{idle,walk,punch}.png), leer = Skin-Render. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WBN|Char") FString Sprite;
+	/** 3D-Meshes (Source of Truth für den Assembler; Fallback: dessen Maps). */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WBN|Char|Meshes") TSoftObjectPtr<USkeletalMesh> BodyMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WBN|Char|Meshes") TSoftObjectPtr<USkeletalMesh> HatMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WBN|Char|Meshes") TSoftObjectPtr<USkeletalMesh> PropMesh;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WBN|Char") FWBNStats Stats;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WBN|Char") FString StartWeapon;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WBN|Char") FWBNCharAbility Ability;
