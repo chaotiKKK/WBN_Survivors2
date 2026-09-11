@@ -1,0 +1,2823 @@
+[
+ {
+  "id": "pistol",
+  "name": "Dienstpistole",
+  "cls": [
+   "gun",
+   "precise"
+  ],
+  "type": "projectile",
+  "col": "#ffe08a",
+  "scaling": {
+   "ranged": 0.6
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    26.7,
+    0.65,
+    420,
+    0.06,
+    1.6,
+    10,
+    {}
+   ],
+   [
+    43.3,
+    0.6,
+    450,
+    0.07,
+    1.6,
+    22,
+    {}
+   ],
+   [
+    70,
+    0.55,
+    490,
+    0.08,
+    1.8,
+    46,
+    {}
+   ],
+   [
+    113.3,
+    0.5,
+    560,
+    0.1,
+    2,
+    92,
+    {}
+   ]
+  ],
+  "special": "Zuverlässig, günstig, trifft immer den nächsten Feind."
+ },
+ {
+  "id": "smg",
+  "name": "MP Rheingau",
+  "cls": [
+   "gun"
+  ],
+  "type": "projectile",
+  "col": "#9ad2ff",
+  "scaling": {
+   "ranged": 0.5
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    4,
+    0.18,
+    340,
+    0.05,
+    1.5,
+    14,
+    {}
+   ],
+   [
+    7,
+    0.17,
+    360,
+    0.06,
+    1.5,
+    28,
+    {}
+   ],
+   [
+    11,
+    0.16,
+    390,
+    0.07,
+    1.7,
+    58,
+    {}
+   ],
+   [
+    18,
+    0.15,
+    450,
+    0.08,
+    2,
+    118,
+    {}
+   ]
+  ],
+  "special": "Sehr hohe Feuerrate, geringe Einzelschadenswerte."
+ },
+ {
+  "id": "shotgun",
+  "name": "Schrotflinte",
+  "cls": [
+   "gun",
+   "heavy"
+  ],
+  "type": "projectile",
+  "col": "#ffb27a",
+  "scaling": {
+   "ranged": 0.55
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    5,
+    1.05,
+    260,
+    0.05,
+    1.5,
+    16,
+    {
+     "pellets": 4,
+     "spread": 0.45
+    }
+   ],
+   [
+    8,
+    1,
+    280,
+    0.06,
+    1.5,
+    32,
+    {
+     "pellets": 5,
+     "spread": 0.45
+    }
+   ],
+   [
+    13,
+    0.95,
+    310,
+    0.07,
+    1.75,
+    66,
+    {
+     "pellets": 6,
+     "spread": 0.42
+    }
+   ],
+   [
+    21,
+    0.9,
+    360,
+    0.08,
+    2,
+    134,
+    {
+     "pellets": 8,
+     "spread": 0.4
+    }
+   ]
+  ],
+  "special": "Streuschuss: mehrere Projektile pro Schuss, tödlich auf kurze Distanz."
+ },
+ {
+  "id": "chaingun",
+  "name": "Kettenkanone",
+  "cls": [
+   "gun",
+   "heavy"
+  ],
+  "type": "projectile",
+  "col": "#ff8a5c",
+  "scaling": {
+   "ranged": 0.55
+  },
+  "unlockDefault": false,
+  "tiers": [
+   [
+    2,
+    0.09,
+    320,
+    0.04,
+    1.5,
+    20,
+    {}
+   ],
+   [
+    3.8,
+    0.08,
+    340,
+    0.05,
+    1.5,
+    40,
+    {}
+   ],
+   [
+    6.5,
+    0.07,
+    370,
+    0.06,
+    1.5,
+    82,
+    {}
+   ],
+   [
+    11,
+    0.06,
+    420,
+    0.07,
+    1.5,
+    166,
+    {}
+   ]
+  ],
+  "special": "Nerf-Protokoll 1984: Dauerfeuer mit reduziertem Krit-Multiplikator.",
+  "unlock": {
+   "key": "kills",
+   "need": 400,
+   "text": "Töte insgesamt 400 Gegner"
+  }
+ },
+ {
+  "id": "sniper",
+  "name": "Scharfschützengewehr",
+  "cls": [
+   "gun",
+   "precise"
+  ],
+  "type": "projectile",
+  "col": "#7dffb0",
+  "scaling": {
+   "ranged": 0.85
+  },
+  "unlockDefault": false,
+  "tiers": [
+   [
+    10.3,
+    1,
+    700,
+    0.18,
+    2,
+    30,
+    {
+     "pierce": 2
+    }
+   ],
+   [
+    16.8,
+    0.95,
+    760,
+    0.2,
+    2.2,
+    60,
+    {
+     "pierce": 3
+    }
+   ],
+   [
+    27.1,
+    0.9,
+    820,
+    0.22,
+    2.4,
+    122,
+    {
+     "pierce": 4
+    }
+   ],
+   [
+    43,
+    0.85,
+    900,
+    0.25,
+    2.8,
+    246,
+    {
+     "pierce": 6
+    }
+   ]
+  ],
+  "special": "Durchschlägt mehrere Gegner, extreme Reichweite und Krit-Werte.",
+  "unlock": {
+   "key": "longKill",
+   "need": 1,
+   "text": "Töte einen Gegner aus über 600 px Entfernung"
+  }
+ },
+ {
+  "id": "medgun",
+  "name": "Medi-Blaster",
+  "cls": [
+   "gun",
+   "medical",
+   "support"
+  ],
+  "type": "projectile",
+  "col": "#8affb0",
+  "scaling": {
+   "ranged": 0.45,
+   "hpRegen": 0.8
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    13.3,
+    0.45,
+    380,
+    0.05,
+    1.5,
+    18,
+    {
+     "lifesteal": 0.65
+    }
+   ],
+   [
+    22.1,
+    0.42,
+    410,
+    0.06,
+    1.5,
+    36,
+    {
+     "lifesteal": 0.65
+    }
+   ],
+   [
+    35.4,
+    0.39,
+    450,
+    0.07,
+    1.75,
+    74,
+    {
+     "lifesteal": 0.7
+    }
+   ],
+   [
+    57.6,
+    0.36,
+    520,
+    0.08,
+    2,
+    150,
+    {
+     "lifesteal": 0.75
+    }
+   ]
+  ],
+  "special": "Buff-Protokoll: 65% Lebensraub — heilt auch den Koop-Partner in Reichweite."
+ },
+ {
+  "id": "shredder",
+  "name": "Schredder",
+  "cls": [
+   "gun",
+   "explosive"
+  ],
+  "type": "projectile",
+  "col": "#ff9a9a",
+  "scaling": {
+   "ranged": 0.5
+  },
+  "unlockDefault": false,
+  "tiers": [
+   [
+    7,
+    0.55,
+    330,
+    0.05,
+    1.5,
+    24,
+    {
+     "boom": 44,
+     "bounce": 1
+    }
+   ],
+   [
+    12,
+    0.52,
+    355,
+    0.06,
+    1.5,
+    48,
+    {
+     "boom": 55,
+     "bounce": 1
+    }
+   ],
+   [
+    19,
+    0.49,
+    390,
+    0.07,
+    1.75,
+    98,
+    {
+     "boom": 66,
+     "bounce": 2
+    }
+   ],
+   [
+    31,
+    0.46,
+    450,
+    0.08,
+    2,
+    198,
+    {
+     "boom": 88,
+     "bounce": 3
+    }
+   ]
+  ],
+  "special": "Abprallende Splittergranaten mit vergrößertem Explosionsradius.",
+  "unlock": {
+   "key": "boomKills",
+   "need": 150,
+   "text": "Töte 150 Gegner mit Explosionen"
+  }
+ },
+ {
+  "id": "knife",
+  "name": "Taschenmesser",
+  "cls": [
+   "blade",
+   "precise"
+  ],
+  "type": "melee",
+  "col": "#e0f0ff",
+  "scaling": {
+   "melee": 0.8
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    10,
+    0.5,
+    90,
+    0.2,
+    2,
+    12,
+    {
+     "arc": 1
+    }
+   ],
+   [
+    16,
+    0.47,
+    100,
+    0.22,
+    2.2,
+    24,
+    {
+     "arc": 1
+    }
+   ],
+   [
+    26,
+    0.44,
+    110,
+    0.24,
+    2.4,
+    50,
+    {
+     "arc": 1.1
+    }
+   ],
+   [
+    42,
+    0.4,
+    125,
+    0.28,
+    2.8,
+    100,
+    {
+     "arc": 1.2
+    }
+   ]
+  ],
+  "special": "Schnelle Stiche mit hoher Kritchance. Trifft mehrere Gegner im Bogen."
+ },
+ {
+  "id": "spear",
+  "name": "Speer",
+  "cls": [
+   "blade",
+   "primitive"
+  ],
+  "type": "melee",
+  "col": "#b8d98a",
+  "scaling": {
+   "melee": 0.9
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    25.4,
+    0.8,
+    150,
+    0.08,
+    1.6,
+    16,
+    {
+     "arc": 0.45,
+     "pierce": 99
+    }
+   ],
+   [
+    41.7,
+    0.76,
+    165,
+    0.09,
+    1.6,
+    32,
+    {
+     "arc": 0.45,
+     "pierce": 99
+    }
+   ],
+   [
+    67,
+    0.72,
+    180,
+    0.1,
+    1.8,
+    66,
+    {
+     "arc": 0.5,
+     "pierce": 99
+    }
+   ],
+   [
+    108.7,
+    0.68,
+    210,
+    0.12,
+    2,
+    132,
+    {
+     "arc": 0.55,
+     "pierce": 99
+    }
+   ]
+  ],
+  "special": "Langer Stoß, durchbohrt eine ganze Reihe Gegner."
+ },
+ {
+  "id": "hammer",
+  "name": "Vorschlaghammer",
+  "cls": [
+   "blunt",
+   "medieval"
+  ],
+  "type": "melee",
+  "col": "#ffcf9a",
+  "scaling": {
+   "melee": 1
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    26,
+    1.35,
+    120,
+    0.05,
+    1.6,
+    22,
+    {
+     "arc": 1.6,
+     "stun": 0.8,
+     "knock": 260
+    }
+   ],
+   [
+    43,
+    1.3,
+    132,
+    0.06,
+    1.6,
+    44,
+    {
+     "arc": 1.7,
+     "stun": 0.9,
+     "knock": 300
+    }
+   ],
+   [
+    70,
+    1.25,
+    145,
+    0.07,
+    1.8,
+    90,
+    {
+     "arc": 1.8,
+     "stun": 1,
+     "knock": 340
+    }
+   ],
+   [
+    112,
+    1.2,
+    165,
+    0.08,
+    2,
+    182,
+    {
+     "arc": 2,
+     "stun": 1.2,
+     "knock": 420
+    }
+   ]
+  ],
+  "special": "Massiver Rundumschlag: hoher Schaden, Betäubung und Rückstoß."
+ },
+ {
+  "id": "wrench",
+  "name": "Schraubenschlüssel",
+  "cls": [
+   "blunt",
+   "support"
+  ],
+  "type": "melee",
+  "col": "#ffb24a",
+  "scaling": {
+   "melee": 0.5,
+   "eng": 0.8
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    10.2,
+    0.6,
+    100,
+    0.06,
+    1.5,
+    14,
+    {
+     "arc": 1.2,
+     "engSpark": 1
+    }
+   ],
+   [
+    16.9,
+    0.57,
+    110,
+    0.07,
+    1.5,
+    28,
+    {
+     "arc": 1.25,
+     "engSpark": 2
+    }
+   ],
+   [
+    27.1,
+    0.54,
+    120,
+    0.08,
+    1.75,
+    58,
+    {
+     "arc": 1.3,
+     "engSpark": 3
+    }
+   ],
+   [
+    44,
+    0.5,
+    140,
+    0.09,
+    2,
+    116,
+    {
+     "arc": 1.4,
+     "engSpark": 4
+    }
+   ]
+  ],
+  "special": "Skaliert mit Technik und schleudert bei jedem Treffer Reparaturfunken auf Gegner."
+ },
+ {
+  "id": "schrauber",
+  "name": "Schlagschrauber",
+  "cls": [
+   "blunt",
+   "support"
+  ],
+  "type": "melee",
+  "col": "#a8c4e8",
+  "scaling": {
+   "melee": 0.45,
+   "eng": 0.9
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    13,
+    0.48,
+    105,
+    0.07,
+    1.5,
+    16,
+    {
+     "arc": 1.25,
+     "stun": 0.7,
+     "engSpark": 1,
+     "knock": 70
+    }
+   ],
+   [
+    22,
+    0.45,
+    115,
+    0.08,
+    1.5,
+    32,
+    {
+     "arc": 1.3,
+     "stun": 0.8,
+     "engSpark": 2,
+     "knock": 80
+    }
+   ],
+   [
+    36,
+    0.42,
+    125,
+    0.09,
+    1.75,
+    66,
+    {
+     "arc": 1.35,
+     "stun": 0.9,
+     "engSpark": 3,
+     "knock": 92
+    }
+   ],
+   [
+    58,
+    0.38,
+    140,
+    0.1,
+    2,
+    132,
+    {
+     "arc": 1.45,
+     "stun": 1.1,
+     "engSpark": 4,
+     "knock": 108
+    }
+   ]
+  ],
+  "special": "Denises Air-Force-Signatur: harte Schlagschrauber-Hiebe mit Technik-Funken, die Gegner festziehen — Betäubung + Reparaturblitze."
+ },
+ {
+  "id": "chopper",
+  "name": "Chopper",
+  "cls": [
+   "blade",
+   "heavy"
+  ],
+  "type": "melee",
+  "col": "#ffd7a1",
+  "scaling": {
+   "melee": 0.95
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    20,
+    1,
+    135,
+    0.07,
+    1.7,
+    20,
+    {
+     "arc": 2.2
+    }
+   ],
+   [
+    33,
+    0.95,
+    150,
+    0.08,
+    1.8,
+    40,
+    {
+     "arc": 2.3
+    }
+   ],
+   [
+    53,
+    0.9,
+    165,
+    0.09,
+    2,
+    82,
+    {
+     "arc": 2.5
+    }
+   ],
+   [
+    85,
+    0.85,
+    180,
+    0.11,
+    2.3,
+    166,
+    {
+     "arc": 2.8
+    }
+   ]
+  ],
+  "special": "Rotierender Rundumschlag mit korrigierter Reichweitenkurve."
+ },
+ {
+  "id": "nunchaku",
+  "name": "Nunchaku",
+  "cls": [
+   "blunt",
+   "precise"
+  ],
+  "type": "melee",
+  "col": "#ffe08a",
+  "scaling": {
+   "melee": 0.75
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    7,
+    0.35,
+    120,
+    0.15,
+    1.8,
+    14,
+    {
+     "arc": 1.8,
+     "knock": 70
+    }
+   ],
+   [
+    11.5,
+    0.33,
+    132,
+    0.16,
+    2,
+    28,
+    {
+     "arc": 1.9,
+     "knock": 80
+    }
+   ],
+   [
+    18.5,
+    0.31,
+    145,
+    0.18,
+    2.2,
+    58,
+    {
+     "arc": 2,
+     "knock": 90
+    }
+   ],
+   [
+    30,
+    0.29,
+    160,
+    0.2,
+    2.4,
+    116,
+    {
+     "arc": 2.2,
+     "knock": 100
+    }
+   ]
+  ],
+  "special": "Zwei Nunchakus: schnelle Doppelhiebe mit weitem Bogen, Rückstoß und ordentlicher Krit-Chance."
+ },
+ {
+  "id": "flamer",
+  "name": "Feuerwehrflammer",
+  "cls": [
+   "elemental",
+   "support"
+  ],
+  "type": "cone",
+  "col": "#ff7a3d",
+  "scaling": {
+   "elem": 0.55
+  },
+  "unlockDefault": false,
+  "tiers": [
+   [
+    1.2,
+    0.12,
+    200,
+    0.03,
+    1.5,
+    26,
+    {
+     "cone": 0.55,
+     "burn": 4
+    }
+   ],
+   [
+    2.1,
+    0.11,
+    220,
+    0.03,
+    1.5,
+    52,
+    {
+     "cone": 0.6,
+     "burn": 7
+    }
+   ],
+   [
+    3.7,
+    0.1,
+    250,
+    0.04,
+    1.75,
+    106,
+    {
+     "cone": 0.65,
+     "burn": 11
+    }
+   ],
+   [
+    6.2,
+    0.09,
+    300,
+    0.05,
+    2,
+    214,
+    {
+     "cone": 0.75,
+     "burn": 18
+    }
+   ]
+  ],
+  "special": "Dauerfeuer-Kegel, setzt Gegner in Brand (Schaden über Zeit).",
+  "unlock": {
+   "key": "burnKills",
+   "need": 100,
+   "text": "Töte 100 Gegner mit Brandschaden"
+  }
+ },
+ {
+  "id": "railgun",
+  "name": "Railgun",
+  "cls": [
+   "gun",
+   "heavy"
+  ],
+  "type": "hitscan",
+  "col": "#59e6ff",
+  "scaling": {
+   "ranged": 0.7
+  },
+  "tiers": [
+   [
+    25,
+    1.5,
+    800,
+    0.05,
+    1.5,
+    35,
+    {
+     "perHit": 0
+    }
+   ],
+   [
+    40,
+    1.4,
+    850,
+    0.05,
+    1.5,
+    68,
+    {
+     "perHit": 0.1
+    }
+   ],
+   [
+    60,
+    1.3,
+    900,
+    0.05,
+    1.75,
+    132,
+    {
+     "perHit": 0.15
+    }
+   ],
+   [
+    90,
+    1.2,
+    1000,
+    0.05,
+    2,
+    258,
+    {
+     "perHit": 0.2
+    }
+   ]
+  ],
+  "special": "Durchdringt ALLE Gegner auf der Linie. Ab Stufe 2 wächst der Schaden pro getroffenem Gegner.",
+  "unlock": {
+   "key": "rangerWave15",
+   "need": 1,
+   "text": "Gewinne Welle 15 mit dem Fernkämpfer (Ranger)"
+  }
+ },
+ {
+  "id": "plasma",
+  "name": "Plasma Caster",
+  "cls": [
+   "elemental",
+   "explosive"
+  ],
+  "type": "projectile",
+  "col": "#7dffdc",
+  "scaling": {
+   "elem": 0.6
+  },
+  "tiers": [
+   [
+    12.2,
+    0.9,
+    450,
+    0.03,
+    1.5,
+    28,
+    {
+     "boom": 60,
+     "elemental": 1
+    }
+   ],
+   [
+    21.4,
+    0.85,
+    480,
+    0.03,
+    1.5,
+    55,
+    {
+     "boom": 75,
+     "elemental": 1
+    }
+   ],
+   [
+    33.7,
+    0.8,
+    520,
+    0.03,
+    1.75,
+    108,
+    {
+     "boom": 90,
+     "elemental": 1
+    }
+   ],
+   [
+    53.6,
+    0.75,
+    600,
+    0.03,
+    2,
+    210,
+    {
+     "boom": 120,
+     "elemental": 1
+    }
+   ]
+  ],
+  "special": "Plasma-Explosion beim Aufschlag (Radius 60/75/90/120).",
+  "unlock": {
+   "key": "elemDmgRun",
+   "need": 500,
+   "text": "Füge 500 Elementarschaden in einem Run zu"
+  }
+ },
+ {
+  "id": "sonic",
+  "name": "Sonic Blaster",
+  "cls": [
+   "gun",
+   "support"
+  ],
+  "type": "cone",
+  "col": "#c7a6ff",
+  "scaling": {
+   "ranged": 0.5
+  },
+  "tiers": [
+   [
+    7.5,
+    0.4,
+    350,
+    0.1,
+    1.5,
+    18,
+    {
+     "cone": 1.75
+    }
+   ],
+   [
+    12,
+    0.36,
+    380,
+    0.12,
+    1.5,
+    36,
+    {
+     "cone": 2.09
+    }
+   ],
+   [
+    20,
+    0.32,
+    420,
+    0.15,
+    1.75,
+    72,
+    {
+     "cone": 2.44
+    }
+   ],
+   [
+    33,
+    0.28,
+    500,
+    0.18,
+    2,
+    144,
+    {
+     "cone": 3.14
+    }
+   ]
+  ],
+  "special": "Schallwellen treffen alle Gegner im Kegel (100°/120°/140°/180°).",
+  "unlock": {
+   "key": "multiKillShot",
+   "need": 1,
+   "text": "Töte 100 Gegner mit einem einzigen Schuss (kumulativ 100 Mehrfachkills)"
+  }
+ },
+ {
+  "id": "klingel",
+  "name": "Roller-Klingel",
+  "cls": [
+   "elemental",
+   "support"
+  ],
+  "type": "cone",
+  "col": "#ffc93c",
+  "scaling": {
+   "ranged": 0.4,
+   "elem": 0.4
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    6,
+    0.42,
+    560,
+    0.08,
+    1.5,
+    18,
+    {
+     "cone": 0.42,
+     "elemental": true
+    }
+   ],
+   [
+    10,
+    0.39,
+    600,
+    0.1,
+    1.5,
+    36,
+    {
+     "cone": 0.48,
+     "elemental": true
+    }
+   ],
+   [
+    17,
+    0.36,
+    660,
+    0.12,
+    1.75,
+    74,
+    {
+     "cone": 0.55,
+     "elemental": true
+    }
+   ],
+   [
+    27,
+    0.33,
+    740,
+    0.15,
+    2,
+    150,
+    {
+     "cone": 0.62,
+     "elemental": true
+    }
+   ]
+  ],
+  "special": "Scharfer Klingelton: trifft alle Gegner im Kegel und funkt sie nieder — wie Sunny auf der Wilhelmstraße."
+ },
+ {
+  "id": "loeschwasser",
+  "name": "Löschwasserstrahl",
+  "cls": [
+   "elemental",
+   "support"
+  ],
+  "type": "cone",
+  "col": "#59e6ff",
+  "scaling": {
+   "ranged": 0.35,
+   "elem": 0.35
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    4,
+    0.35,
+    200,
+    0.07,
+    1.5,
+    26,
+    {
+     "cone": 0.3
+    }
+   ],
+   [
+    7,
+    0.32,
+    220,
+    0.08,
+    1.5,
+    52,
+    {
+     "cone": 0.34
+    }
+   ],
+   [
+    11,
+    0.3,
+    240,
+    0.09,
+    1.75,
+    104,
+    {
+     "cone": 0.38
+    }
+   ],
+   [
+    17,
+    0.28,
+    260,
+    0.1,
+    2,
+    208,
+    {
+     "cone": 0.44
+    }
+   ]
+  ],
+  "special": "Hochdruckwasser: verlangsamt Gegner und löscht Brände. Kurze Reichweite, dafür breiter Kegel."
+ },
+ {
+  "id": "musiknoten",
+  "name": "Noten-Sturm",
+  "cls": [
+   "elemental",
+   "support"
+  ],
+  "type": "projectile",
+  "col": "#a06bff",
+  "scaling": {
+   "ranged": 0.45,
+   "elem": 0.45
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    8.5,
+    0.6,
+    900,
+    0.1,
+    1.8,
+    26,
+    {
+     "pierce": 1,
+     "elemental": 1
+    }
+   ],
+   [
+    13.8,
+    0.55,
+    980,
+    0.12,
+    1.8,
+    52,
+    {
+     "pierce": 1,
+     "elemental": 1
+    }
+   ],
+   [
+    21.2,
+    0.5,
+    1080,
+    0.14,
+    2,
+    104,
+    {
+     "pierce": 2,
+     "elemental": 1
+    }
+   ],
+   [
+    32.9,
+    0.45,
+    1200,
+    0.16,
+    2.2,
+    208,
+    {
+     "pierce": 3,
+     "elemental": 1
+    }
+   ]
+  ],
+  "special": "T.Boehmers Signature: eine große Musiknote startet mittig und fliegt weit im Zickzack — durchschlägt Gegner."
+ },
+ {
+  "id": "nagler",
+  "name": "Nagelpistole",
+  "cls": [
+   "gun",
+   "precise"
+  ],
+  "type": "projectile",
+  "col": "#cfd6e2",
+  "scaling": {
+   "ranged": 0.3,
+   "crit": 0.12
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    3.1,
+    0.22,
+    480,
+    0.07,
+    1.9,
+    12,
+    {
+     "pierce": 1,
+     "spread": 0.04
+    }
+   ],
+   [
+    4.8,
+    0.2,
+    520,
+    0.09,
+    2,
+    24,
+    {
+     "pierce": 2,
+     "spread": 0.035
+    }
+   ],
+   [
+    7.9,
+    0.18,
+    560,
+    0.1,
+    2.2,
+    50,
+    {
+     "pierce": 2,
+     "spread": 0.03
+    }
+   ],
+   [
+    12.8,
+    0.16,
+    620,
+    0.12,
+    2.4,
+    100,
+    {
+     "pierce": 3,
+     "spread": 0.025
+    }
+   ]
+  ],
+  "special": "Schneller Nagelhagel: dünne Stifte, die sich durch ganze Reihen fädeln. Hohe Krit-Chance, wenig Einzelschaden."
+ },
+ {
+  "id": "schrottkanone",
+  "name": "Schrottkanone",
+  "cls": [
+   "gun",
+   "heavy"
+  ],
+  "type": "projectile",
+  "col": "#b08a4a",
+  "scaling": {
+   "ranged": 0.22
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    3.8,
+    0.95,
+    300,
+    0.06,
+    1.7,
+    20,
+    {
+     "pellets": 7,
+     "spread": 0.48
+    }
+   ],
+   [
+    6.3,
+    0.9,
+    330,
+    0.07,
+    1.8,
+    40,
+    {
+     "pellets": 8,
+     "spread": 0.45
+    }
+   ],
+   [
+    10,
+    0.84,
+    360,
+    0.08,
+    2,
+    82,
+    {
+     "pellets": 10,
+     "spread": 0.42
+    }
+   ],
+   [
+    16.3,
+    0.78,
+    400,
+    0.1,
+    2.2,
+    165,
+    {
+     "pellets": 12,
+     "spread": 0.38
+    }
+   ]
+  ],
+  "special": "Geladen mit allem, was der Wertstoffhof hergibt. Eine breite Wolke aus Schrauben, Blech und Scherben."
+ },
+ {
+  "id": "bierwerfer",
+  "name": "Bierkastenwerfer",
+  "cls": [
+   "explosive",
+   "heavy"
+  ],
+  "type": "projectile",
+  "col": "#e0a83a",
+  "scaling": {
+   "dmgP": 0.5,
+   "expSize": 0.2
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    23.7,
+    1.25,
+    380,
+    0.05,
+    1.8,
+    26,
+    {
+     "boom": 78,
+     "slow": 0.2,
+     "slowT": 1.4
+    }
+   ],
+   [
+    38.5,
+    1.15,
+    410,
+    0.06,
+    1.9,
+    52,
+    {
+     "boom": 92,
+     "slow": 0.24,
+     "slowT": 1.6
+    }
+   ],
+   [
+    62.2,
+    1.05,
+    450,
+    0.07,
+    2,
+    108,
+    {
+     "boom": 108,
+     "slow": 0.28,
+     "slowT": 1.8
+    }
+   ],
+   [
+    100.7,
+    0.95,
+    500,
+    0.09,
+    2.2,
+    215,
+    {
+     "boom": 128,
+     "slow": 0.32,
+     "slowT": 2
+    }
+   ]
+  ],
+  "special": "Ein voller Kasten fliegt weit und geht laut zu Bruch. Die Scherben machen den Boden rutschig."
+ },
+ {
+  "id": "magnetmine",
+  "name": "Magnetmine",
+  "cls": [
+   "explosive",
+   "precise"
+  ],
+  "type": "projectile",
+  "col": "#ff6b3d",
+  "scaling": {
+   "dmgP": 0.45,
+   "expSize": 0.25
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    25.7,
+    1.5,
+    420,
+    0.08,
+    2,
+    30,
+    {
+     "boom": 86,
+     "stick": 1.1,
+     "armorPierce": 4
+    }
+   ],
+   [
+    42.1,
+    1.4,
+    450,
+    0.09,
+    2.1,
+    60,
+    {
+     "boom": 100,
+     "stick": 1,
+     "armorPierce": 6
+    }
+   ],
+   [
+    67.8,
+    1.3,
+    490,
+    0.11,
+    2.3,
+    122,
+    {
+     "boom": 118,
+     "stick": 0.9,
+     "armorPierce": 8
+    }
+   ],
+   [
+    109.8,
+    1.2,
+    540,
+    0.13,
+    2.5,
+    245,
+    {
+     "boom": 140,
+     "stick": 0.8,
+     "armorPierce": 12
+    }
+   ]
+  ],
+  "special": "Haftet am ersten Ziel und zündet kurz darauf. Wer getroffen wird, nimmt die Mine mit in die Menge."
+ },
+ {
+  "id": "taubenschwarm",
+  "name": "Taubenschwarm",
+  "cls": [
+   "primitive",
+   "support"
+  ],
+  "type": "projectile",
+  "col": "#9fb4d8",
+  "scaling": {
+   "ranged": 0.4,
+   "luck": 0.3
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    3.2,
+    0.62,
+    620,
+    0.08,
+    1.8,
+    22,
+    {
+     "pellets": 3,
+     "spread": 0.6,
+     "homing": 3.2
+    }
+   ],
+   [
+    5,
+    0.58,
+    660,
+    0.09,
+    1.9,
+    44,
+    {
+     "pellets": 4,
+     "spread": 0.6,
+     "homing": 3.6
+    }
+   ],
+   [
+    8.2,
+    0.54,
+    700,
+    0.11,
+    2,
+    92,
+    {
+     "pellets": 5,
+     "spread": 0.65,
+     "homing": 4.2
+    }
+   ],
+   [
+    13.2,
+    0.5,
+    760,
+    0.13,
+    2.2,
+    184,
+    {
+     "pellets": 6,
+     "spread": 0.7,
+     "homing": 5
+    }
+   ]
+  ],
+  "special": "Aufgescheuchte Kurpark-Tauben suchen sich ihr Ziel selbst. Nicht elegant, aber unbeirrbar."
+ },
+ {
+  "id": "kettensaege",
+  "name": "Kettensäge",
+  "cls": [
+   "blade",
+   "heavy"
+  ],
+  "type": "melee",
+  "col": "#ff8a3d",
+  "scaling": {
+   "melee": 0.6,
+   "dmgP": 0.25
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    2.7,
+    0.18,
+    92,
+    0.07,
+    1.8,
+    24,
+    {
+     "arc": 0.95,
+     "knock": 40,
+     "bleed": 1
+    }
+   ],
+   [
+    4.5,
+    0.17,
+    100,
+    0.08,
+    1.9,
+    48,
+    {
+     "arc": 1,
+     "knock": 46,
+     "bleed": 1
+    }
+   ],
+   [
+    7.4,
+    0.16,
+    108,
+    0.1,
+    2.1,
+    100,
+    {
+     "arc": 1.05,
+     "knock": 54,
+     "bleed": 1
+    }
+   ],
+   [
+    12.1,
+    0.15,
+    118,
+    0.12,
+    2.3,
+    200,
+    {
+     "arc": 1.15,
+     "knock": 62,
+     "bleed": 1
+    }
+   ]
+  ],
+  "special": "Läuft durch, solange der Finger am Gas bleibt. Sehr kurze Reichweite, dafür ein durchgehender Fleischwolf."
+ },
+ {
+  "id": "laserzirkel",
+  "name": "Laserzirkel",
+  "cls": [
+   "elemental",
+   "precise"
+  ],
+  "type": "aura",
+  "col": "#59e6ff",
+  "scaling": {
+   "elem": 0.5,
+   "range": 0.2
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    7,
+    0.32,
+    116,
+    0.06,
+    1.7,
+    28,
+    {
+     "elemental": 1,
+     "burn": 4
+    }
+   ],
+   [
+    12,
+    0.3,
+    128,
+    0.07,
+    1.8,
+    56,
+    {
+     "elemental": 1,
+     "burn": 6
+    }
+   ],
+   [
+    19,
+    0.28,
+    142,
+    0.09,
+    2,
+    116,
+    {
+     "elemental": 1,
+     "burn": 9
+    }
+   ],
+   [
+    31,
+    0.26,
+    158,
+    0.11,
+    2.2,
+    232,
+    {
+     "elemental": 1,
+     "burn": 13
+    }
+   ]
+  ],
+  "special": "Zwei rotierende Schnittstrahlen kreisen um den Träger und brennen alles an, was zu nah kommt."
+ },
+ {
+  "id": "blitzableiter",
+  "name": "Blitzableiter",
+  "cls": [
+   "elemental",
+   "support"
+  ],
+  "type": "chain",
+  "col": "#ffe27a",
+  "scaling": {
+   "elem": 0.55
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    11,
+    0.78,
+    300,
+    0.07,
+    1.8,
+    26,
+    {
+     "chain": 4,
+     "chainRange": 150,
+     "elemental": 1,
+     "shock": 1
+    }
+   ],
+   [
+    18,
+    0.72,
+    330,
+    0.08,
+    1.9,
+    52,
+    {
+     "chain": 5,
+     "chainRange": 165,
+     "elemental": 1,
+     "shock": 1
+    }
+   ],
+   [
+    29,
+    0.66,
+    360,
+    0.1,
+    2.1,
+    108,
+    {
+     "chain": 7,
+     "chainRange": 180,
+     "elemental": 1,
+     "shock": 1
+    }
+   ],
+   [
+    47,
+    0.6,
+    400,
+    0.12,
+    2.3,
+    216,
+    {
+     "chain": 9,
+     "chainRange": 200,
+     "elemental": 1,
+     "shock": 1
+    }
+   ]
+  ],
+  "special": "Zieht die Entladung vom Dach in die Menge. Springt weiter als jede andere Kette und betäubt kurz."
+ },
+ {
+  "id": "ratschlaege",
+  "name": "Gute Ratschläge",
+  "cls": [
+   "support",
+   "precise"
+  ],
+  "type": "projectile",
+  "col": "#ffd24a",
+  "scaling": {
+   "ranged": 0.55,
+   "luck": 0.3
+  },
+  "unlockDefault": true,
+  "tiers": [
+   [
+    7.3,
+    0.5,
+    560,
+    0.07,
+    1.7,
+    14,
+    {
+     "pierce": 1,
+     "slow": 0.22,
+     "slowT": 1.6,
+     "advice": 1
+    }
+   ],
+   [
+    11.7,
+    0.47,
+    600,
+    0.08,
+    1.8,
+    28,
+    {
+     "pierce": 2,
+     "slow": 0.26,
+     "slowT": 1.8,
+     "advice": 1
+    }
+   ],
+   [
+    19,
+    0.44,
+    660,
+    0.1,
+    2,
+    58,
+    {
+     "pierce": 3,
+     "slow": 0.3,
+     "slowT": 2,
+     "advice": 1
+    }
+   ],
+   [
+    30.7,
+    0.4,
+    740,
+    0.12,
+    2.2,
+    116,
+    {
+     "pierce": 4,
+     "slow": 0.34,
+     "slowT": 2.2,
+     "advice": 1
+    }
+   ]
+  ],
+  "special": "Ös Signature: gut gemeinte Ratschläge als Sprechblasen. Sie schweben leicht, durchschlagen mehrere Gegner und lassen sie grübelnd langsamer werden."
+ },
+ {
+  "id": "gravgun",
+  "name": "Gravity Gun",
+  "cls": [
+   "heavy",
+   "explosive"
+  ],
+  "type": "projectile",
+  "col": "#a06bff",
+  "scaling": {
+   "ranged": 0.8,
+   "eng": 0.3
+  },
+  "tiers": [
+   [
+    26.2,
+    1.8,
+    300,
+    0.03,
+    1.5,
+    40,
+    {
+     "pull": 100,
+     "boom": 60
+    }
+   ],
+   [
+    43.6,
+    1.7,
+    320,
+    0.03,
+    1.5,
+    78,
+    {
+     "pull": 130,
+     "boom": 70
+    }
+   ],
+   [
+    69.8,
+    1.6,
+    350,
+    0.03,
+    1.75,
+    152,
+    {
+     "pull": 160,
+     "boom": 80
+    }
+   ],
+   [
+    104.7,
+    1.5,
+    400,
+    0.03,
+    2,
+    298,
+    {
+     "pull": 200,
+     "boom": 95
+    }
+   ]
+  ],
+  "special": "Erzeugt ein Gravitationszentrum, das Gegner heranzieht und zerquetscht.",
+  "unlock": {
+   "key": "pulled",
+   "need": 500,
+   "text": "Ziehe 500 Gegner mit der Gravity Gun an"
+  }
+ },
+ {
+  "id": "tesla",
+  "name": "Tesla Coil",
+  "cls": [
+   "elemental",
+   "support"
+  ],
+  "type": "chain",
+  "col": "#39e6ff",
+  "scaling": {
+   "elem": 0.3,
+   "eng": 0.3
+  },
+  "tiers": [
+   [
+    7.1,
+    0.3,
+    250,
+    0.08,
+    1.8,
+    22,
+    {
+     "chain": 3,
+     "elemental": 1
+    }
+   ],
+   [
+    12,
+    0.28,
+    280,
+    0.08,
+    1.8,
+    44,
+    {
+     "chain": 4,
+     "elemental": 1
+    }
+   ],
+   [
+    19.8,
+    0.26,
+    320,
+    0.1,
+    2,
+    88,
+    {
+     "chain": 5,
+     "elemental": 1
+    }
+   ],
+   [
+    31.8,
+    0.24,
+    380,
+    0.1,
+    2,
+    176,
+    {
+     "chain": 7,
+     "elemental": 1
+    }
+   ]
+  ],
+  "special": "Kettenblitz springt auf 3/4/5/7 Gegner über — Partikelblitz mit Funkenflug. Skaliert mit Elementar und Technik.",
+  "unlock": {
+   "key": "chain10",
+   "need": 1,
+   "text": "Treffe 10 Gegner mit einer einzigen Kette"
+  }
+ },
+ {
+  "id": "frost",
+  "name": "Frost Cannon",
+  "cls": [
+   "gun",
+   "medieval"
+  ],
+  "type": "projectile",
+  "col": "#9fe4ff",
+  "scaling": {
+   "ranged": 0.55
+  },
+  "tiers": [
+   [
+    32,
+    1.2,
+    500,
+    0.03,
+    1.5,
+    30,
+    {
+     "slow": 0.3,
+     "slowT": 2,
+     "elemental": 1
+    }
+   ],
+   [
+    53,
+    1.1,
+    550,
+    0.03,
+    1.5,
+    58,
+    {
+     "slow": 0.4,
+     "slowT": 2.5,
+     "elemental": 1
+    }
+   ],
+   [
+    85,
+    1,
+    600,
+    0.03,
+    1.75,
+    114,
+    {
+     "slow": 0.5,
+     "slowT": 3,
+     "elemental": 1
+    }
+   ],
+   [
+    135,
+    0.9,
+    700,
+    0.03,
+    2,
+    224,
+    {
+     "slow": 0.6,
+     "slowT": 4,
+     "elemental": 1
+    }
+   ]
+  ],
+  "special": "Vereist Gegner: verlangsamt um 30–60% für 2–4 s.",
+  "unlock": {
+   "key": "flawless10",
+   "need": 1,
+   "text": "Überlebe Welle 10 ohne Schaden zu nehmen"
+  }
+ },
+ {
+  "id": "spore",
+  "name": "Spore Launcher",
+  "cls": [
+   "primitive",
+   "explosive"
+  ],
+  "type": "projectile",
+  "col": "#b8d98a",
+  "scaling": {
+   "ranged": 0.55,
+   "elem": 0.25
+  },
+  "tiers": [
+   [
+    9,
+    0.55,
+    400,
+    0.05,
+    1.5,
+    25,
+    {
+     "poison": 8,
+     "poisonT": 3,
+     "cloud": 60
+    }
+   ],
+   [
+    14,
+    0.5,
+    430,
+    0.05,
+    1.5,
+    48,
+    {
+     "poison": 14,
+     "poisonT": 3,
+     "cloud": 68
+    }
+   ],
+   [
+    22,
+    0.45,
+    470,
+    0.05,
+    1.75,
+    96,
+    {
+     "poison": 22,
+     "poisonT": 3,
+     "cloud": 76
+    }
+   ],
+   [
+    36,
+    0.4,
+    550,
+    0.05,
+    2,
+    188,
+    {
+     "poison": 36,
+     "poisonT": 3,
+     "cloud": 92
+    }
+   ]
+  ],
+  "special": "Hinterlässt eine Giftwolke: 8–36 Schaden über 3 s.",
+  "unlock": {
+   "key": "poisonKills",
+   "need": 50,
+   "text": "Töte 50 Gegner mit Gift"
+  }
+ },
+ {
+  "id": "photon",
+  "name": "Photon Rifle",
+  "cls": [
+   "precise",
+   "gun"
+  ],
+  "type": "projectile",
+  "col": "#ffe27a",
+  "scaling": {
+   "ranged": 0.75
+  },
+  "tiers": [
+   [
+    39.4,
+    1.3,
+    600,
+    0.15,
+    2,
+    38,
+    {
+     "armorPierce": 0.2
+    }
+   ],
+   [
+    65.7,
+    1.2,
+    650,
+    0.18,
+    2.25,
+    74,
+    {
+     "armorPierce": 0.3
+    }
+   ],
+   [
+    105.1,
+    1.1,
+    720,
+    0.2,
+    2.5,
+    146,
+    {
+     "armorPierce": 0.4
+    }
+   ],
+   [
+    164.2,
+    1,
+    800,
+    0.25,
+    3,
+    286,
+    {
+     "armorPierce": 0.5
+    }
+   ]
+  ],
+  "special": "Präzisionsschuss ignoriert 20–50% der gegnerischen Rüstung.",
+  "unlock": {
+   "key": "critStreak",
+   "need": 10,
+   "text": "Erziele 10 kritische Treffer in Folge"
+  }
+ },
+ {
+  "id": "arc",
+  "name": "Arc Thrower",
+  "cls": [
+   "elemental",
+   "heavy"
+  ],
+  "type": "charge",
+  "col": "#5dff9b",
+  "scaling": {
+   "elem": 0.6
+  },
+  "tiers": [
+   [
+    10,
+    1,
+    280,
+    0.03,
+    1.5,
+    32,
+    {
+     "chargeMax": 2,
+     "chargeT": 1.4,
+     "elemental": 1
+    }
+   ],
+   [
+    18,
+    0.95,
+    310,
+    0.03,
+    1.5,
+    62,
+    {
+     "chargeMax": 2.2,
+     "chargeT": 1.4,
+     "elemental": 1
+    }
+   ],
+   [
+    28,
+    0.9,
+    350,
+    0.03,
+    1.75,
+    122,
+    {
+     "chargeMax": 2.5,
+     "chargeT": 1.3,
+     "elemental": 1
+    }
+   ],
+   [
+    45,
+    0.85,
+    420,
+    0.03,
+    2,
+    240,
+    {
+     "chargeMax": 3,
+     "chargeT": 1.2,
+     "elemental": 1
+    }
+   ]
+  ],
+  "special": "Lädt sich auf: bis zu 200–300% Schaden als durchschlagender Bogenblitz.",
+  "unlock": {
+   "key": "fullCharges",
+   "need": 100,
+   "text": "Lade die Waffe 100 Mal voll auf"
+  }
+ },
+ {
+  "id": "needle",
+  "name": "Needle Gun",
+  "cls": [
+   "precise",
+   "medical"
+  ],
+  "type": "projectile",
+  "col": "#8affb0",
+  "scaling": {
+   "ranged": 0.45,
+   "hpRegen": 0.3
+  },
+  "tiers": [
+   [
+    3,
+    0.15,
+    400,
+    0.1,
+    1.5,
+    20,
+    {
+     "healHit": 1
+    }
+   ],
+   [
+    5,
+    0.14,
+    430,
+    0.12,
+    1.5,
+    40,
+    {
+     "healHit": 2
+    }
+   ],
+   [
+    9,
+    0.13,
+    470,
+    0.15,
+    1.75,
+    80,
+    {
+     "healHit": 3
+    }
+   ],
+   [
+    15,
+    0.12,
+    550,
+    0.18,
+    2,
+    160,
+    {
+     "healHit": 5
+    }
+   ]
+  ],
+  "special": "Heilnadeln: 1–5 HP Heilung pro Treffer.",
+  "unlock": {
+   "key": "needleHeal",
+   "need": 500,
+   "text": "Heile 500 HP mit der Needle Gun"
+  }
+ },
+ {
+  "id": "vortex",
+  "name": "Vortex Cannon",
+  "cls": [
+   "support",
+   "explosive"
+  ],
+  "type": "aura",
+  "col": "#ff2e88",
+  "scaling": {
+   "ranged": 0.35,
+   "eng": 0.35
+  },
+  "tiers": [
+   [
+    2,
+    0.2,
+    200,
+    0.03,
+    1.5,
+    26,
+    {
+     "pull": 120,
+     "dur": 1.5
+    }
+   ],
+   [
+    4,
+    0.18,
+    230,
+    0.03,
+    1.5,
+    50,
+    {
+     "pull": 150,
+     "dur": 2
+    }
+   ],
+   [
+    7,
+    0.16,
+    270,
+    0.03,
+    1.75,
+    100,
+    {
+     "pull": 180,
+     "dur": 3
+    }
+   ],
+   [
+    12,
+    0.14,
+    330,
+    0.03,
+    2,
+    196,
+    {
+     "pull": 220,
+     "dur": 4
+    }
+   ]
+  ],
+  "special": "Permanenter Wirbel um dich: zieht Gegner an und fügt Dauerschaden zu.",
+  "unlock": {
+   "key": "vortexPulled",
+   "need": 200,
+   "text": "Ziehe 200 Gegner in einen Wirbel"
+  }
+ },
+ {
+  "id": "starfall",
+  "name": "Starfall Bow",
+  "cls": [
+   "medieval",
+   "precise"
+  ],
+  "type": "projectile",
+  "col": "#ffd7f5",
+  "scaling": {
+   "ranged": 0.7
+  },
+  "tiers": [
+   [
+    4.2,
+    1.1,
+    550,
+    0.08,
+    2,
+    36,
+    {
+     "pellets": 3,
+     "spread": 0.3,
+     "arcRain": 1
+    }
+   ],
+   [
+    6.6,
+    1,
+    600,
+    0.1,
+    2.25,
+    70,
+    {
+     "pellets": 4,
+     "spread": 0.32,
+     "arcRain": 1
+    }
+   ],
+   [
+    10.5,
+    0.9,
+    660,
+    0.12,
+    2.5,
+    138,
+    {
+     "pellets": 5,
+     "spread": 0.34,
+     "arcRain": 1
+    }
+   ],
+   [
+    16.5,
+    0.8,
+    750,
+    0.15,
+    3,
+    270,
+    {
+     "pellets": 6,
+     "spread": 0.36,
+     "arcRain": 1
+    }
+   ]
+  ],
+  "special": "Sternenregen: 3–6 Leuchtpfeile gleichzeitig, die beim Aufprall funkeln.",
+  "unlock": {
+   "key": "starfall3",
+   "need": 1,
+   "text": "Treffe 3 Gegner gleichzeitig mit Sternenregen"
+  }
+ },
+ {
+  "id": "leg_rheingold",
+  "name": "RHEINGOLD-ORGEL",
+  "cls": [
+   "gun",
+   "heavy",
+   "explosive"
+  ],
+  "type": "projectile",
+  "col": "#f4c25a",
+  "legendary": true,
+  "scaling": {
+   "ranged": 0.7,
+   "eng": 0.3
+  },
+  "tiers": [
+   [
+    16,
+    0.32,
+    380,
+    0.06,
+    1.8,
+    90,
+    {
+     "pellets": 6,
+     "spread": 0.42,
+     "boom": 42,
+     "elemental": 1
+    }
+   ],
+   [
+    27,
+    0.3,
+    420,
+    0.07,
+    1.8,
+    180,
+    {
+     "pellets": 7,
+     "spread": 0.44,
+     "boom": 52,
+     "elemental": 1
+    }
+   ],
+   [
+    44,
+    0.27,
+    470,
+    0.08,
+    2,
+    360,
+    {
+     "pellets": 8,
+     "spread": 0.46,
+     "boom": 64,
+     "elemental": 1
+    }
+   ],
+   [
+    70,
+    0.24,
+    540,
+    0.1,
+    2.25,
+    720,
+    {
+     "pellets": 10,
+     "spread": 0.5,
+     "boom": 80,
+     "elemental": 1
+    }
+   ]
+  ],
+  "special": "Legendär: Acht goldene Rohre — jede Salve detoniert mit Elementarkraft."
+ },
+ {
+  "id": "leg_neroberg",
+  "name": "NEROBERG-STURM",
+  "cls": [
+   "elemental",
+   "heavy"
+  ],
+  "type": "chain",
+  "col": "#b9a6ff",
+  "legendary": true,
+  "scaling": {
+   "elem": 0.45,
+   "eng": 0.3
+  },
+  "tiers": [
+   [
+    11,
+    0.26,
+    320,
+    0.08,
+    1.9,
+    90,
+    {
+     "chain": 8,
+     "elemental": 1
+    }
+   ],
+   [
+    18,
+    0.24,
+    360,
+    0.1,
+    2,
+    180,
+    {
+     "chain": 10,
+     "elemental": 1
+    }
+   ],
+   [
+    30,
+    0.22,
+    420,
+    0.12,
+    2.25,
+    360,
+    {
+     "chain": 12,
+     "elemental": 1
+    }
+   ],
+   [
+    48,
+    0.2,
+    500,
+    0.15,
+    2.5,
+    720,
+    {
+     "chain": 15,
+     "elemental": 1
+    }
+   ]
+  ],
+  "special": "Legendär: Ein lebender Blitz gewinnt mit jedem Sprung an Schärfe."
+ },
+ {
+  "id": "leg_thermal",
+  "name": "THERMAL-DAMPFKANONE",
+  "cls": [
+   "elemental",
+   "gun",
+   "support"
+  ],
+  "type": "cone",
+  "col": "#ff7a3d",
+  "legendary": true,
+  "scaling": {
+   "elem": 0.5,
+   "eng": 0.25
+  },
+  "tiers": [
+   [
+    10,
+    0.34,
+    330,
+    0.04,
+    1.6,
+    90,
+    {
+     "cone": 1.4,
+     "burn": 2.4,
+     "elemental": 1
+    }
+   ],
+   [
+    17,
+    0.31,
+    370,
+    0.05,
+    1.7,
+    180,
+    {
+     "cone": 1.5,
+     "burn": 3.2,
+     "elemental": 1
+    }
+   ],
+   [
+    28,
+    0.28,
+    420,
+    0.06,
+    1.8,
+    360,
+    {
+     "cone": 1.6,
+     "burn": 4,
+     "elemental": 1
+    }
+   ],
+   [
+    45,
+    0.25,
+    500,
+    0.08,
+    2,
+    720,
+    {
+     "cone": 1.8,
+     "burn": 5,
+     "elemental": 1
+    }
+   ]
+  ],
+  "special": "Legendär: Überdruck-Dampfstrahl — verbrennt Feinde und lädt Elementarreaktionen."
+ }
+]

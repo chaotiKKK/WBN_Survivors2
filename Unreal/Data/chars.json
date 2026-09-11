@@ -1,0 +1,1434 @@
+[
+ {
+  "id": "leonidas",
+  "name": "Leonidas",
+  "role": "Allrounder · Feuerwehr",
+  "col": "#ffcf4a",
+  "col2": "#e2564a",
+  "desc": "7 Jahre, lange Haare, Mitglied der freiwilligen Feuerwehr, verehrt die Polizei und will selbst Polizist werden. Spielt leidenschaftlich Gitarre.",
+  "skin": {
+   "build": "kid",
+   "head": "#f2d5b0",
+   "hat": "fire",
+   "prop": "guitar",
+   "chest": "#ffcf4a"
+  },
+  "stats": {
+   "speed": 8,
+   "maxHp": 15,
+   "ranged": 10,
+   "crit": 5,
+   "armor": 2
+  },
+  "startWeapon": "loeschwasser",
+  "ability": {
+   "id": "loeschstrahl",
+   "name": "Löschstrahl",
+   "cd": 9,
+   "desc": "Kegel aus Hochdruckwasser: Schaden, Rückstoß, löscht Brände und verlangsamt."
+  },
+  "synergy": {
+   "cls": "gun",
+   "need": 3,
+   "stats": {
+    "atkSpd": 12,
+    "ranged": 8
+   },
+   "text": "3× Gun: +12% Angriffstempo, +8 Fernkampf"
+  },
+  "profile": {
+   "figure": "firefighter-kid",
+   "animation": "hose-sprint",
+   "animationRate": 1.08,
+   "moveSet": {
+    "id": "fireline",
+    "speed": 1.04,
+    "dash": 920,
+    "rollCd": 0.48,
+    "rollDuration": 0.3,
+    "rollSpeed": 650,
+    "rollStyle": "rush"
+   },
+   "walkStyle": {
+    "bobAmp": 0.7,
+    "bobFreq": 1.1,
+    "legSwing": 1.2,
+    "legLift": 0.8,
+    "armSwing": 0.6,
+    "lean": 0.04,
+    "stepWidth": 1.3
+   },
+   "idleAnim": "check-belt"
+  }
+ },
+ {
+  "id": "sylvia",
+  "name": "Sylvia",
+  "role": "Therapeutin · Support",
+  "col": "#ff5d7a",
+  "col2": "#ffd7a1",
+  "desc": "Sportliche Polin mit roten Haaren, arbeitet als Therapeutin. Emotionale Stütze des Teams — heilt, stützt, hält alle am Leben.",
+  "skin": {
+   "build": "normal",
+   "head": "#ffd7a1",
+   "hat": "pony",
+   "prop": "nunchaku",
+   "chest": "#fff"
+  },
+  "stats": {
+   "hpRegen": 2,
+   "lifesteal": 6,
+   "luck": 15,
+   "dmgP": -10
+  },
+  "startWeapon": "nunchaku",
+  "ability": {
+   "id": "heilaura",
+   "name": "Heilaura",
+   "cd": 12,
+   "desc": "Pulsierende Aura: heilt beide Spieler, reinigt Statuseffekte, gibt kurz +Rüstung."
+  },
+  "synergy": {
+   "cls": "medical",
+   "need": 2,
+   "stats": {
+    "hpRegen": 3,
+    "lifesteal": 10
+   },
+   "text": "2× Medical: +3 HP-Reg, +10% Lebensraub"
+  },
+  "profile": {
+   "figure": "red-cross-athlete",
+   "animation": "healer-stride",
+   "animationRate": 0.92,
+   "moveSet": {
+    "id": "guardian-step",
+    "speed": 0.98,
+    "dash": 820,
+    "rollCd": 0.42,
+    "rollDuration": 0.36,
+    "rollSpeed": 590,
+    "rollStyle": "grace"
+   },
+   "walkStyle": {
+    "bobAmp": 1.3,
+    "bobFreq": 1,
+    "legSwing": 0.8,
+    "legLift": 1.2,
+    "armSwing": 0.7,
+    "lean": -0.02,
+    "stepWidth": 0.9
+   },
+   "idleAnim": "check-pulse"
+  }
+ },
+ {
+  "id": "sebbo",
+  "name": "Sebbo",
+  "role": "Halbgott · Techno-Tüftler",
+  "col": "#59e6ff",
+  "col2": "#a06bff",
+  "sprite": "sebbo",
+  "desc": "Nachbar, Fachinformatiker, Philosoph und Halbgott mit technomagischen Fähigkeiten. Kein Klotz, sondern agiler Bastler: Gadgets, Drohnen, Ausweichmanöver.",
+  "skin": {
+   "build": "normal",
+   "head": "#f2d5b0",
+   "hat": "goggles",
+   "prop": "wrench",
+   "chest": "#59e6ff"
+  },
+  "stats": {
+   "eng": 20,
+   "dodge": 10,
+   "speed": 6,
+   "ranged": -15
+  },
+  "startWeapon": "tesla",
+  "ability": {
+   "id": "phasendash",
+   "name": "Phasen-Dash",
+   "cd": 5,
+   "desc": "Kurzer Blink durch den Raum: unverwundbar, hinterlässt eine Schockwelle und setzt ein Gadget frei."
+  },
+  "synergy": {
+   "cls": "support",
+   "need": 2,
+   "stats": {
+    "eng": 12,
+    "atkSpd": 8
+   },
+   "text": "2× Support: +12 Technik, +8% Tempo"
+  },
+  "profile": {
+   "figure": "techno-gadgeteer",
+   "animation": "gadget-hop",
+   "animationRate": 1.18,
+   "moveSet": {
+    "id": "phase-gadget",
+    "speed": 1.06,
+    "dash": 1040,
+    "rollCd": 0.36,
+    "rollDuration": 0.24,
+    "rollSpeed": 735,
+    "rollStyle": "phase"
+   },
+   "walkStyle": {
+    "bobAmp": 1.1,
+    "bobFreq": 1.2,
+    "legSwing": 1,
+    "legLift": 1,
+    "armSwing": 1.2,
+    "lean": 0.03,
+    "stepWidth": 1.1
+   },
+   "idleAnim": "tap-gadget"
+  }
+ },
+ {
+  "id": "scharfschuetze",
+  "name": "Ranger",
+  "role": "Fernkämpfer",
+  "col": "#7dffb0",
+  "col2": "#2b8f5a",
+  "desc": "Distanzspezialist der Wiesbadener Stadtwache. Wer zu nah kommt, hat verloren — für ihn.",
+  "skin": {
+   "build": "normal",
+   "head": "#0f3a26",
+   "hat": "hood",
+   "prop": "none",
+   "chest": "#7dffb0"
+  },
+  "stats": {
+   "ranged": 22,
+   "range": 20,
+   "dodge": 8,
+   "speed": 6,
+   "melee": -5
+  },
+  "startWeapon": "sniper",
+  "ability": {
+   "id": "markierung",
+   "name": "Zielmarkierung",
+   "cd": 10,
+   "desc": "Markiert alle Gegner in Sicht: +35% erlittener Schaden für 5 s."
+  },
+  "synergy": {
+   "cls": "precise",
+   "need": 2,
+   "stats": {
+    "crit": 8,
+    "critDmg": 25
+   },
+   "text": "2× Precise: +8% Krit, +25% Krit-Schaden"
+  },
+  "unlock": null,
+  "profile": {
+   "figure": "ranger-cloak",
+   "animation": "low-stalk",
+   "animationRate": 0.82,
+   "moveSet": {
+    "id": "deadeye-stalk",
+    "speed": 0.96,
+    "dash": 870,
+    "rollCd": 0.55,
+    "rollDuration": 0.27,
+    "rollSpeed": 610,
+    "rollStyle": "silent"
+   },
+   "walkStyle": {
+    "bobAmp": 0.5,
+    "bobFreq": 0.8,
+    "legSwing": 0.6,
+    "legLift": 0.5,
+    "armSwing": 0.4,
+    "lean": 0.06,
+    "stepWidth": 0.8
+   },
+   "idleAnim": "scan-horizon"
+  }
+ },
+ {
+  "id": "bollwerk",
+  "name": "T.Boehmer",
+  "role": "2,20m Riese · Techno-DJ",
+  "col": "#59e6ff",
+  "col2": "#a06bff",
+  "desc": "2,20m Riese aus Wiesbaden. Legt Techno auf, bis die Bude wackelt. Wirft wirbelnde Musiknoten, die Feinde aus dem Takt bringen.",
+  "skin": {
+   "build": "giant",
+   "head": "#e0c6a2",
+   "hat": "headphones",
+   "prop": "none",
+   "chest": "#59e6ff"
+  },
+  "stats": {
+   "armor": 4,
+   "maxHp": 25,
+   "speed": -8
+  },
+  "startWeapon": "musiknoten",
+  "ability": {
+   "id": "raveaura",
+   "name": "Rave-Aura",
+   "cd": 12,
+   "desc": "5 s Rave-Aura: +60% Angriffstempo und +25% Tempo, Stroboskop-Licht blendet Gegner (Slow)."
+  },
+  "synergy": {
+   "cls": "elemental",
+   "need": 2,
+   "stats": {
+    "elem": 12,
+    "armor": 2
+   },
+   "text": "2× Elemental: +12 Elementarschaden, +2 Rüstung"
+  },
+  "profile": {
+   "figure": "dj-stack",
+   "animation": "heavy-bounce",
+   "animationRate": 0.74,
+   "moveSet": {
+    "id": "bass-step",
+    "speed": 0.91,
+    "dash": 760,
+    "rollCd": 0.66,
+    "rollDuration": 0.32,
+    "rollSpeed": 560,
+    "rollStyle": "impact"
+   },
+   "walkStyle": {
+    "bobAmp": 1.6,
+    "bobFreq": 1.3,
+    "legSwing": 0.9,
+    "legLift": 0.7,
+    "armSwing": 1.4,
+    "lean": -0.03,
+    "stepWidth": 1.2
+   },
+   "idleAnim": "head-bop"
+  }
+ },
+ {
+  "id": "nova",
+  "name": "Nova",
+  "role": "Glas-Kanone",
+  "col": "#ff5ce0",
+  "col2": "#ffa8f0",
+  "desc": "Töte, bevor du stirbst. Wortwörtlich.",
+  "skin": {
+   "build": "slim",
+   "head": "#ffd7b8",
+   "hat": "spiky",
+   "prop": "none",
+   "chest": "#ffa8f0"
+  },
+  "stats": {
+   "dmgP": 50,
+   "crit": 15,
+   "maxHp": -40,
+   "armor": -4
+  },
+  "startWeapon": "chaingun",
+  "ability": {
+   "id": "overdrive",
+   "name": "Overdrive",
+   "cd": 14,
+   "desc": "4 s lang +80% Angriffstempo und +30% Krit-Chance."
+  },
+  "synergy": {
+   "cls": "heavy",
+   "need": 2,
+   "stats": {
+    "dmgP": 15
+   },
+   "text": "2× Heavy: +15% Schaden"
+  },
+  "profile": {
+   "figure": "neon-glassblade",
+   "animation": "glass-flicker",
+   "animationRate": 1.35,
+   "moveSet": {
+    "id": "overdrive",
+    "speed": 1.12,
+    "dash": 1110,
+    "rollCd": 0.31,
+    "rollDuration": 0.21,
+    "rollSpeed": 790,
+    "rollStyle": "blink"
+   },
+   "walkStyle": {
+    "bobAmp": 0.4,
+    "bobFreq": 1.5,
+    "legSwing": 1.3,
+    "legLift": 1.4,
+    "armSwing": 1.1,
+    "lean": 0.05,
+    "stepWidth": 1
+   },
+   "idleAnim": "tremble"
+  }
+ },
+ {
+  "id": "kleeblatt",
+  "name": "Kleeblatt",
+  "role": "Glückspilz",
+  "col": "#8dff5c",
+  "col2": "#3d8f2a",
+  "desc": "Setzt alles auf Fundstücke. Der Shop ist seine wahre Waffe.",
+  "skin": {
+   "build": "kid",
+   "head": "#f2d5b0",
+   "hat": "cap",
+   "prop": "none",
+   "chest": "#8dff5c"
+  },
+  "stats": {
+   "luck": 50,
+   "dmgP": -8
+  },
+  "startWeapon": "shotgun",
+  "ability": {
+   "id": "fuellhorn",
+   "name": "Füllhorn",
+   "cd": 15,
+   "desc": "Regnet Material und ein zufälliges Power-Up ab."
+  },
+  "synergy": {
+   "cls": "primitive",
+   "need": 2,
+   "stats": {
+    "luck": 20,
+    "harvest": 3
+   },
+   "text": "2× Primitive: +20 Glück, +3 Ernte"
+  },
+  "profile": {
+   "figure": "clover-scout",
+   "animation": "lucky-skip",
+   "animationRate": 1.02,
+   "moveSet": {
+    "id": "lucky-skip",
+    "speed": 1.02,
+    "dash": 900,
+    "rollCd": 0.46,
+    "rollDuration": 0.29,
+    "rollSpeed": 640,
+    "rollStyle": "bounce"
+   },
+   "walkStyle": {
+    "bobAmp": 1.8,
+    "bobFreq": 0.9,
+    "legSwing": 0.7,
+    "legLift": 1.6,
+    "armSwing": 0.9,
+    "lean": -0.04,
+    "stepWidth": 0.7
+   },
+   "idleAnim": "pat-clover"
+  }
+ },
+ {
+  "id": "ingenieur",
+  "name": "Ingenieur",
+  "role": "Handwerker",
+  "col": "#ffb24a",
+  "col2": "#8a5a1a",
+  "desc": "Baut sich zum Sieg. Geschütze erledigen die Arbeit, er hält nur die Schraubenschlüssel.",
+  "skin": {
+   "build": "normal",
+   "head": "#e0c6a2",
+   "hat": "hard",
+   "prop": "wrench",
+   "chest": "#ffb24a"
+  },
+  "stats": {
+   "eng": 20,
+   "maxHp": 15,
+   "ranged": -15
+  },
+  "startWeapon": "wrench",
+  "ability": {
+   "id": "turret",
+   "name": "Notfall-Geschütz",
+   "cd": 11,
+   "desc": "Setzt ein zusätzliches Geschütz mit voller Technik-Skalierung ab."
+  },
+  "synergy": {
+   "cls": "support",
+   "need": 3,
+   "stats": {
+    "eng": 15
+   },
+   "text": "3× Support: +15 Technik"
+  },
+  "profile": {
+   "figure": "builder-rig",
+   "animation": "measured-walk",
+   "animationRate": 0.86,
+   "moveSet": {
+    "id": "builder-roll",
+    "speed": 0.94,
+    "dash": 800,
+    "rollCd": 0.58,
+    "rollDuration": 0.34,
+    "rollSpeed": 575,
+    "rollStyle": "tool"
+   },
+   "walkStyle": {
+    "bobAmp": 0.6,
+    "bobFreq": 0.85,
+    "legSwing": 1.1,
+    "legLift": 0.6,
+    "armSwing": 0.5,
+    "lean": 0.02,
+    "stepWidth": 1.4
+   },
+   "idleAnim": "twirl-wrench"
+  }
+ },
+ {
+  "id": "cyborg",
+  "name": "Cyborg",
+  "role": "Wiederhergestellt",
+  "col": "#c0f0ff",
+  "col2": "#2b6f8f",
+  "desc": "Mehr Servo als Mensch. Zäh, schnell, aber die Batterie ist klein.",
+  "skin": {
+   "build": "square",
+   "head": "#9fb8c4",
+   "hat": "antenna",
+   "prop": "none",
+   "chest": "#c0f0ff"
+  },
+  "stats": {
+   "armor": 5,
+   "atkSpd": 15,
+   "maxHp": -30,
+   "hpRegen": 2
+  },
+  "startWeapon": "railgun",
+  "ability": {
+   "id": "notstrom",
+   "name": "Notstrom",
+   "cd": 18,
+   "desc": "Bei tödlichem Schaden: einmal pro Welle mit 30% HP wiederherstellen (passiv aktiv) + Elektro-Nova."
+  },
+  "synergy": {
+   "cls": "elemental",
+   "need": 2,
+   "stats": {
+    "elem": 15
+   },
+   "text": "2× Elemental: +15 Elementarschaden"
+  },
+  "unlock": {
+   "key": "lowHpWaves",
+   "need": 5,
+   "text": "Überlebe 5 Wellen mit unter 10% HP"
+  },
+  "profile": {
+   "figure": "servo-frame",
+   "animation": "servo-pulse",
+   "animationRate": 1.1,
+   "moveSet": {
+    "id": "servo-charge",
+    "speed": 1.01,
+    "dash": 980,
+    "rollCd": 0.44,
+    "rollDuration": 0.25,
+    "rollSpeed": 690,
+    "rollStyle": "magnetic"
+   },
+   "walkStyle": {
+    "bobAmp": 0.8,
+    "bobFreq": 1,
+    "legSwing": 0.9,
+    "legLift": 0.8,
+    "armSwing": 0.3,
+    "lean": 0.01,
+    "stepWidth": 1
+   },
+   "idleAnim": "servo-check"
+  }
+ },
+ {
+  "id": "rockstar",
+  "name": "Rockstar",
+  "role": "Gitarrist",
+  "col": "#ff8a3d",
+  "col2": "#ffe45c",
+  "desc": "Leonidas mit E-Gitarre. Jeder Riff ist eine Schallwelle, jeder Kill ein Solo.",
+  "skin": {
+   "build": "normal",
+   "head": "#f2d5b0",
+   "hat": "rock",
+   "prop": "guitar",
+   "chest": "#ffe45c"
+  },
+  "stats": {
+   "atkSpd": 12,
+   "dmgP": 12,
+   "luck": 10,
+   "armor": -1,
+   "maxHp": -5
+  },
+  "startWeapon": "sonic",
+  "ability": {
+   "id": "powerchord",
+   "name": "Powerchord",
+   "cd": 10,
+   "desc": "Schallexplosion im Umkreis: Schaden, Rückstoß, +20% Tempo für 4 s."
+  },
+  "synergy": {
+   "cls": "support",
+   "need": 2,
+   "stats": {
+    "atkSpd": 10,
+    "dmgP": 8
+   },
+   "text": "2× Support: +10% Tempo, +8% Schaden"
+  },
+  "unlock": {
+   "key": "wavesWon",
+   "need": 1,
+   "text": "Gewinne einen Run (Welle 20)"
+  },
+  "profile": {
+   "figure": "guitar-hero",
+   "animation": "stage-strut",
+   "animationRate": 1.24,
+   "moveSet": {
+    "id": "riff-dash",
+    "speed": 1.05,
+    "dash": 940,
+    "rollCd": 0.39,
+    "rollDuration": 0.28,
+    "rollSpeed": 670,
+    "rollStyle": "sound"
+   },
+   "walkStyle": {
+    "bobAmp": 1.2,
+    "bobFreq": 1.15,
+    "legSwing": 1.1,
+    "legLift": 0.9,
+    "armSwing": 1.6,
+    "lean": -0.05,
+    "stepWidth": 1.3
+   },
+   "idleAnim": "air-guitar"
+  }
+ },
+ {
+  "id": "greta",
+  "name": "Greta",
+  "role": "Streitschlichterin · Reflektor",
+  "col": "#7dffb0",
+  "col2": "#2b8f5a",
+  "desc": "Schlichtet auf dem Schulhof jede Rangelei — ein Blick und die Fäuste sinken. Reflektiert Chaos, straft Ungeduld.",
+  "skin": {
+   "build": "normal",
+   "head": "#c98a5a",
+   "hat": "beret",
+   "prop": "none",
+   "chest": "#5a8f2b"
+  },
+  "stats": {
+   "armor": 4,
+   "dodge": 8,
+   "maxHp": 5,
+   "dmgP": -5
+  },
+  "startWeapon": "nunchaku",
+  "ability": {
+   "id": "schiedsgericht",
+   "name": "Schiedsgericht",
+   "cd": 12,
+   "desc": "Taunt-Aura: zieht Gegner im Umkreis heran, verlangsamt sie und erteilt Schaden."
+  },
+  "synergy": {
+   "cls": "medical",
+   "need": 2,
+   "stats": {
+    "hpRegen": 2,
+    "lifesteal": 8
+   },
+   "text": "2× Medical: +2 HP-Reg, +8% Lebensraub"
+  },
+  "unlock": null,
+  "profile": {
+   "figure": "referee-stance",
+   "animation": "calm-stance",
+   "animationRate": 0.8,
+   "moveSet": {
+    "id": "parry-step",
+    "speed": 0.97,
+    "dash": 850,
+    "rollCd": 0.38,
+    "rollDuration": 0.33,
+    "rollSpeed": 600,
+    "rollStyle": "parry"
+   },
+   "walkStyle": {
+    "bobAmp": 0.4,
+    "bobFreq": 0.9,
+    "legSwing": 0.5,
+    "legLift": 0.4,
+    "armSwing": 0.3,
+    "lean": 0,
+    "stepWidth": 0.9
+   },
+   "idleAnim": "flip-notes"
+  }
+ },
+ {
+  "id": "manni",
+  "name": "Kiosk-Manni",
+  "role": "Kiosk-Betreiber · Ökonom",
+  "col": "#ffb24a",
+  "col2": "#ffe08a",
+  "desc": "Der Mann hinter dem Kiosk am Kurhaus. Kennt jede Preistafel und jeden Drop — was er anpackt, das schließt er ab.",
+  "skin": {
+   "build": "wide",
+   "head": "#e0c6a2",
+   "hat": "flatcap",
+   "prop": "none",
+   "chest": "#b24a2b"
+  },
+  "stats": {
+   "luck": 25,
+   "harvest": 4,
+   "maxHp": 10,
+   "armor": 2
+  },
+  "startWeapon": "pistol",
+  "ability": {
+   "id": "kiosk",
+   "name": "Kiosk-Stoß",
+   "cd": 15,
+   "desc": "Wirft eine Snack-Ladung: Material-Schauer, Heilung und ein Power-Up."
+  },
+  "synergy": {
+   "cls": "primitive",
+   "need": 2,
+   "stats": {
+    "luck": 20,
+    "harvest": 3
+   },
+   "text": "2× Primitive: +20 Glück, +3 Ernte"
+  },
+  "unlock": null,
+  "profile": {
+   "figure": "kiosk-apron",
+   "animation": "vendor-shuffle",
+   "animationRate": 0.9,
+   "moveSet": {
+    "id": "vendor-shuffle",
+    "speed": 0.95,
+    "dash": 780,
+    "rollCd": 0.6,
+    "rollDuration": 0.37,
+    "rollSpeed": 540,
+    "rollStyle": "spill"
+   },
+   "walkStyle": {
+    "bobAmp": 1.4,
+    "bobFreq": 0.7,
+    "legSwing": 1.3,
+    "legLift": 0.8,
+    "armSwing": 0.6,
+    "lean": 0,
+    "stepWidth": 1.5
+   },
+   "idleAnim": "wipe-counter"
+  }
+ },
+ {
+  "id": "oe",
+  "name": "Ö",
+  "role": "Lebensberaterin · Gute Ratschläge",
+  "col": "#ffd24a",
+  "col2": "#8a5cff",
+  "desc": "Locken mit Zopf, Brille auf der Nase, und für jede Lage einen gut gemeinten Rat. Ihr Hauptangriff sind gute Ratschläge, walla — Sprechblasen, die durch ganze Gegnerreihen gehen und sie nachdenklich (und langsam) machen.",
+  "skin": {
+   "build": "normal",
+   "head": "#e8bf95",
+   "hat": "lockenzopf",
+   "prop": "none",
+   "chest": "#ffd24a"
+  },
+  "stats": {
+   "ranged": 12,
+   "range": 20,
+   "atkSpd": 8,
+   "luck": 10,
+   "melee": -12,
+   "armor": -1
+  },
+  "startWeapon": "ratschlaege",
+  "ability": {
+   "id": "walla",
+   "name": "Walla-Ansage",
+   "cd": 11,
+   "desc": "Lautstarker Rundum-Ratschlag: Schaden im weiten Umkreis, Gegner werden verwirrt (Betäubung) und stark verlangsamt, das ganze Team bekommt Angriffstempo und Glück."
+  },
+  "synergy": {
+   "cls": "support",
+   "need": 2,
+   "stats": {
+    "atkSpd": 10,
+    "range": 12
+   },
+   "text": "2× Support: +10% Tempo, +12% Reichweite"
+  },
+  "unlock": null,
+  "profile": {
+   "figure": "advice-notebook",
+   "animation": "talking-stride",
+   "animationRate": 1,
+   "moveSet": {
+    "id": "walla-slide",
+    "speed": 1,
+    "dash": 880,
+    "rollCd": 0.5,
+    "rollDuration": 0.3,
+    "rollSpeed": 625,
+    "rollStyle": "wave"
+   },
+   "walkStyle": {
+    "bobAmp": 0.9,
+    "bobFreq": 1,
+    "legSwing": 0.8,
+    "legLift": 0.7,
+    "armSwing": 1.3,
+    "lean": -0.01,
+    "stepWidth": 1
+   },
+   "idleAnim": "meditate"
+  }
+ },
+ {
+  "id": "blindgaenger",
+  "name": "Blindgänger",
+  "role": "Sprengmeister · Duellant",
+  "col": "#ff8a3d",
+  "col2": "#ffd23e",
+  "desc": "Sprengmeister von der Neroberg-Baustelle. War zu oft „nahe dran“ — jetzt sind es die anderen.",
+  "skin": {
+   "build": "slim",
+   "head": "#8a5a2a",
+   "hat": "gasmask",
+   "prop": "none",
+   "chest": "#8a5a2a"
+  },
+  "stats": {
+   "dmgP": 15,
+   "expSize": 15,
+   "maxHp": -15,
+   "armor": -2,
+   "speed": 5
+  },
+  "startWeapon": "smg",
+  "ability": {
+   "id": "sprengsatz",
+   "name": "Sprengsatz",
+   "cd": 10,
+   "desc": "Wirft einen Blindgänger auf das nächste Ziel: verzögerte Explosion mit Schub."
+  },
+  "synergy": {
+   "cls": "heavy",
+   "need": 2,
+   "stats": {
+    "dmgP": 15
+   },
+   "text": "2× Heavy: +15% Schaden"
+  },
+  "unlock": null,
+  "profile": {
+   "figure": "demolition-rig",
+   "animation": "reckless-run",
+   "animationRate": 1.16,
+   "moveSet": {
+    "id": "blast-roll",
+    "speed": 1.07,
+    "dash": 1010,
+    "rollCd": 0.52,
+    "rollDuration": 0.26,
+    "rollSpeed": 720,
+    "rollStyle": "blast"
+   },
+   "walkStyle": {
+    "bobAmp": 0.6,
+    "bobFreq": 1.4,
+    "legSwing": 1.4,
+    "legLift": 1.1,
+    "armSwing": 1,
+    "lean": 0.07,
+    "stepWidth": 1.1
+   },
+   "idleAnim": "check-fuse"
+  }
+ },
+ {
+  "id": "petra",
+  "name": "Denise McKay",
+  "role": "Ex-Army-Ingenieurin · Air-Force-Wartung",
+  "col": "#a8c4e8",
+  "col2": "#3a5a3a",
+  "desc": "Deutsch-Amerikanerin mit Army-Vergangenheit: Engineering und Wartung für die Air Force. Was Denise anfasst, hält — und was sie anfasst, fliegt wieder. Lässig, präzise, mit Schraubenschlüssel in der Hand.",
+  "skin": {
+   "build": "wide",
+   "head": "#e0b28a",
+   "hat": "military",
+   "prop": "schrauber",
+   "chest": "#3a5a3a"
+  },
+  "stats": {
+   "armor": 3,
+   "maxHp": 15,
+   "eng": 12,
+   "melee": 6,
+   "speed": -5,
+   "atkSpd": -3
+  },
+  "startWeapon": "schrauber",
+  "ability": {
+   "id": "luftschlag",
+   "name": "Präzisions-Luftschlag",
+   "cd": 10,
+   "desc": "Markiert das nächste Ziel mit einem Laser-Beacon und ruft einen Air-Force-Luftschlag: harte Explosion mit Betäubung im Umkreis."
+  },
+  "synergy": {
+   "cls": "support",
+   "need": 2,
+   "stats": {
+    "eng": 10,
+    "armor": 2
+   },
+   "text": "2× Support: +10 Technik, +2 Rüstung"
+  },
+  "unlock": null,
+  "profile": {
+   "figure": "excavator-harness",
+   "animation": "wide-powerwalk",
+   "animationRate": 0.7,
+   "moveSet": {
+    "id": "crane-step",
+    "speed": 0.9,
+    "dash": 730,
+    "rollCd": 0.72,
+    "rollDuration": 0.4,
+    "rollSpeed": 510,
+    "rollStyle": "crane"
+   },
+   "walkStyle": {
+    "bobAmp": 0.5,
+    "bobFreq": 0.75,
+    "legSwing": 1.5,
+    "legLift": 0.9,
+    "armSwing": 0.8,
+    "lean": 0.03,
+    "stepWidth": 1.6
+   },
+   "idleAnim": "test-crane"
+  }
+ },
+ {
+  "id": "kobra",
+  "name": "Kobra",
+  "role": "Streifenpolizistin · Partnerin",
+  "col": "#7d9dff",
+  "col2": "#ffe08a",
+  "desc": "Schwerter zu Pflugscharen? Nicht bei ihr. Die Dienstwaffe sitzt locker, der Helm sitzt fester — und wer markiert ist, wird auch erwischt.",
+  "skin": {
+   "build": "normal",
+   "head": "#f2d5b0",
+   "hat": "helm",
+   "prop": "none",
+   "chest": "#2b4a8f"
+  },
+  "stats": {
+   "ranged": 12,
+   "crit": 8,
+   "speed": 5,
+   "maxHp": -5
+  },
+  "startWeapon": "pistol",
+  "ability": {
+   "id": "festnahme",
+   "name": "Festnahme",
+   "cd": 11,
+   "desc": "Stürmt auf das nächste Ziel zu: harter Treffer, lange Betäubung und Zielmarkierung — Gegner daneben werden mitgestunnt."
+  },
+  "synergy": {
+   "cls": "precise",
+   "need": 2,
+   "stats": {
+    "ranged": 10,
+    "crit": 6
+   },
+   "text": "2× Precise: +10 Fernkampf, +6% Krit"
+  },
+  "unlock": null,
+  "profile": {
+   "figure": "police-tactical",
+   "animation": "tactical-jog",
+   "animationRate": 1.06,
+   "moveSet": {
+    "id": "arrest-lunge",
+    "speed": 1.03,
+    "dash": 970,
+    "rollCd": 0.4,
+    "rollDuration": 0.27,
+    "rollSpeed": 680,
+    "rollStyle": "tactical"
+   },
+   "walkStyle": {
+    "bobAmp": 0.8,
+    "bobFreq": 1.1,
+    "legSwing": 1,
+    "legLift": 1,
+    "armSwing": 0.7,
+    "lean": 0.04,
+    "stepWidth": 1.1
+   },
+   "idleAnim": "rattle-cuffs"
+  }
+ },
+ {
+  "id": "sunny",
+  "name": "Sunny",
+  "role": "E-Roller · KI-Helferin",
+  "col": "#6c5ce7",
+  "col2": "#8e7cff",
+  "desc": "Wiesbadens freundliche KI-Helferin mit langem blondem Haar — immer mit dem E-Roller unterwegs. Flink, wendig und verdammt gut aussehend, und ihre Klingel funkt ganze Gegnerreihen nieder, bevor sie überhaupt merken, was sie überrollt hat.",
+  "skin": {
+   "build": "slim",
+   "head": "#ffd9b3",
+   "hat": "blond",
+   "prop": "escooter",
+   "chest": "#6c5ce7"
+  },
+  "stats": {
+   "speed": 18,
+   "dodge": 8,
+   "elem": 10,
+   "maxHp": -12,
+   "armor": -2
+  },
+  "startWeapon": "klingel",
+  "ability": {
+   "id": "vollgas",
+   "name": "Roller-Boost",
+   "cd": 9,
+   "desc": "Vollgas! Elektrischer Sprint: kurz unverwundbar, schubst Gegner um und funkt sie nieder."
+  },
+  "synergy": {
+   "cls": "elemental",
+   "need": 2,
+   "stats": {
+    "elem": 12,
+    "speed": 6
+   },
+   "text": "2× Elemental: +12 Elementarschaden, +6% Tempo"
+  },
+  "unlock": null,
+  "profile": {
+   "figure": "roller-ai",
+   "animation": "roller-carve",
+   "animationRate": 1.3,
+   "moveSet": {
+    "id": "sunny-roller",
+    "speed": 1.14,
+    "dash": 1180,
+    "rollCd": 0.28,
+    "rollDuration": 0.22,
+    "rollSpeed": 840,
+    "rollStyle": "roller"
+   },
+   "walkStyle": {
+    "bobAmp": 0.3,
+    "bobFreq": 1,
+    "legSwing": 0.2,
+    "legLift": 0.2,
+    "armSwing": 0.4,
+    "lean": 0,
+    "stepWidth": 0.6
+   },
+   "idleAnim": "check-phone"
+  }
+ },
+ {
+  "id": "kaykit_barbarian",
+  "synergy": {
+   "cls": "blunt",
+   "need": 2,
+   "stats": {
+    "melee": 10,
+    "knock": 20
+   },
+   "text": "2× Blunt: +10 Nahkampf, +20% Rückstoß"
+  },
+  "name": "Barbarian",
+  "role": "KayKit · Nahkämpfer",
+  "col": "#d4a373",
+  "col2": "#8a5a2a",
+  "desc": "KayKit-Barbar mit Axt und Fellumhang. Stürmt voran, wo andere zaudern.",
+  "skin": {
+   "build": "wide",
+   "head": "#e0c6a2",
+   "hat": "bear",
+   "prop": "none",
+   "chest": "#d4a373"
+  },
+  "stats": {
+   "maxHp": 20,
+   "melee": 12,
+   "armor": 2,
+   "speed": -4
+  },
+  "startWeapon": "hammer",
+  "ability": {
+   "id": "kralle",
+   "name": "Barbarenwut",
+   "cd": 10,
+   "desc": "Brüllt und stürmt vor: Schaden + Stun im Kegel."
+  },
+  "sprite": "barbarian",
+  "profile": {
+   "figure": "barbarian-axe",
+   "animation": "barbarian-axe-swing",
+   "animationRate": 0.9,
+   "moveSet": {
+    "id": "barb-step",
+    "speed": 1,
+    "dash": 900,
+    "rollCd": 0.5,
+    "rollDuration": 0.3,
+    "rollSpeed": 640,
+    "rollStyle": "rush"
+   },
+   "walkStyle": {
+    "bobAmp": 1.1,
+    "bobFreq": 1,
+    "legSwing": 1,
+    "legLift": 0.9,
+    "armSwing": 0.8,
+    "lean": 0.02,
+    "stepWidth": 1.1
+   },
+   "idleAnim": "guard"
+  }
+ },
+ {
+  "id": "kaykit_knight",
+  "synergy": {
+   "cls": "heavy",
+   "need": 2,
+   "stats": {
+    "armor": 3,
+    "maxHp": 20
+   },
+   "text": "2× Heavy: +3 Rüstung, +20 Leben"
+  },
+  "name": "Knight",
+  "role": "KayKit · Schildträger",
+  "col": "#a0b8d0",
+  "col2": "#4a6a8f",
+  "desc": "Ritter in Plattenrüstung. Hält die Stellung, wenn alle anderen fallen.",
+  "skin": {
+   "build": "wide",
+   "head": "#e0c6a2",
+   "hat": "helm",
+   "prop": "none",
+   "chest": "#a0b8d0"
+  },
+  "stats": {
+   "armor": 5,
+   "maxHp": 25,
+   "speed": -8,
+   "dodge": -5
+  },
+  "startWeapon": "shotgun",
+  "ability": {
+   "id": "kralle",
+   "name": "Schildwall",
+   "cd": 11,
+   "desc": "Stellt einen Schild auf: 3s +40% Rüstung und Stun-Immunität."
+  },
+  "sprite": "knight",
+  "profile": {
+   "figure": "knight-shield",
+   "animation": "knight-shield-bash",
+   "animationRate": 0.8,
+   "moveSet": {
+    "id": "knight-step",
+    "speed": 0.92,
+    "dash": 800,
+    "rollCd": 0.6,
+    "rollDuration": 0.32,
+    "rollSpeed": 560,
+    "rollStyle": "impact"
+   },
+   "walkStyle": {
+    "bobAmp": 1.2,
+    "bobFreq": 1.1,
+    "legSwing": 0.9,
+    "legLift": 0.7,
+    "armSwing": 0.7,
+    "lean": -0.02,
+    "stepWidth": 1.2
+   },
+   "idleAnim": "guard"
+  }
+ },
+ {
+  "id": "kaykit_mage",
+  "synergy": {
+   "cls": "elemental",
+   "need": 2,
+   "stats": {
+    "elem": 14,
+    "atkSpd": 8
+   },
+   "text": "2× Elemental: +14 Elementarschaden, +8% Angriffstempo"
+  },
+  "name": "Mage",
+  "role": "KayKit · Elementarist",
+  "col": "#8a5cff",
+  "col2": "#ffd23e",
+  "desc": "Magier mit Stab und Kapuze. Lässt die Elemente für sich arbeiten.",
+  "skin": {
+   "build": "normal",
+   "head": "#e0c6a2",
+   "hat": "hood",
+   "prop": "none",
+   "chest": "#8a5cff"
+  },
+  "stats": {
+   "elem": 20,
+   "maxHp": -10,
+   "atkSpd": 10,
+   "armor": -2
+  },
+  "startWeapon": "tesla",
+  "ability": {
+   "id": "walla",
+   "name": "Arkanschlag",
+   "cd": 9,
+   "desc": "Entlädt einen Elementarstoß: Kegel-Schaden + Burn/Shock."
+  },
+  "sprite": "mage",
+  "profile": {
+   "figure": "mage-staff",
+   "animation": "mage-staff-cast",
+   "animationRate": 1.1,
+   "moveSet": {
+    "id": "mage-step",
+    "speed": 1.02,
+    "dash": 920,
+    "rollCd": 0.45,
+    "rollDuration": 0.26,
+    "rollSpeed": 660,
+    "rollStyle": "phase"
+   },
+   "walkStyle": {
+    "bobAmp": 0.9,
+    "bobFreq": 1.2,
+    "legSwing": 0.8,
+    "legLift": 0.9,
+    "armSwing": 1,
+    "lean": 0.01,
+    "stepWidth": 1
+   },
+   "idleAnim": "meditate"
+  }
+ },
+ {
+  "id": "kaykit_ranger",
+  "synergy": {
+   "cls": "precise",
+   "need": 2,
+   "stats": {
+    "ranged": 10,
+    "range": 12
+   },
+   "text": "2× Precise: +10 Fernkampf, +12% Reichweite"
+  },
+  "name": "Ranger",
+  "role": "KayKit · Waldläufer",
+  "col": "#7dffb0",
+  "col2": "#2b8f5a",
+  "desc": "Waldläufer mit Bogen und Köcher. Trifft, bevor du ihn siehst.",
+  "skin": {
+   "build": "normal",
+   "head": "#e0c6a2",
+   "hat": "hood",
+   "prop": "none",
+   "chest": "#7dffb0"
+  },
+  "stats": {
+   "ranged": 18,
+   "range": 15,
+   "crit": 8,
+   "speed": 5,
+   "maxHp": -5
+  },
+  "startWeapon": "sniper",
+  "ability": {
+   "id": "markierung",
+   "name": "Präzisionsschuss",
+   "cd": 10,
+   "desc": "Ein perfekt gezielter Schuss: +50% Reichweite und garantierter Krit für 3s."
+  },
+  "sprite": "ranger",
+  "profile": {
+   "figure": "ranger-bow",
+   "animation": "ranger-bow-aim",
+   "animationRate": 0.85,
+   "moveSet": {
+    "id": "ranger-step",
+    "speed": 1.04,
+    "dash": 950,
+    "rollCd": 0.4,
+    "rollDuration": 0.27,
+    "rollSpeed": 680,
+    "rollStyle": "silent"
+   },
+   "walkStyle": {
+    "bobAmp": 0.7,
+    "bobFreq": 1,
+    "legSwing": 0.9,
+    "legLift": 0.8,
+    "armSwing": 0.9,
+    "lean": 0.04,
+    "stepWidth": 1.1
+   },
+   "idleAnim": "aim"
+  }
+ },
+ {
+  "id": "kaykit_rogue",
+  "synergy": {
+   "cls": "blade",
+   "need": 2,
+   "stats": {
+    "crit": 8,
+    "dodge": 6
+   },
+   "text": "2× Blade: +8% Krit, +6% Ausweichen"
+  },
+  "name": "Rogue",
+  "role": "KayKit · Schatten",
+  "col": "#6c5ce7",
+  "col2": "#2d3436",
+  "desc": "Meuchler mit Dolch. Schnell, leise, tödlich.",
+  "skin": {
+   "build": "slim",
+   "head": "#e0c6a2",
+   "hat": "hood",
+   "prop": "none",
+   "chest": "#6c5ce7"
+  },
+  "stats": {
+   "dodge": 12,
+   "crit": 12,
+   "speed": 10,
+   "maxHp": -15,
+   "armor": -2
+  },
+  "startWeapon": "knife",
+  "ability": {
+   "id": "phasendash",
+   "name": "Schattenritt",
+   "cd": 6,
+   "desc": "Blinkt durch Gegner: kurz unverwundbar, hinterlässt Giftwolke."
+  },
+  "sprite": "rogue",
+  "profile": {
+   "figure": "rogue-dagger",
+   "animation": "rogue-dagger-strike",
+   "animationRate": 1.1,
+   "moveSet": {
+    "id": "rogue-step",
+    "speed": 1.08,
+    "dash": 1000,
+    "rollCd": 0.35,
+    "rollDuration": 0.24,
+    "rollSpeed": 720,
+    "rollStyle": "tactical"
+   },
+   "walkStyle": {
+    "bobAmp": 0.6,
+    "bobFreq": 1.2,
+    "legSwing": 1.1,
+    "legLift": 1,
+    "armSwing": 1.1,
+    "lean": 0.03,
+    "stepWidth": 1
+   },
+   "idleAnim": "crouch"
+  }
+ },
+ {
+  "id": "kaykit_rogue_hooded",
+  "synergy": {
+   "cls": "precise",
+   "need": 2,
+   "stats": {
+    "crit": 7,
+    "speed": 8
+   },
+   "text": "2× Precise: +7% Krit, +8 Tempo"
+  },
+  "name": "Hooded Rogue",
+  "role": "KayKit · Kapuze",
+  "col": "#2d3436",
+  "col2": "#636e72",
+  "desc": "Vermummter Schurke. Arbeitet im Verborgenen, schlägt aus dem Hinterhalt zu.",
+  "skin": {
+   "build": "slim",
+   "head": "#e0c6a2",
+   "hat": "hood",
+   "prop": "none",
+   "chest": "#2d3436"
+  },
+  "stats": {
+   "dodge": 10,
+   "crit": 10,
+   "speed": 8,
+   "luck": 10,
+   "maxHp": -10
+  },
+  "startWeapon": "nunchaku",
+  "ability": {
+   "id": "festnahme",
+   "name": "Hinterhalt",
+   "cd": 10,
+   "desc": "Springt zum Ziel: Stun + hoher Krit-Schaden."
+  },
+  "sprite": "rogue_hooded",
+  "profile": {
+   "figure": "rogue-hood",
+   "animation": "rogue-hood-sneak",
+   "animationRate": 1,
+   "moveSet": {
+    "id": "hood-step",
+    "speed": 1.05,
+    "dash": 970,
+    "rollCd": 0.38,
+    "rollDuration": 0.25,
+    "rollSpeed": 690,
+    "rollStyle": "tactical"
+   },
+   "walkStyle": {
+    "bobAmp": 0.8,
+    "bobFreq": 1.1,
+    "legSwing": 1,
+    "legLift": 0.9,
+    "armSwing": 0.8,
+    "lean": 0.02,
+    "stepWidth": 1
+   },
+   "idleAnim": "crouch"
+  }
+ }
+]
