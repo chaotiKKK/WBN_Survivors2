@@ -23,7 +23,7 @@ public class WBN_Survivors2 : ModuleRules
 			"Slate"
 		});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { });
+		PrivateDependencyModuleNames.AddRange(new string[] { "Json", "JsonUtilities" });
 
 		PublicIncludePaths.AddRange(new string[] {
 			"WBN_Survivors2",
