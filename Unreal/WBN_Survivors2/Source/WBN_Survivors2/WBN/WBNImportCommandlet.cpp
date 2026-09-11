@@ -201,7 +201,13 @@ namespace WBNImport
 int32 UWBNImportCommandlet::Main(const FString& Params)
 {
 	using namespace WBNImport;
-	const FString DataDir = FPaths::Combine(FPaths::ProjectDir(), TEXT("Unreal/Data/"));
+	// JSONs liegen im Repo unter Unreal/Data (== ProjectDir/../Data).
+	FString DataDir = FPaths::Combine(FPaths::ProjectDir(), TEXT("../Data/"));
+	FPaths::CollapseRelativeDirectories(DataDir);
+	if (!FPaths::DirectoryExists(DataDir))
+	{
+		DataDir = FPaths::Combine(FPaths::ProjectDir(), TEXT("Unreal/Data/"));
+	}
 	int32 Total = 0, Failed = 0;
 
 	auto LoadArr = [&](const FString& File) -> TArray<TSharedPtr<FJsonValue>>
