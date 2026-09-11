@@ -1,0 +1,355 @@
+[
+ {
+  "id": "kurhaus",
+  "name": "KURHAUS-KOLOSS",
+  "arena": "innenstadt",
+  "hp": 3400,
+  "r": 46,
+  "col": "#f4c25a",
+  "spd": 52,
+  "dmg": 22,
+  "armor": 10,
+  "mat": 60,
+  "xp": 40,
+  "phases": [
+   {
+    "at": 1,
+    "spd": 52,
+    "pattern": "radial",
+    "cd": 2.2,
+    "n": 12,
+    "bs": 190,
+    "bd": 11
+   },
+   {
+    "at": 0.65,
+    "spd": 74,
+    "pattern": "charge",
+    "cd": 2.6,
+    "n": 16,
+    "bs": 220,
+    "bd": 13
+   },
+   {
+    "at": 0.3,
+    "spd": 92,
+    "pattern": "bulletHell",
+    "cd": 1.8,
+    "n": 18,
+    "bs": 200,
+    "bd": 15,
+    "summon": "runner"
+   }
+  ]
+ },
+ {
+  "id": "nerobahn",
+  "name": "NEROBERG-WURM",
+  "arena": "rheinufer",
+  "hp": 5700,
+  "r": 50,
+  "col": "#5dff9b",
+  "spd": 66,
+  "dmg": 24,
+  "armor": 12,
+  "mat": 80,
+  "xp": 60,
+  "phases": [
+   {
+    "at": 1,
+    "spd": 66,
+    "pattern": "spiral",
+    "cd": 1.6,
+    "n": 5,
+    "bs": 210,
+    "bd": 12
+   },
+   {
+    "at": 0.6,
+    "spd": 88,
+    "pattern": "crossfire",
+    "cd": 2.2,
+    "n": 7,
+    "bs": 240,
+    "bd": 14,
+    "summon": "flyer"
+   },
+   {
+    "at": 0.28,
+    "spd": 112,
+    "pattern": "shockwave",
+    "cd": 2.4,
+    "n": 22,
+    "bs": 240,
+    "bd": 16,
+    "summon": "exploder"
+   }
+  ]
+ },
+ {
+  "id": "kochbrunnen",
+  "name": "KOCHBRUNNEN-GOLEM",
+  "arena": "labor",
+  "hp": 11000,
+  "r": 54,
+  "col": "#ff8a3d",
+  "spd": 58,
+  "dmg": 28,
+  "armor": 16,
+  "mat": 110,
+  "xp": 85,
+  "phases": [
+   {
+    "at": 1,
+    "spd": 58,
+    "pattern": "radial",
+    "cd": 1.8,
+    "n": 16,
+    "bs": 200,
+    "bd": 15
+   },
+   {
+    "at": 0.62,
+    "spd": 76,
+    "pattern": "arenaHazard",
+    "cd": 2.4,
+    "n": 4,
+    "bs": 0,
+    "bd": 17,
+    "summon": "tank"
+   },
+   {
+    "at": 0.3,
+    "spd": 96,
+    "pattern": "orbitMines",
+    "cd": 2,
+    "n": 14,
+    "bs": 130,
+    "bd": 18,
+    "summon": "elite"
+   }
+  ]
+ },
+ {
+  "id": "rogueki",
+  "name": "SEBBOS ROGUE-KI",
+  "arena": "neroberg",
+  "hp": 22000,
+  "r": 58,
+  "col": "#ff2e88",
+  "spd": 74,
+  "dmg": 32,
+  "armor": 20,
+  "mat": 180,
+  "xp": 140,
+  "phases": [
+   {
+    "at": 1,
+    "spd": 74,
+    "pattern": "spiral",
+    "cd": 1.2,
+    "n": 7,
+    "bs": 240,
+    "bd": 17,
+    "summon": "ghost"
+   },
+   {
+    "at": 0.66,
+    "spd": 96,
+    "pattern": "shotgunBurst",
+    "cd": 1.5,
+    "n": 12,
+    "bs": 290,
+    "bd": 20,
+    "summon": "elite"
+   },
+   {
+    "at": 0.33,
+    "spd": 124,
+    "pattern": "bulletHell",
+    "cd": 1.4,
+    "n": 20,
+    "bs": 230,
+    "bd": 22,
+    "summon": "summoner"
+   }
+  ]
+ },
+ {
+  "id": "bergbahn",
+  "name": "BERGBAHN-KOLOSS",
+  "arena": "neroberg",
+  "hp": 2600,
+  "r": 52,
+  "col": "#7fe0a8",
+  "spd": 58,
+  "dmg": 24,
+  "armor": 11,
+  "mat": 70,
+  "xp": 50,
+  "phases": [
+   {
+    "at": 1,
+    "spd": 58,
+    "pattern": "rails",
+    "cd": 3,
+    "n": 3,
+    "bs": 230,
+    "bd": 13
+   },
+   {
+    "at": 0.62,
+    "spd": 78,
+    "pattern": "waterjet",
+    "cd": 1.9,
+    "n": 14,
+    "bs": 260,
+    "bd": 15,
+    "summon": "weaver"
+   },
+   {
+    "at": 0.3,
+    "spd": 100,
+    "pattern": "crossfire",
+    "cd": 2,
+    "n": 8,
+    "bs": 220,
+    "bd": 17,
+    "summon": "bomber"
+   }
+  ]
+ },
+ {
+  "id": "sirenkollektiv",
+  "name": "SIRENEN-KOLLEKTIV",
+  "arena": "schlachthof",
+  "hp": 5400,
+  "r": 48,
+  "col": "#ff5ce0",
+  "spd": 70,
+  "dmg": 26,
+  "armor": 13,
+  "mat": 95,
+  "xp": 70,
+  "phases": [
+   {
+    "at": 1,
+    "spd": 70,
+    "pattern": "wailRings",
+    "cd": 2.6,
+    "n": 18,
+    "bs": 150,
+    "bd": 13
+   },
+   {
+    "at": 0.64,
+    "spd": 88,
+    "pattern": "arenaHazard",
+    "cd": 2.2,
+    "n": 4,
+    "bs": 0,
+    "bd": 16,
+    "summon": "siren"
+   },
+   {
+    "at": 0.3,
+    "spd": 108,
+    "pattern": "wailRings",
+    "cd": 1.7,
+    "n": 26,
+    "bs": 175,
+    "bd": 18,
+    "summon": "mirror"
+   }
+  ]
+ },
+ {
+  "id": "thermalquelle",
+  "name": "THERMALQUELLE",
+  "arena": "warmerdamm",
+  "hp": 9500,
+  "r": 56,
+  "col": "#ff9a3d",
+  "spd": 46,
+  "dmg": 30,
+  "armor": 18,
+  "mat": 130,
+  "xp": 100,
+  "phases": [
+   {
+    "at": 1,
+    "spd": 46,
+    "pattern": "geysers",
+    "cd": 2.8,
+    "n": 5,
+    "bs": 200,
+    "bd": 16
+   },
+   {
+    "at": 0.63,
+    "spd": 62,
+    "pattern": "steamCone",
+    "cd": 2,
+    "n": 22,
+    "bs": 300,
+    "bd": 18,
+    "summon": "spitter"
+   },
+   {
+    "at": 0.28,
+    "spd": 82,
+    "pattern": "bulletHell",
+    "cd": 1.6,
+    "n": 16,
+    "bs": 220,
+    "bd": 21,
+    "summon": "juggernaut"
+   }
+  ]
+ },
+ {
+  "id": "marktturm",
+  "name": "MARKTKIRCHEN-TURM",
+  "arena": "innenstadt",
+  "hp": 27000,
+  "r": 60,
+  "col": "#c7a6ff",
+  "spd": 40,
+  "dmg": 34,
+  "armor": 22,
+  "mat": 200,
+  "xp": 160,
+  "phases": [
+   {
+    "at": 1,
+    "spd": 40,
+    "pattern": "bellwave",
+    "cd": 3,
+    "n": 20,
+    "bs": 165,
+    "bd": 18,
+    "summon": "shielded"
+   },
+   {
+    "at": 0.66,
+    "spd": 58,
+    "pattern": "crossfire",
+    "cd": 2.2,
+    "n": 8,
+    "bs": 250,
+    "bd": 21,
+    "summon": "sentinel"
+   },
+   {
+    "at": 0.32,
+    "spd": 76,
+    "pattern": "stoneRain",
+    "cd": 1.9,
+    "n": 11,
+    "bs": 220,
+    "bd": 24,
+    "summon": "juggernaut"
+   }
+  ]
+ }
+]
