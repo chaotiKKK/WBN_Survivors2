@@ -9,6 +9,7 @@
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
 #include "AssetRegistry/AssetRegistryModule.h"
+#include "Animation/Skeleton.h"
 #include "UObject/SavePackage.h"
 #include "Misc/PackageName.h"
 
@@ -205,6 +206,23 @@ namespace WBNImport
 int32 UWBNImportCommandlet::Main(const FString& Params)
 {
 	using namespace WBNImport;
+	// Modus -dumpbones: Skelett-Hierarchie nach tools/skeleton_bones.txt dumpen
+	// (Bone-Namen sind per Python nicht lesbar). Aufruf: -run=WBNImport -dumpbones
+	if (Params.Contains(TEXT("dumpbones")))
+	{
+		const USkeleton* Skel = LoadObject<USkeleton>(nullptr,
+			TEXT("/Game/WBN/Chars/Leonidas/leonidas_body_Skeleton.leonidas_body_Skeleton"));
+		if (!Skel) { UE_LOG(LogTemp, Error, TEXT("WBNImport: Skeleton nicht ladbar")); return 1; }
+		FString Out = TEXT("# Leonidas-Skeleton (Index Name Parent) - fuer IK-Retargeter-Mapping\n");
+		const FReferenceSkeleton& Ref = Skel->GetReferenceSkeleton();
+		for (int32 i = 0; i < Ref.GetNum(); i++)
+			Out += FString::Printf(TEXT("%d %s %d\n"), i, *Ref.GetBoneName(i).ToString(), Ref.GetParentIndex(i));
+		FString File = FPaths::Combine(FPaths::ProjectDir(), TEXT("../../tools/skeleton_bones.txt"));
+		FPaths::CollapseRelativeDirectories(File);
+		FFileHelper::SaveStringToFile(Out, *File);
+		UE_LOG(LogTemp, Display, TEXT("WBNImport: %d Bones -> %s"), Ref.GetNum(), *File);
+		return 0;
+	}
 	// JSONs liegen im Repo unter Unreal/Data (== ProjectDir/../Data).
 	FString DataDir = FPaths::Combine(FPaths::ProjectDir(), TEXT("../Data/"));
 	FPaths::CollapseRelativeDirectories(DataDir);

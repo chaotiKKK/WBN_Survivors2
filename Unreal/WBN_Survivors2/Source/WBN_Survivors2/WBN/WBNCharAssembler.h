@@ -33,9 +33,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "WBN|Assembly")
 	FName HatBone = TEXT("head");
 
-	/** Bone für Prop-Attachments. */
+	/** Bone für Prop-Attachments (UE-Import benennt .L/.R zu _L/_R um). */
 	UPROPERTY(EditAnywhere, Category = "WBN|Assembly")
-	FName PropBone = TEXT("hand.R");
+	FName PropBone = TEXT("hand_R");
 
 	/** Yaw-Korrektur Blender-Facing -> UE-Front. */
 	UPROPERTY(EditAnywhere, Category = "WBN|Assembly", meta = (ClampMin = -180, ClampMax = 180, Units = "deg"))
