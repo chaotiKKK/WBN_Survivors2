@@ -13,7 +13,7 @@ class AStrategyPlayerController;
  *  Exposes some game commands to UI
  */
 UCLASS(abstract)
-class WBN_Survivors2_API UStrategyTouchControls : public UUserWidget
+class WBN_SURVIVORS2_API UStrategyTouchControls : public UUserWidget
 {
 	GENERATED_BODY()
 	

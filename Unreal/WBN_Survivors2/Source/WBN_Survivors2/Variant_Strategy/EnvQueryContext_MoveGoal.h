@@ -10,7 +10,7 @@
  *  Simple EnvQueryContext that returns a Unit's current movement goal location
  */
 UCLASS()
-class WBN_Survivors2_API UEnvQueryContext_MoveGoal : public UEnvQueryContext
+class WBN_SURVIVORS2_API UEnvQueryContext_MoveGoal : public UEnvQueryContext
 {
 	GENERATED_BODY()
 	

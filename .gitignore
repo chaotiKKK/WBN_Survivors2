@@ -16,6 +16,13 @@ __pycache__/
 # engine.js.bak: Backup von split-engine.js
 *.bak
 
+# ---- Unreal Engine (GitHub-Template), auch fuer Projekte in Unterordnern ----
+Unreal/**/Binaries/
+Unreal/**/Intermediate/
+Unreal/**/Saved/
+Unreal/**/DerivedDataCache/
+*.slnx
+
 # ---- Unreal Engine (GitHub-Template) ----
 # Visual Studio 2015 user specific files
 .vs/
