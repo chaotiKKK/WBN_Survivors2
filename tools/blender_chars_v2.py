@@ -231,12 +231,15 @@ def main():
     rig = build_armature()
     skin(body, rig, hat)
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT, 'models', 'leonidas_rig.blend'))
-    select_only(rig, body, hat)
-    bpy.context.view_layer.objects.active = rig
-    fbx = os.path.join(FBXD, 'leonidas_rig.fbx')
-    bpy.ops.export_scene.fbx(filepath=fbx, use_selection=True, add_leaf_bones=False,
-                              primary_bone_axis='Y', secondary_bone_axis='X',
-                              bake_anim=False, global_scale=100.0)
-    log('FBX ok:', fbx)
+    # Getrennte FBX pro Modul-Teil (UE wuerde sonst zu EINEM Mesh mergen).
+    # Meter-Einheiten (Standard); UE-Import mit Convert Scene rechnet nach cm um.
+    for objs, name in (([rig, body], 'leonidas_body'), ([rig, hat], 'leonidas_hat_helmet')):
+        select_only(*objs)
+        bpy.context.view_layer.objects.active = rig
+        fbx = os.path.join(FBXD, name + '.fbx')
+        bpy.ops.export_scene.fbx(filepath=fbx, use_selection=True, add_leaf_bones=False,
+                                  primary_bone_axis='Y', secondary_bone_axis='X',
+                                  bake_anim=False, global_scale=1.0)
+        log('FBX ok:', fbx)
 
 main()

@@ -99,3 +99,6 @@ Plugins/**/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Headless-Tool-Logs (re generierbar)
+tools/*_out.txt
