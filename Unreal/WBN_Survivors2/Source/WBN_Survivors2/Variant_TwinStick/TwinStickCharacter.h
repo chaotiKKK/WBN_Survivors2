@@ -35,6 +35,10 @@ class ATwinStickCharacter : public ACharacter
 
 protected:
 
+	/** Zugriff für Subklassen (Game Feel / Assembler). */
+	USpringArmComponent* GetSpringArm() const { return SpringArm; }
+	UCameraComponent* GetCamera() const { return Camera; }
+
 	/** Movement input action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MoveAction;
@@ -180,7 +184,7 @@ public:
 
 	/** Handles shoot inputs from both input actions and touch interface */
 	UFUNCTION(BlueprintCallable, Category="Input")
-	void DoShoot();
+	virtual void DoShoot();
 
 	/** Handles aoe attack inputs from both input actions and touch interface */
 	UFUNCTION(BlueprintCallable, Category="Input")
@@ -189,7 +193,7 @@ public:
 public:
 
 	/** Applies collision impact to the player */
-	void HandleDamage(float Damage, const FVector& DamageDirection);
+	virtual void HandleDamage(float Damage, const FVector& DamageDirection);
 
 protected:
 

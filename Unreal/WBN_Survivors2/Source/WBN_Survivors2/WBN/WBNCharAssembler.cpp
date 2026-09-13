@@ -66,9 +66,9 @@ USkeletalMeshComponent* UWBNCharAssembler::SpawnFollower(USkeletalMesh* Mesh, FN
 	C->RegisterComponent();
 	C->SetSkeletalMesh(Mesh);
 	if (BodySlot->GetSkeletalMeshAsset() && Mesh->GetSkeleton() == BodySlot->GetSkeletalMeshAsset()->GetSkeleton())
-		C->SetMasterPoseComponent(BodySlot);
+		C->SetLeaderPoseComponent(BodySlot);
 	else
-		UE_LOG(LogTemp, Warning, TEXT("WBNAssembly: Skelett-Mismatch, MasterPose aus"));
+		UE_LOG(LogTemp, Warning, TEXT("WBNAssembly: Skelett-Mismatch, LeaderPose aus"));
 	AttachmentSlots.Add(C);
 	return C;
 }

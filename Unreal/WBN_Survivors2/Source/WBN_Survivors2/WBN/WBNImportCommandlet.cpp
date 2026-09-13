@@ -12,6 +12,9 @@
 #include "Animation/Skeleton.h"
 #include "HAL/FileManager.h"
 #include "WBNWaveDirector.h"
+#include "InputAction.h"
+#include "InputMappingContext.h"
+#include "InputCoreTypes.h"
 #include "UObject/SavePackage.h"
 #include "Misc/PackageName.h"
 
@@ -234,6 +237,52 @@ namespace WBNImport
 		bOk = true;
 		return Root->AsArray();
 	}
+	// Modus -makeinput: Enhanced-Input-Assets fuer AWBNPlayerCharacter anlegen.
+	static bool MakeInput()
+	{
+		const FString Root = TEXT("/Game/WBN/Input");
+		auto MakeAction = [&Root](const TCHAR* Name, EInputActionValueType VT)
+		{
+			UPackage* Pkg = CreatePackage(*(Root + TEXT("/") + Name));
+			UInputAction* A = NewObject<UInputAction>(Pkg, Name, RF_Public | RF_Standalone);
+			A->ValueType = VT;
+			return A;
+		};
+		UInputAction* Move = MakeAction(TEXT("IA_Move"), EInputActionValueType::Axis2D);
+		UInputAction* AimStick = MakeAction(TEXT("IA_AimStick"), EInputActionValueType::Axis2D);
+		UInputAction* MouseAim = MakeAction(TEXT("IA_MouseAim"), EInputActionValueType::Axis2D);
+		UInputAction* Shoot = MakeAction(TEXT("IA_Shoot"), EInputActionValueType::Boolean);
+		UInputAction* Dash = MakeAction(TEXT("IA_Dash"), EInputActionValueType::Boolean);
+		UInputAction* AoE = MakeAction(TEXT("IA_AoE"), EInputActionValueType::Boolean);
+
+		bool bOk = true;
+		auto Save = [](UInputAction* A) { return SaveAsset(A->GetOutermost(), A); };
+		bOk &= Save(Move);
+		bOk &= Save(AimStick);
+		bOk &= Save(MouseAim);
+		bOk &= Save(Shoot);
+		bOk &= Save(Dash);
+		bOk &= Save(AoE);
+
+		UPackage* Pkg = CreatePackage(*(Root + TEXT("/IMC_WBN")));
+		UInputMappingContext* IMC = NewObject<UInputMappingContext>(Pkg, TEXT("IMC_WBN"), RF_Public | RF_Standalone);
+		IMC->MapKey(Move, EKeys::W);
+		IMC->MapKey(Move, EKeys::A);
+		IMC->MapKey(Move, EKeys::S);
+		IMC->MapKey(Move, EKeys::D);
+		IMC->MapKey(Move, EKeys::Gamepad_Left2D);
+		IMC->MapKey(AimStick, EKeys::Gamepad_Right2D);
+		IMC->MapKey(MouseAim, EKeys::Mouse2D);
+		IMC->MapKey(Shoot, EKeys::LeftMouseButton);
+		IMC->MapKey(Dash, EKeys::SpaceBar);
+		IMC->MapKey(Dash, EKeys::Gamepad_FaceButton_Bottom);
+		IMC->MapKey(AoE, EKeys::Q);
+		bOk &= SaveAsset(IMC->GetOutermost(), IMC);
+
+		UE_LOG(LogTemp, Display, TEXT("WBNImport: %d Input-Actions + IMC_WBN geschrieben"), bOk ? 6 : 0);
+		return bOk;
+	}
+
 	// Modus -testwaves: Wellen 1..30 gegen UWBNWaveDirector rechnen, Tabelle schreiben.
 	static bool TestWaves(const FString& DataDir)
 	{
@@ -324,6 +373,9 @@ int32 UWBNImportCommandlet::Main(const FString& Params)
 	// Modus -testwaves: Wellen-Tabelle rechnen statt importieren.
 	if (Params.Contains(TEXT("testwaves")))
 		return TestWaves(DataDir) ? 0 : 1;
+	// Modus -makeinput: Enhanced-Input-Assets anlegen (kein DataDir noetig).
+	if (Params.Contains(TEXT("makeinput")))
+		return MakeInput() ? 0 : 1;
 	int32 Total = 0, Failed = 0;
 
 	auto LoadArr = [&](const FString& File) -> TArray<TSharedPtr<FJsonValue>>
