@@ -124,4 +124,5 @@ void AWBNPlayerCharacter::HandleDamage(float Damage, const FVector& DamageDirect
 {
 	Super::HandleDamage(Damage, DamageDirection);
 	CameraKick = 1.f;
+	UE_LOG(LogTemp, Display, TEXT("WBNDamage: Spieler erleidet %.1f Schaden"), Damage);
 }

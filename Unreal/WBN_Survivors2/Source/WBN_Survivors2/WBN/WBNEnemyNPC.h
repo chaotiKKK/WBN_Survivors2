@@ -34,6 +34,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "WBN|Enemy")
 	void SetElite(bool bIn);
 
+	UFUNCTION(BlueprintCallable, Category = "WBN|Enemy")
+	bool IsElite() const { return bElite; }
+
 	virtual void Tick(float DeltaTime) override;
 	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp,
 		bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;

@@ -24,6 +24,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "WBN|Wave")
 	int32 GetCurrentWave() const { return CurrentWave; }
 
+	UFUNCTION(BlueprintCallable, Category = "WBN|Wave")
+	int32 GetTotalSpawned() const { return TotalSpawned; }
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
@@ -43,6 +46,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "WBN|Wave")
 	int32 MaxSimultaneous = 50;
+
+	/** Gesamtzahl der in diesem Run gespawnten Gegner (für Proben/Analytics). */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WBN|Wave")
+	int32 TotalSpawned = 0;
 
 	/** In die Maps eingebaute Arena-Halbbreite (PX2UU=5, Kurpark 1100px). */
 	static constexpr float ArenaHalf = 2700.f;

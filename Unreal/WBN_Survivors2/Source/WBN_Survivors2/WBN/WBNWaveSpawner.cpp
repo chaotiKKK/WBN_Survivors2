@@ -14,13 +14,22 @@ AWBNWaveSpawner::AWBNWaveSpawner()
 
 void AWBNWaveSpawner::BuildLibrary()
 {
-	FAssetRegistryModule& Mod = FModuleManager::LoadModuleChecked<FAssetRegistryModule>(TEXT("AssetRegistry"));
-	TArray<FAssetData> Assets;
-	Mod.Get().GetAssetsByPath(TEXT("/Game/WBN/Data/Enemies"), Assets, true);
-
-	for (const FAssetData& A : Assets)
+	// Direkter Dateisystem-Scan statt AssetRegistry: deterministisch in Editor UND -game/Standalone
+	// (Standalone-Registry findet Content-Assets zuverlässig erst nach Cook/FullGather).
+	const FString EnemyDir = FPaths::ProjectContentDir() + TEXT("WBN/Data/Enemies");
+	UE_LOG(LogTemp, Display, TEXT("WBNWaveSpawner: Scan %s (Content=%s)"), *EnemyDir, *FPaths::ProjectContentDir());
+	TArray<FString> Files;
+	IFileManager::Get().FindFilesRecursive(Files, *EnemyDir, TEXT("*.uasset"), true, false);
+	int32 Loaded = 0;
+	for (const FString& File : Files)
 	{
-		UWBNEnemyData* D = Cast<UWBNEnemyData>(A.GetAsset());
+		const FString Short = FPaths::GetBaseFilename(File);
+		if (!Short.StartsWith(TEXT("DA_Enemy_")))
+		{
+			continue;
+		}
+		const FString PkgPath = FString(TEXT("/Game/WBN/Data/Enemies/")) + Short;
+		UWBNEnemyData* D = LoadObject<UWBNEnemyData>(nullptr, *PkgPath);
 		if (!D)
 		{
 			continue;
@@ -31,8 +40,9 @@ void AWBNWaveSpawner::BuildLibrary()
 		Pick.MinWave = D->MinWave;
 		Pick.Weight = D->Weight;
 		Pool.Add(Pick);
+		++Loaded;
 	}
-	UE_LOG(LogTemp, Display, TEXT("WBNWaveSpawner: %d Gegnertypen geladen"), Pool.Num());
+	UE_LOG(LogTemp, Display, TEXT("WBNWaveSpawner: %d Gegnertypen geladen (%d Dateien)"), Loaded, Files.Num());
 }
 
 void AWBNWaveSpawner::BeginPlay()
@@ -167,6 +177,7 @@ void AWBNWaveSpawner::SpawnGroup(const FWBNSpawnGroup& Group)
 				{
 					E->SetElite(true);
 				}
+				++TotalSpawned;
 			}
 		}, 0.08f * i, false);
 	}

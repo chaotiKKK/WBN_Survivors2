@@ -15,4 +15,10 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+
+	void ProbeSnapshot();
+	void ProbeExit();
+
+	FTimerHandle ProbeTimer;
+	FTimerHandle ProbeExitTimer;
 };
