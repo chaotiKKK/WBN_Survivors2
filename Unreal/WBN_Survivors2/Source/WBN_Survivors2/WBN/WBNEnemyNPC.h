@@ -52,6 +52,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WBN|Enemy")
 	float DamageOnHit = 5.f;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WBN|Enemy")
+	TObjectPtr<UWBNEnemyData> EnemyData;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "WBN|Enemy")
 	bool bElite = false;
 
 	/** Karte-Pixel -> cm (Maps mit PX2UU=5). */

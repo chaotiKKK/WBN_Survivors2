@@ -50,7 +50,7 @@ void UWBNWeaponComponent::FireAt(const FVector& AimDir)
 	}
 
 	const int32 CritPct = RollCrit(T.CritChance, T.CritMult);
-	const float Damage = T.Damage * (CritPct / 100.f);
+	const float Damage = T.Damage * (CritPct / 100.f) * DamageScale;
 	const FVector SafeDir = AimDir.GetSafeNormal2D();
 
 	switch (WeaponData->Type)

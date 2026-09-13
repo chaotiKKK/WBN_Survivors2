@@ -5,6 +5,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "WBNEnemyData.h"
 #include "WBNFloatingNumber.h"
+#include "WBNPlayerCharacter.h"
 #include "Variant_TwinStick/TwinStickCharacter.h"
 #include "Variant_TwinStick/TwinStickGameMode.h"
 #include "Kismet/GameplayStatics.h"
@@ -36,6 +37,7 @@ void AWBNEnemyNPC::FetchData(UWBNEnemyData* InData)
 	{
 		return;
 	}
+	EnemyData = InData;
 
 	MaxHp = InData->Hp;
 	Hp = MaxHp;
@@ -121,6 +123,15 @@ void AWBNEnemyNPC::Die()
 	if (ATwinStickGameMode* GM = Cast<ATwinStickGameMode>(GetWorld()->GetAuthGameMode()))
 	{
 		GM->ScoreUpdate(1);
+	}
+
+	// Kill -> XP an den besitzenden Spieler (nur wenn einer lebt).
+	if (APawn* Pawn = UGameplayStatics::GetPlayerPawn(this, 0))
+	{
+		if (AWBNPlayerCharacter* PC = Cast<AWBNPlayerCharacter>(Pawn))
+		{
+			PC->GrantKill(EnemyData);
+		}
 	}
 
 	// Hit-Stop: kurz die Zeit einfrieren (Game-Feel).

@@ -64,6 +64,33 @@ def main():
             wpn.fire_at(unreal.Vector(1, 0, 0))
             proj_after = len(unreal.EditorLevelLibrary.get_all_level_actors())
             check('projectile-spawned', proj_after > proj_before, f'{proj_before}->{proj_after}')
+
+        # XP / Level-Up: xpFor(l)=floor(5+l*4+l*l*0.85) -> L1:9, L2:16, L3:24
+        if player is not None:
+            check('xp-start', player.get_wbn_level() == 1 and player.get_xp() == 0, f"L{player.get_wbn_level()} xp={player.get_xp()}")
+            check('xp-next-1', player.get_xp_next() == 9, f"{player.get_xp_next()}")
+            player.add_xp(9)
+            check('levelup-1', player.get_wbn_level() == 2 and player.get_xp() == 0 and player.get_xp_next() == 16,
+                  f"L{player.get_wbn_level()} xp={player.get_xp()} next={player.get_xp_next()}")
+            check('dmg-mult-2', abs(player.get_damage_mult() - 1.1) < 0.001, f"{player.get_damage_mult()}")
+            check('dsync-on-player', wpn is not None and abs(wpn.get_damage_scale() - 1.1) < 0.001,
+                  f"scale={wpn.get_damage_scale() if wpn else None}")
+            player.add_xp(19)
+            check('levelup-2', player.get_wbn_level() == 3 and player.get_xp() == 3 and player.get_xp_next() == 24,
+                  f"L{player.get_wbn_level()} xp={player.get_xp()} next={player.get_xp_next()}")
+            check('dmg-mult-3', abs(player.get_damage_mult() - 1.2) < 0.001, f"{player.get_damage_mult()}")
+
+        # GrantKill: runner xp=1 auf frischem Spieler.
+        p2 = unreal.EditorLevelLibrary.spawn_actor_from_class(
+            unreal.WBNPlayerCharacter, unreal.Vector(100, 0, 90), unreal.Rotator(0, 0, 0))
+        check('xp-player2', p2 is not None and p2.get_xp() == 0)
+        if p2 is not None and enemy_asset is not None:
+            p2.grant_kill(enemy_asset)
+            check('grant-kill', p2.get_xp() == 1 and p2.get_wbn_level() == 1,
+                  f"xp={p2.get_xp()} L={p2.get_wbn_level()}")
+            p2.grant_kill(enemy_asset)
+            p2.grant_kill(enemy_asset)
+            check('grant-multi', p2.get_xp() == 3, f"xp={p2.get_xp()}")
     except Exception as e:
         unreal.log_error(f'[wbn_combat] FEHLER: {e}')
         note(f'FEHLER: {e}')

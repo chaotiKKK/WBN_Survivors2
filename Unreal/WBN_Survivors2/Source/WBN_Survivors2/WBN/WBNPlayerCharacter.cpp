@@ -2,6 +2,7 @@
 #include "WBNPlayerCharacter.h"
 #include "WBNCharAssembler.h"
 #include "WBNCharacterData.h"
+#include "WBNEnemyData.h"
 #include "WBNWeaponComponent.h"
 #include "WBNWeaponData.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -125,4 +126,35 @@ void AWBNPlayerCharacter::HandleDamage(float Damage, const FVector& DamageDirect
 	Super::HandleDamage(Damage, DamageDirection);
 	CameraKick = 1.f;
 	UE_LOG(LogTemp, Display, TEXT("WBNDamage: Spieler erleidet %.1f Schaden"), Damage);
+}
+
+void AWBNPlayerCharacter::AddXp(int32 Amount)
+{
+	Xp += FMath::Max(0, Amount);
+	while (Xp >= XpNext)
+	{
+		Xp -= XpNext;
+		++Level;
+		++PendingLevels;
+		XpNext = XpFor(Level);
+		OnLevelUp();
+	}
+}
+
+void AWBNPlayerCharacter::GrantKill(UWBNEnemyData* Data)
+{
+	if (Data)
+	{
+		AddXp(Data->Xp);
+	}
+}
+
+void AWBNPlayerCharacter::OnLevelUp()
+{
+	DamageMult = 1.f + 0.1f * (Level - 1);
+	if (WeaponComponent)
+	{
+		WeaponComponent->SetDamageScale(DamageMult);
+	}
+	UE_LOG(LogTemp, Display, TEXT("WBNLevel: Level %d erreicht (Schaden x%.1f)"), Level, DamageMult);
 }
